@@ -1,34 +1,16 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
-	"net/http"
+	"megaphone-server/interface/post/api"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	productHandler := func(w http.ResponseWriter, req *http.Request) {
-		product1 := ProductDTO{Id: 1, Name: "Chicken"}
-		product2 := ProductDTO{Id: 2, Name: "Pizza"}
-		product3 := ProductDTO{Id: 3, Name: "Pasta"}
-		products := []ProductDTO{product1, product2, product3}
+	postHandler := api.PostHandler{}
 
-		productsJson, err := json.Marshal(products)
-		if err != nil {
-			log.Fatalf("Failed to marshal response. Resp: %v, Err: %s", products, err)
-		}
+	r := gin.Default()
+	r.GET("/posts", postHandler.GetPosts)
 
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(productsJson)
-	}
-
-	http.HandleFunc("/products", productHandler)
-	log.Println("Listing on port 8000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
-}
-
-type ProductDTO struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	r.Run(":8000")
 }
