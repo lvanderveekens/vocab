@@ -13,8 +13,3 @@ func (h *PostHandler) GetPosts(c *gin.Context) {
 
 	c.JSON(200, posts)
 }
-
-type PostDTO struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
