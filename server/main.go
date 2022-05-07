@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	postApi "megaphone-server/interface/post/api"
+	"megaphone-server/interface/post/postgres"
 
 	"github.com/gin-gonic/gin"
 	migrate "github.com/golang-migrate/migrate/v4"
@@ -35,7 +36,8 @@ func main() {
 		panic(err)
 	}
 
-	postHandler := postApi.PostHandler{}
+	postRepository := postgres.NewPostRepository(db)
+	postHandler := postApi.NewPostHandler(postRepository)
 
 	r := gin.Default()
 	r.GET("/posts", postHandler.GetPosts)
@@ -53,7 +55,7 @@ func runMigrations(db *sql.DB) error {
 		return err
 	}
 	err = m.Up()
-	if err != nil {
+	if err != nil && err != migrate.ErrNoChange {
 		return err
 	}
 	return nil

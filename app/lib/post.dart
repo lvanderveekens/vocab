@@ -1,16 +1,16 @@
 class Post {
   final int id;
-  final String name;
+  final DateTime createdAt;
 
   const Post({
     required this.id,
-    required this.name,
+    required this.createdAt,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      name: json['name'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }

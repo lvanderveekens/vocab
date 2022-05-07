@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'product.dart';
+import 'post.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,12 +34,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<List<Product>> futureProducts;
+  late Future<List<Post>> futurePosts;
 
   @override
   void initState() {
     super.initState();
-    futureProducts = fetchProducts();
+    futurePosts = fetchPosts();
   }
 
   @override
@@ -49,8 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: Center(
-          child: FutureBuilder<List<Product>>(
-            future: futureProducts,
+          child: FutureBuilder<List<Post>>(
+            future: futurePosts,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemBuilder: (_, index) => Column(
                     children: [
                       Text("${snapshot.data![index].id}"),
-                      Text(snapshot.data![index].name),
+                      Text("${snapshot.data![index].createdAt}"),
                     ],
                   ),
                 );
@@ -71,15 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 
-  Future<List<Product>> fetchProducts() async {
-    final resp = await http.get(Uri.parse('http://localhost:8000/products'));
+  Future<List<Post>> fetchPosts() async {
+    final resp = await http.get(Uri.parse('http://localhost:8000/posts'));
 
     if (resp.statusCode == 200) {
       return jsonDecode(resp.body)
-          .map<Product>((productJson) => Product.fromJson(productJson))
+          .map<Post>((postJson) => Post.fromJson(postJson))
           .toList();
     } else {
-      throw Exception('Failed to load products');
+      throw Exception('Failed to load posts');
     }
   }
 }
