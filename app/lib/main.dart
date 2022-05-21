@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -164,18 +165,29 @@ class _MyHomePageState extends State<MyHomePage> {
           itemBuilder: (BuildContext context, int index) {
             // Why network for web?
             // See https://pub.dev/packages/image_picker#getting-ready-for-the-web-platform
+            final xFile = _imageFileList![index];
+            final imageFile = File(xFile.path);
 
-            XFile file = _imageFileList![index];
             return Column(children: [
               Semantics(
                 label: 'image_picker_example_picked_image',
-                child: kIsWeb
-                    ? Image.network(file.path)
-                    : Image.file(File(file.path)),
+                child: Image.file(File(xFile.path)),
               ),
-              Text(
-                file.name,
-                textAlign: TextAlign.center,
+              FutureBuilder<String>(
+                future: recognizeText(imageFile),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (!snapshot.hasData) {
+                    // while data is loading
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    // data loaded
+                    final text = snapshot.data;
+                    return Center(
+                      child: Text(text ?? ''),
+                    );
+                  }
+                },
               )
             ]);
           },
@@ -221,6 +233,18 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       _retrieveDataError = response.exception!.code;
     }
+  }
+
+  Future<String> recognizeText(File imageFile) async {
+    final inputImage = InputImage.fromFile(imageFile);
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+
+    String text = recognizedText.text;
+    textRecognizer.close();
+    return text;
   }
 
   @override

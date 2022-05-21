@@ -31,8 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # google_mlkit_text_recognition: ^0.3.0
-
+  google_mlkit_text_recognition: ^0.3.0
   image_picker: ^0.8.5
   video_player: ^2.1.4
 
