@@ -1,11 +1,19 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+
+// useful links:
+// https://www.fluttercampus.com/guide/266/show-live-image-preview-camera-flutter/
+// https://medium.flutterdevs.com/text-recognition-with-ml-kit-flutter-c71f27089437
 
 void main() {
   runApp(const MyApp());
@@ -35,9 +43,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<XFile>? _imageFileList;
 
-  void _setImageFileListFromFile(XFile? value) {
-    _imageFileList = value == null ? null : <XFile>[value];
-  }
+  List<CameraDescription>? cameras;
+  CameraController? cameraController;
+  bool _isDetecting = false;
+  bool _initialized = false;
+  String? _recognizedText;
 
   dynamic _pickImageError;
   bool isVideo = false;
@@ -50,6 +60,83 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController maxWidthController = TextEditingController();
   final TextEditingController maxHeightController = TextEditingController();
   final TextEditingController qualityController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loadCamera();
+  }
+
+  Uint8List _concatenatePlanes(List<Plane> planes) {
+    final WriteBuffer allBytes = WriteBuffer();
+    for (Plane plane in planes) {
+      allBytes.putUint8List(plane.bytes);
+    }
+    return allBytes.done().buffer.asUint8List();
+  }
+
+  Future<void> recognizeText(CameraImage cameraImage) async {
+    final inputImage = InputImage.fromBytes(
+        bytes: _concatenatePlanes(cameraImage.planes),
+        inputImageData: InputImageData(
+            size: Size(
+                cameraImage.width.toDouble(), cameraImage.height.toDouble()),
+            imageRotation: InputImageRotation.rotation0deg,
+            inputImageFormat: InputImageFormat.bgra8888,
+            planeData: cameraImage.planes.map(
+              (Plane plane) {
+                return InputImagePlaneMetadata(
+                  bytesPerRow: plane.bytesPerRow,
+                  height: plane.height,
+                  width: plane.width,
+                );
+              },
+            ).toList()));
+
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+
+    _recognizedText = recognizedText.text;
+    textRecognizer.close();
+  }
+
+  loadCamera() async {
+    log("@>loadCamera");
+    cameras = await availableCameras();
+    if (cameras != null) {
+      cameraController = CameraController(cameras![0], ResolutionPreset.max);
+
+      //cameras[0] = first camera, change to 1 to another camera
+
+      cameraController!.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _initialized = true;
+        });
+
+        // CameraImage is in YUV420 format...
+        cameraController!.startImageStream((CameraImage image) {
+          if (_isDetecting) return;
+
+          setState(() {
+            _isDetecting = true;
+          });
+
+          recognizeText(image).whenComplete(() => _isDetecting = false);
+        });
+      });
+    } else {
+      log("No cameras found");
+    }
+  }
+
+  void _setImageFileListFromFile(XFile? value) {
+    _imageFileList = value == null ? null : <XFile>[value];
+  }
 
   Future<void> _playVideo(XFile? file) async {
     if (file != null && mounted) {
@@ -173,22 +260,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 label: 'image_picker_example_picked_image',
                 child: Image.file(File(xFile.path)),
               ),
-              FutureBuilder<String>(
-                future: recognizeText(imageFile),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (!snapshot.hasData) {
-                    // while data is loading
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    // data loaded
-                    final text = snapshot.data;
-                    return Center(
-                      child: Text(text ?? ''),
-                    );
-                  }
-                },
-              )
+              // FutureBuilder<String>(
+              //   future: recognizeText(imageFile),
+              //   builder:
+              //       (BuildContext context, AsyncSnapshot<String> snapshot) {
+              //     if (!snapshot.hasData) {
+              //       // while data is loading
+              //       return const Center(child: CircularProgressIndicator());
+              //     } else {
+              //       // data loaded
+              //       final text = snapshot.data;
+              //       return Center(
+              //         child: Text(text ?? ''),
+              //       );
+              //     }
+              //   },
+              // )
             ]);
           },
           itemCount: _imageFileList!.length,
@@ -235,127 +322,25 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<String> recognizeText(File imageFile) async {
-    final inputImage = InputImage.fromFile(imageFile);
-    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
-
-    String text = recognizedText.text;
-    textRecognizer.close();
-    return text;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
-      ),
-      body: Center(
-        child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
-            ? FutureBuilder<void>(
-                future: retrieveLostData(),
-                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return const Text(
-                        'You have not yet picked an image.',
-                        textAlign: TextAlign.center,
-                      );
-                    case ConnectionState.done:
-                      return _handlePreview();
-                    default:
-                      if (snapshot.hasError) {
-                        return Text(
-                          'Pick image/video error: ${snapshot.error}}',
-                          textAlign: TextAlign.center,
-                        );
-                      } else {
-                        return const Text(
-                          'You have not yet picked an image.',
-                          textAlign: TextAlign.center,
-                        );
-                      }
-                  }
-                },
-              )
-            : _handlePreview(),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Semantics(
-            label: 'image_picker_example_from_gallery',
-            child: FloatingActionButton(
-              onPressed: () {
-                isVideo = false;
-                _onImageButtonPressed(ImageSource.gallery, context: context);
-              },
-              heroTag: 'image0',
-              tooltip: 'Pick Image from gallery',
-              child: const Icon(Icons.photo),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: FloatingActionButton(
-              onPressed: () {
-                isVideo = false;
-                _onImageButtonPressed(
-                  ImageSource.gallery,
-                  context: context,
-                  isMultiImage: true,
-                );
-              },
-              heroTag: 'image1',
-              tooltip: 'Pick Multiple Image from gallery',
-              child: const Icon(Icons.photo_library),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: FloatingActionButton(
-              onPressed: () {
-                isVideo = false;
-                _onImageButtonPressed(ImageSource.camera, context: context);
-              },
-              heroTag: 'image2',
-              tooltip: 'Take a Photo',
-              child: const Icon(Icons.camera_alt),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: FloatingActionButton(
-              backgroundColor: Colors.red,
-              onPressed: () {
-                isVideo = true;
-                _onImageButtonPressed(ImageSource.gallery);
-              },
-              heroTag: 'video0',
-              tooltip: 'Pick Video from gallery',
-              child: const Icon(Icons.video_library),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: FloatingActionButton(
-              backgroundColor: Colors.red,
-              onPressed: () {
-                isVideo = true;
-                _onImageButtonPressed(ImageSource.camera);
-              },
-              heroTag: 'video1',
-              tooltip: 'Take a Video',
-              child: const Icon(Icons.videocam),
-            ),
-          ),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: Text(widget.title!),
+        ),
+        body: Column(
+          children: <Widget>[
+            Container(
+                height: 400,
+                child: cameraController == null
+                    ? const Center(child: Text("Loading Camera..."))
+                    : !cameraController!.value.isInitialized
+                        ? const Center(child: CircularProgressIndicator())
+                        : CameraPreview(cameraController!)),
+            Container(
+                child: Text(_recognizedText != null ? _recognizedText! : ""))
+          ],
+        ));
   }
 
   Text? _getRetrieveErrorWidget() {
