@@ -45,9 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<CameraDescription>? cameras;
   CameraController? cameraController;
+  bool _textScanningEnabled = false;
   bool _isDetecting = false;
   bool _initialized = false;
   String? _recognizedText;
+  bool _cameraEnabled = true;
 
   dynamic _pickImageError;
   bool isVideo = false;
@@ -118,19 +120,28 @@ class _MyHomePageState extends State<MyHomePage> {
           _initialized = true;
         });
 
-        // CameraImage is in YUV420 format...
         cameraController!.startImageStream((CameraImage image) {
+          log("processing image");
           if (_isDetecting) return;
 
-          setState(() {
-            _isDetecting = true;
-          });
+          if (_textScanningEnabled) {
+            setState(() {
+              _isDetecting = true;
+            });
 
-          recognizeText(image).whenComplete(() => _isDetecting = false);
+            log("will recognize text");
+            recognizeText(image).whenComplete(() => _isDetecting = false);
+          }
         });
       });
     } else {
       log("No cameras found");
+    }
+  }
+
+  unloadCamera() async {
+    if (cameraController != null) {
+      cameraController!.stopImageStream();
     }
   }
 
@@ -328,19 +339,55 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title!),
         ),
-        body: Column(
+        body: SingleChildScrollView(
+            child: Column(
           children: <Widget>[
             Container(
                 height: 400,
                 child: cameraController == null
-                    ? const Center(child: Text("Loading Camera..."))
-                    : !cameraController!.value.isInitialized
-                        ? const Center(child: CircularProgressIndicator())
-                        : CameraPreview(cameraController!)),
+                    ? const Text("Loading Camera...")
+                    : Center(
+                        child: _cameraEnabled &&
+                                cameraController!.value.isInitialized
+                            ? CameraPreview(cameraController!)
+                            : const Text(""))),
             Container(
-                child: Text(_recognizedText != null ? _recognizedText! : ""))
+                child: Text(_cameraEnabled &&
+                        _textScanningEnabled &&
+                        _recognizedText != null
+                    ? _recognizedText!
+                    : "")),
           ],
-        ));
+        )),
+        floatingActionButton:
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _textScanningEnabled = !_textScanningEnabled;
+              });
+            },
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.document_scanner),
+          ),
+          Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    _cameraEnabled = !_cameraEnabled;
+                  });
+
+                  if (_cameraEnabled) {
+                    loadCamera();
+                  } else {
+                    unloadCamera();
+                  }
+                },
+                backgroundColor: Colors.blue,
+                child: const Icon(Icons.camera_alt),
+              ))
+        ]));
   }
 
   Text? _getRetrieveErrorWidget() {
