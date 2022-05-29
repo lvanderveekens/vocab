@@ -112,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       //cameras[0] = first camera, change to 1 to another camera
 
+      // cameraController!.value.aspectRatio
       cameraController!.initialize().then((_) {
         if (!mounted) {
           return;
@@ -120,19 +121,19 @@ class _MyHomePageState extends State<MyHomePage> {
           _initialized = true;
         });
 
-        cameraController!.startImageStream((CameraImage image) {
-          log("processing image");
-          if (_isDetecting) return;
+        // cameraController!.startImageStream((CameraImage image) {
+        //   log("processing image");
+        //   if (_isDetecting) return;
 
-          if (_textScanningEnabled) {
-            setState(() {
-              _isDetecting = true;
-            });
+        //   if (_textScanningEnabled) {
+        //     setState(() {
+        //       _isDetecting = true;
+        //     });
 
-            log("will recognize text");
-            recognizeText(image).whenComplete(() => _isDetecting = false);
-          }
-        });
+        //     log("will recognize text");
+        //     recognizeText(image).whenComplete(() => _isDetecting = false);
+        //   }
+        // });
       });
     } else {
       log("No cameras found");
@@ -305,8 +306,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Widget _handlePreview() {
-    return isVideo ? _previewVideo() : _previewImages();
+  Widget getCameraPreviewWidget(context) {
+    final size = MediaQuery.of(context).size;
+
+    return Container(
+        width: size.width,
+        height: size.height,
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: Container(
+              width: 100, // fkda
+              child: CameraPreview(cameraController!)),
+        ));
   }
 
   Future<void> retrieveLostData() async {
@@ -339,26 +350,9 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title!),
         ),
-        body: SingleChildScrollView(
-            child: Column(
-          children: <Widget>[
-            Container(
-                height: 400,
-                child: cameraController == null
-                    ? const Text("Loading Camera...")
-                    : Center(
-                        child: _cameraEnabled &&
-                                cameraController!.value.isInitialized
-                            ? CameraPreview(cameraController!)
-                            : const Text(""))),
-            Container(
-                child: Text(_cameraEnabled &&
-                        _textScanningEnabled &&
-                        _recognizedText != null
-                    ? _recognizedText!
-                    : "")),
-          ],
-        )),
+        body: cameraController == null
+            ? const Text("Loading Camera...")
+            : getCameraPreviewWidget(context),
         floatingActionButton:
             Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
           FloatingActionButton(
