@@ -8,9 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
-
 // useful links:
 // https://www.fluttercampus.com/guide/266/show-live-image-preview-camera-flutter/
 // https://medium.flutterdevs.com/text-recognition-with-ml-kit-flutter-c71f27089437
@@ -51,18 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _recognizedText;
   bool _cameraEnabled = true;
   File? imageFile;
-
-  dynamic _pickImageError;
-  bool isVideo = false;
-
-  VideoPlayerController? _controller;
-  VideoPlayerController? _toBeDisposed;
-  String? _retrieveDataError;
-
-  final ImagePicker _picker = ImagePicker();
-  final TextEditingController maxWidthController = TextEditingController();
-  final TextEditingController maxHeightController = TextEditingController();
-  final TextEditingController qualityController = TextEditingController();
 
   @override
   void initState() {
@@ -113,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
       //cameras[0] = first camera, change to 1 to another camera
 
-      // cameraController!.value.aspectRatio
       cameraController!.initialize().then((_) {
         if (!mounted) {
           return;
@@ -121,20 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           _initialized = true;
         });
-
-        // cameraController!.startImageStream((CameraImage image) {
-        //   log("processing image");
-        //   if (_isDetecting) return;
-
-        //   if (_textScanningEnabled) {
-        //     setState(() {
-        //       _isDetecting = true;
-        //     });
-
-        //     log("will recognize text");
-        //     recognizeText(image).whenComplete(() => _isDetecting = false);
-        //   }
-        // });
       });
     } else {
       log("No cameras found");
@@ -147,25 +117,9 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _setImageFileListFromFile(XFile? value) {
-    _imageFileList = value == null ? null : <XFile>[value];
-  }
-
   @override
   void dispose() {
-    _disposeVideoController();
-    maxWidthController.dispose();
-    maxHeightController.dispose();
-    qualityController.dispose();
     super.dispose();
-  }
-
-  Future<void> _disposeVideoController() async {
-    if (_toBeDisposed != null) {
-      await _toBeDisposed!.dispose();
-    }
-    _toBeDisposed = _controller;
-    _controller = null;
   }
 
   Widget getCameraPreviewWidget(context) {
@@ -275,67 +229,5 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Icon(Icons.camera_alt),
               ))
         ]));
-  }
-
-  Text? _getRetrieveErrorWidget() {
-    if (_retrieveDataError != null) {
-      final Text result = Text(_retrieveDataError!);
-      _retrieveDataError = null;
-      return result;
-    }
-    return null;
-  }
-}
-
-typedef OnPickImageCallback = void Function(
-    double? maxWidth, double? maxHeight, int? quality);
-
-class AspectRatioVideo extends StatefulWidget {
-  const AspectRatioVideo(this.controller, {Key? key}) : super(key: key);
-
-  final VideoPlayerController? controller;
-
-  @override
-  AspectRatioVideoState createState() => AspectRatioVideoState();
-}
-
-class AspectRatioVideoState extends State<AspectRatioVideo> {
-  VideoPlayerController? get controller => widget.controller;
-  bool initialized = false;
-
-  void _onVideoControllerUpdate() {
-    if (!mounted) {
-      return;
-    }
-    if (initialized != controller!.value.isInitialized) {
-      initialized = controller!.value.isInitialized;
-      setState(() {});
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller!.addListener(_onVideoControllerUpdate);
-  }
-
-  @override
-  void dispose() {
-    controller!.removeListener(_onVideoControllerUpdate);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (initialized) {
-      return Center(
-        child: AspectRatio(
-          aspectRatio: controller!.value.aspectRatio,
-          child: VideoPlayer(controller!),
-        ),
-      );
-    } else {
-      return Container();
-    }
   }
 }
