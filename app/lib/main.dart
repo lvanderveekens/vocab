@@ -7,6 +7,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:megaphone/text_decorator_painter.dart';
 
 // useful links:
 // https://www.fluttercampus.com/guide/266/show-live-image-preview-camera-flutter/
@@ -122,73 +123,104 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  handleTapUp(TapUpDetails details) {
+    // on tap: take picture and show picture until tapped again
+    if (imageFile != null) {
+      setState(() {
+        imageFile = null;
+      });
+      return;
+    }
+
+    // or user the local position method to get the offset
+    print(details.localPosition);
+    var x = details.globalPosition.dx;
+    var y = details.globalPosition.dy;
+    print("global " + x.toString() + ", " + y.toString());
+
+    cameraController!.takePicture().then((file) async {
+      final imageFile = File(file.path);
+      setState(() {
+        this.imageFile = imageFile;
+      });
+    });
+  }
+
+  Future<MyResult?> getAap(File? imageFile) async {
+    if (imageFile == null) {
+      return null;
+    }
+
+    final bs = await imageFile.readAsBytes();
+    final uiImage = await decodeImageFromList(bs);
+    print(
+        "image " + uiImage.width.toString() + " " + uiImage.height.toString());
+
+    final inputImage = InputImage.fromFile(imageFile);
+
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+
+    print(">>> RECOGNIZED TEXT");
+    print(recognizedText.text);
+    print("<<< RECOGNIZED TEXT");
+
+    textRecognizer.close();
+
+    final size = Size(uiImage.width.toDouble(), uiImage.height.toDouble());
+    print(size);
+
+    return MyResult(size, recognizedText);
+  }
+
+  _buildOverlayIfNeeded(File? imageFile) {
+    return new FutureBuilder(
+        future: getAap(imageFile),
+        builder: (BuildContext context, AsyncSnapshot<MyResult?> myResult) {
+          if (myResult == null || myResult.data == null) {
+            return Container();
+          }
+
+          print("draw it");
+          final painter = TextDetectorPainter(
+              myResult.data!.size, myResult.data!.recognizedText);
+
+          return CustomPaint(painter: painter);
+        });
+
+    // recognizedText.blocks.forEach((block) {
+    //   block.lines.forEach((line) {
+    //     line.elements.forEach((element) {
+    //       if (element.text == "gaan") {
+    //         print("'gaan' found");
+    //         print(element.boundingBox);
+    //       }
+    //     });
+    //   });
+    // });
+  }
+
   Widget getCameraPreviewWidget(context) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-        width: size.width,
-        height: size.height,
-        child: FittedBox(
-            fit: BoxFit.contain,
-            child: Container(
-              width: 100,
-              child: GestureDetector(
-                  onTapUp: (TapUpDetails details) {
-                    // on tap: take picture and show picture until tapped again
-                    if (imageFile != null) {
-                      setState(() {
-                        imageFile = null;
-                      });
-                      return;
-                    }
-
-                    // or user the local position method to get the offset
-                    print(details.localPosition);
-                    var x = details.globalPosition.dx;
-                    var y = details.globalPosition.dy;
-                    print("global " + x.toString() + ", " + y.toString());
-
-                    cameraController!.takePicture().then((file) async {
-                      final imageFile = File(file.path);
-                      setState(() {
-                        this.imageFile = imageFile;
-                      });
-
-                      file.readAsBytes().then((bs) {
-                        decodeImageFromList(bs).then((uiImage) {
-                          print("image " +
-                              uiImage.width.toString() +
-                              " " +
-                              uiImage.height.toString());
-                        });
-                      });
-
-                      final inputImage = InputImage.fromFile(imageFile);
-
-                      final textRecognizer =
-                          TextRecognizer(script: TextRecognitionScript.latin);
-
-                      final RecognizedText recognizedText =
-                          await textRecognizer.processImage(inputImage);
-
-                      recognizedText.blocks.forEach((block) {
-                        block.lines.forEach((line) {
-                          line.elements.forEach((element) {
-                            if (element.text == "gaan") {
-                              print("'gaan' found");
-                              print(element.boundingBox);
-                            }
-                          });
-                        });
-                      });
-
-                      // textRecognizer.close();
-                    });
-                  },
-                  child: imageFile != null
-                      ? Image.file(imageFile!)
-                      : CameraPreview(cameraController!)),
-            )));
+    return Stack(fit: StackFit.expand, children: <Widget>[
+      Container(
+          width: size.width,
+          height: size.height,
+          child: FittedBox(
+              fit: BoxFit.contain, // TODO: change to 'cover' later...
+              child: Container(
+                width: 100,
+                child: GestureDetector(
+                    onTapUp: handleTapUp,
+                    child: imageFile != null
+                        ? Image.file(imageFile!)
+                        : CameraPreview(cameraController!)),
+              ))),
+      _buildOverlayIfNeeded(imageFile),
+    ]);
   }
 
   @override
@@ -230,4 +262,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ))
         ]));
   }
+}
+
+class MyResult {
+  Size size;
+  RecognizedText recognizedText;
+
+  MyResult(this.size, this.recognizedText);
 }
