@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _initialized = false;
   String? _recognizedText;
   bool _cameraEnabled = true;
+  File? imageFile;
 
   dynamic _pickImageError;
   bool isVideo = false;
@@ -150,73 +151,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _imageFileList = value == null ? null : <XFile>[value];
   }
 
-  Future<void> _playVideo(XFile? file) async {
-    if (file != null && mounted) {
-      await _disposeVideoController();
-      late VideoPlayerController controller;
-      if (kIsWeb) {
-        controller = VideoPlayerController.network(file.path);
-      } else {
-        controller = VideoPlayerController.file(File(file.path));
-      }
-      _controller = controller;
-      // In web, most browsers won't honor a programmatic call to .play
-      // if the video has a sound track (and is not muted).
-      // Mute the video so it auto-plays in web!
-      // This is not needed if the call to .play is the result of user
-      // interaction (clicking on a "play" button, for example).
-      const double volume = kIsWeb ? 0.0 : 1.0;
-      await controller.setVolume(volume);
-      await controller.initialize();
-      await controller.setLooping(true);
-      await controller.play();
-      setState(() {});
-    }
-  }
-
-  Future<void> _onImageButtonPressed(ImageSource source,
-      {BuildContext? context, bool isMultiImage = false}) async {
-    if (_controller != null) {
-      await _controller!.setVolume(0.0);
-    }
-    if (isVideo) {
-      final XFile? file = await _picker.pickVideo(
-          source: source, maxDuration: const Duration(seconds: 10));
-      await _playVideo(file);
-    } else if (isMultiImage) {
-      try {
-        final List<XFile>? pickedFileList = await _picker.pickMultiImage();
-        setState(() {
-          _imageFileList = pickedFileList;
-        });
-      } catch (e) {
-        setState(() {
-          _pickImageError = e;
-        });
-      }
-    } else {
-      try {
-        final XFile? pickedFile = await _picker.pickImage(source: source);
-        setState(() {
-          _setImageFileListFromFile(pickedFile);
-        });
-      } catch (e) {
-        setState(() {
-          _pickImageError = e;
-        });
-      }
-    }
-  }
-
-  @override
-  void deactivate() {
-    if (_controller != null) {
-      _controller!.setVolume(0.0);
-      _controller!.pause();
-    }
-    super.deactivate();
-  }
-
   @override
   void dispose() {
     _disposeVideoController();
@@ -234,78 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _controller = null;
   }
 
-  Widget _previewVideo() {
-    final Text? retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-    if (_controller == null) {
-      return const Text(
-        'You have not yet picked a video',
-        textAlign: TextAlign.center,
-      );
-    }
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: AspectRatioVideo(_controller),
-    );
-  }
-
-  Widget _previewImages() {
-    final Text? retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-    if (_imageFileList != null) {
-      return Semantics(
-        label: 'image_picker_example_picked_images',
-        child: ListView.builder(
-          key: UniqueKey(),
-          itemBuilder: (BuildContext context, int index) {
-            // Why network for web?
-            // See https://pub.dev/packages/image_picker#getting-ready-for-the-web-platform
-            final xFile = _imageFileList![index];
-            final imageFile = File(xFile.path);
-
-            return Column(children: [
-              Semantics(
-                label: 'image_picker_example_picked_image',
-                child: Image.file(File(xFile.path)),
-              ),
-              // FutureBuilder<String>(
-              //   future: recognizeText(imageFile),
-              //   builder:
-              //       (BuildContext context, AsyncSnapshot<String> snapshot) {
-              //     if (!snapshot.hasData) {
-              //       // while data is loading
-              //       return const Center(child: CircularProgressIndicator());
-              //     } else {
-              //       // data loaded
-              //       final text = snapshot.data;
-              //       return Center(
-              //         child: Text(text ?? ''),
-              //       );
-              //     }
-              //   },
-              // )
-            ]);
-          },
-          itemCount: _imageFileList!.length,
-        ),
-      );
-    } else if (_pickImageError != null) {
-      return Text(
-        'Pick image error: $_pickImageError',
-        textAlign: TextAlign.center,
-      );
-    } else {
-      return const Text(
-        'You have not yet picked an image.',
-        textAlign: TextAlign.center,
-      );
-    }
-  }
-
   Widget getCameraPreviewWidget(context) {
     final size = MediaQuery.of(context).size;
 
@@ -313,43 +175,74 @@ class _MyHomePageState extends State<MyHomePage> {
         width: size.width,
         height: size.height,
         child: FittedBox(
-          fit: BoxFit.cover,
-          child: Container(
-              width: 100, // fkda
-              child: CameraPreview(cameraController!)),
-        ));
-  }
+            fit: BoxFit.contain,
+            child: Container(
+              width: 100,
+              child: GestureDetector(
+                  onTapUp: (TapUpDetails details) {
+                    // on tap: take picture and show picture until tapped again
+                    if (imageFile != null) {
+                      setState(() {
+                        imageFile = null;
+                      });
+                      return;
+                    }
 
-  Future<void> retrieveLostData() async {
-    final LostDataResponse response = await _picker.retrieveLostData();
-    if (response.isEmpty) {
-      return;
-    }
-    if (response.file != null) {
-      if (response.type == RetrieveType.video) {
-        isVideo = true;
-        await _playVideo(response.file);
-      } else {
-        isVideo = false;
-        setState(() {
-          if (response.files == null) {
-            _setImageFileListFromFile(response.file);
-          } else {
-            _imageFileList = response.files;
-          }
-        });
-      }
-    } else {
-      _retrieveDataError = response.exception!.code;
-    }
+                    // or user the local position method to get the offset
+                    print(details.localPosition);
+                    var x = details.globalPosition.dx;
+                    var y = details.globalPosition.dy;
+                    print("global " + x.toString() + ", " + y.toString());
+
+                    cameraController!.takePicture().then((file) async {
+                      final imageFile = File(file.path);
+                      setState(() {
+                        this.imageFile = imageFile;
+                      });
+
+                      file.readAsBytes().then((bs) {
+                        decodeImageFromList(bs).then((uiImage) {
+                          print("image " +
+                              uiImage.width.toString() +
+                              " " +
+                              uiImage.height.toString());
+                        });
+                      });
+
+                      final inputImage = InputImage.fromFile(imageFile);
+
+                      final textRecognizer =
+                          TextRecognizer(script: TextRecognitionScript.latin);
+
+                      final RecognizedText recognizedText =
+                          await textRecognizer.processImage(inputImage);
+
+                      recognizedText.blocks.forEach((block) {
+                        block.lines.forEach((line) {
+                          line.elements.forEach((element) {
+                            if (element.text == "gaan") {
+                              print("'gaan' found");
+                              print(element.boundingBox);
+                            }
+                          });
+                        });
+                      });
+
+                      // textRecognizer.close();
+                    });
+                  },
+                  child: imageFile != null
+                      ? Image.file(imageFile!)
+                      : CameraPreview(cameraController!)),
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title!),
-        ),
+        // appBar: AppBar(
+        //   title: Text(widget.title!),
+        // ),
         body: cameraController == null
             ? const Text("Loading Camera...")
             : getCameraPreviewWidget(context),
