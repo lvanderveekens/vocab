@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class TextDetectorPainter extends CustomPainter {
-  TextDetectorPainter(this.absoluteImageSize, this.recognizedText);
+  TextDetectorPainter(this.imageSize, this.recognizedText);
 
-  final Size absoluteImageSize;
+  final Size imageSize;
   final RecognizedText recognizedText;
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size canvasSize) {
     print("@>paint");
-    final double scaleX = size.width / absoluteImageSize.width;
-    final double scaleY = size.height / absoluteImageSize.height;
-    print("size: " + size.toString());
-    print("absoluteImageSize: " + absoluteImageSize.toString());
+
+    final double scaleX = canvasSize.width / imageSize.width;
+    final double scaleY = canvasSize.height / imageSize.height;
+
+    print("canvas size: " + canvasSize.toString());
+    print("canvas ratio (width/height): " +
+        (canvasSize.width / canvasSize.height).toString());
+    print("image size: " + imageSize.toString());
+    print("image ratio (width/height): " +
+        (imageSize.width / imageSize.height).toString());
 
     print("scale " + scaleX.toString() + " " + scaleY.toString());
 
@@ -34,24 +40,37 @@ class TextDetectorPainter extends CustomPainter {
       for (TextLine line in block.lines) {
         for (TextElement element in line.elements) {
           // print("draw rectangle for element: " + element.text);
-          paint.color = Colors.green;
-          final scaledRect = scaleRect(element.boundingBox);
-          // print("scaled rect: " + scaledRect.toString());
+          paint.color = Colors.red;
+          final elementBoundingBox = element.boundingBox;
+          print("elementBoundingBox before scale");
+          print(elementBoundingBox);
+          final scaledRect = scaleRect(elementBoundingBox);
+          print("elementBoundingBox after scale");
+          print(scaledRect);
           canvas.drawRect(scaledRect, paint);
         }
 
-        paint.color = Colors.yellow;
+        // paint.color = Colors.yellow;
         canvas.drawRect(scaleRect(line.boundingBox), paint);
       }
 
-      paint.color = Colors.red;
+      // paint.color = Colors.red;
       canvas.drawRect(scaleRect(block.boundingBox), paint);
     }
+
+    canvas.drawRect(
+        scaleRect(Rect.fromLTRB(
+          0.0,
+          0.0,
+          2376.0,
+          4224.0,
+        )),
+        paint);
   }
 
   @override
   bool shouldRepaint(TextDetectorPainter oldDelegate) {
-    return oldDelegate.absoluteImageSize != absoluteImageSize ||
+    return oldDelegate.imageSize != imageSize ||
         oldDelegate.recognizedText != recognizedText;
   }
 }

@@ -6,6 +6,9 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
+
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:megaphone/text_decorator_painter.dart';
 
@@ -97,8 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (cameras != null) {
       cameraController = CameraController(cameras![0], ResolutionPreset.max);
 
-      //cameras[0] = first camera, change to 1 to another camera
-
       cameraController!.initialize().then((_) {
         if (!mounted) {
           return;
@@ -106,6 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           _initialized = true;
         });
+
+        // TODO: is this needed?
+        cameraController!.lockCaptureOrientation(DeviceOrientation.portraitUp);
       });
     } else {
       log("No cameras found");
@@ -139,7 +143,15 @@ class _MyHomePageState extends State<MyHomePage> {
     print("global " + x.toString() + ", " + y.toString());
 
     cameraController!.takePicture().then((file) async {
+      // final imageFile = File(file.path);
+
+      final img.Image? capturedImage =
+          img.decodeImage(await File(file.path).readAsBytes());
+      final img.Image orientedImage = img.bakeOrientation(capturedImage!);
+      await File(file.path).writeAsBytes(img.encodeJpg(orientedImage));
+
       final imageFile = File(file.path);
+
       setState(() {
         this.imageFile = imageFile;
       });
@@ -152,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     final bs = await imageFile.readAsBytes();
+
     final uiImage = await decodeImageFromList(bs);
     print(
         "image " + uiImage.width.toString() + " " + uiImage.height.toString());
@@ -169,25 +182,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
     textRecognizer.close();
 
-    final size = Size(uiImage.width.toDouble(), uiImage.height.toDouble());
-    print(size);
+    final imageSize = Size(uiImage.width.toDouble(), uiImage.height.toDouble());
+    print("image size");
+    print(imageSize);
 
-    return MyResult(size, recognizedText);
+    return MyResult(imageSize, recognizedText);
   }
 
   _buildOverlayIfNeeded(File? imageFile) {
-    return new FutureBuilder(
+    return FutureBuilder(
         future: getAap(imageFile),
         builder: (BuildContext context, AsyncSnapshot<MyResult?> myResult) {
-          if (myResult == null || myResult.data == null) {
+          if (myResult.data == null) {
             return Container();
           }
 
           print("draw it");
-          final painter = TextDetectorPainter(
-              myResult.data!.size, myResult.data!.recognizedText);
+          final absoluteImageSize = myResult.data!.imageSize;
+          final recognizedText = myResult.data!.recognizedText;
+          print("absolute image size");
+          print(absoluteImageSize);
+          print("recognizedText");
+          print(recognizedText);
 
-          return CustomPaint(painter: painter);
+          final painter =
+              TextDetectorPainter(absoluteImageSize, recognizedText);
+
+          print("futureBuilder()");
+          // print(context.size);
+
+          return CustomPaint(painter: painter, size: Size(390.0, 693.3));
         });
 
     // recognizedText.blocks.forEach((block) {
@@ -205,22 +229,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget getCameraPreviewWidget(context) {
     final size = MediaQuery.of(context).size;
 
-    return Stack(fit: StackFit.expand, children: <Widget>[
+    return Stack(fit: StackFit.loose, children: <Widget>[
       Container(
           width: size.width,
-          height: size.height,
-          child: FittedBox(
-              fit: BoxFit.contain, // TODO: change to 'cover' later...
-              child: Container(
-                width: 100,
-                child: GestureDetector(
-                    onTapUp: handleTapUp,
-                    child: imageFile != null
-                        ? Image.file(imageFile!)
-                        : CameraPreview(cameraController!)),
-              ))),
+          // height: size.height,
+          // child: FittedBox(
+          // fit: BoxFit.contain, // TODO: change to 'cover' later...
+          // child: Container(
+          // width: size.width,
+          child: GestureDetector(
+              onTapUp: handleTapUp,
+              child: imageFile != null
+                  ? Image.file(imageFile!)
+                  : CameraPreview(cameraController!))),
+      // ))),
       _buildOverlayIfNeeded(imageFile),
     ]);
+    // ]);
   }
 
   @override
@@ -265,8 +290,8 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class MyResult {
-  Size size;
+  Size imageSize;
   RecognizedText recognizedText;
 
-  MyResult(this.size, this.recognizedText);
+  MyResult(this.imageSize, this.recognizedText);
 }
