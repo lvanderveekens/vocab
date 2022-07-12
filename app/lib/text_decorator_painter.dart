@@ -32,30 +32,39 @@ class TextDetectorPainter extends CustomPainter {
       );
     }
 
-    final Paint paint = Paint()
+    final Paint redPaint = Paint()
       ..style = PaintingStyle.stroke
+      ..color = Colors.red
+      ..strokeWidth = 2.0;
+
+    final Paint bluePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = Colors.blue
+      ..strokeWidth = 2.0;
+
+    final Paint yellowPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = Colors.yellow
       ..strokeWidth = 2.0;
 
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
         for (TextElement element in line.elements) {
           // print("draw rectangle for element: " + element.text);
-          paint.color = Colors.red;
           final elementBoundingBox = element.boundingBox;
           print("elementBoundingBox before scale");
           print(elementBoundingBox);
           final scaledRect = scaleRect(elementBoundingBox);
           print("elementBoundingBox after scale");
           print(scaledRect);
-          canvas.drawRect(scaledRect, paint);
+
+          canvas.drawRect(scaledRect, redPaint);
         }
 
-        // paint.color = Colors.yellow;
-        canvas.drawRect(scaleRect(line.boundingBox), paint);
+        // canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
       }
 
-      // paint.color = Colors.red;
-      canvas.drawRect(scaleRect(block.boundingBox), paint);
+      // canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
     }
 
     canvas.drawRect(
@@ -65,7 +74,7 @@ class TextDetectorPainter extends CustomPainter {
           2376.0,
           4224.0,
         )),
-        paint);
+        redPaint);
   }
 
   @override

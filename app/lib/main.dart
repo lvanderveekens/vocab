@@ -127,7 +127,36 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  handleTapUp(TapUpDetails details) {
+  handleOverlayTapUp(
+      RecognizedText recognizedText, double scaleX, double scaleY) {
+    Rect scaleRect(Rect boundingBox) {
+      return Rect.fromLTRB(
+        boundingBox.left * scaleX,
+        boundingBox.top * scaleY,
+        boundingBox.right * scaleX,
+        boundingBox.bottom * scaleY,
+      );
+    }
+
+    return (TapUpDetails details) {
+      var x = details.localPosition.dx;
+      var y = details.localPosition.dy;
+
+      for (TextBlock block in recognizedText.blocks) {
+        for (TextLine line in block.lines) {
+          for (TextElement element in line.elements) {
+            final scaledBoundingBox = scaleRect(element.boundingBox);
+            if (scaledBoundingBox.contains(details.localPosition)) {
+              log("CLICKED ON: ${element.text}");
+            }
+          }
+        }
+      }
+    };
+  }
+
+  handleCameraPreviewTapUp(TapUpDetails details) {
+    log("handle camera preview tap up!");
     // on tap: take picture and show picture until tapped again
     if (imageFile != null) {
       setState(() {
@@ -137,10 +166,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // or user the local position method to get the offset
-    print(details.localPosition);
+    log("${details.localPosition}");
     var x = details.globalPosition.dx;
     var y = details.globalPosition.dy;
-    print("global " + x.toString() + ", " + y.toString());
+    log("global " + x.toString() + ", " + y.toString());
 
     cameraController!.takePicture().then((file) async {
       // final imageFile = File(file.path);
@@ -166,8 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final bs = await imageFile.readAsBytes();
 
     final uiImage = await decodeImageFromList(bs);
-    print(
-        "image " + uiImage.width.toString() + " " + uiImage.height.toString());
+    log("image " + uiImage.width.toString() + " " + uiImage.height.toString());
 
     final inputImage = InputImage.fromFile(imageFile);
 
@@ -176,15 +204,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
 
-    print(">>> RECOGNIZED TEXT");
-    print(recognizedText.text);
-    print("<<< RECOGNIZED TEXT");
+    log(">>> RECOGNIZED TEXT");
+    log(recognizedText.text);
+    log("<<< RECOGNIZED TEXT");
 
     textRecognizer.close();
 
     final imageSize = Size(uiImage.width.toDouble(), uiImage.height.toDouble());
-    print("image size");
-    print(imageSize);
+    log("image size");
+    log("$imageSize");
 
     return MyResult(imageSize, recognizedText);
   }
@@ -197,29 +225,35 @@ class _MyHomePageState extends State<MyHomePage> {
             return Container();
           }
 
-          print("draw it");
+          log("draw it");
           final absoluteImageSize = myResult.data!.imageSize;
           final recognizedText = myResult.data!.recognizedText;
-          print("absolute image size");
-          print(absoluteImageSize);
-          print("recognizedText");
-          print(recognizedText);
+          log("absolute image size");
+          log("$absoluteImageSize");
+          log("recognizedText");
+          log("$recognizedText");
 
           final painter =
               TextDetectorPainter(absoluteImageSize, recognizedText);
 
-          print("futureBuilder()");
-          // print(context.size);
+          log("futureBuilder()");
+          // log(context.size);
 
-          return CustomPaint(painter: painter, size: Size(390.0, 693.3));
+          final Size canvasSize = Size(390.0, 693.3);
+          final double scaleX = canvasSize.width / absoluteImageSize.width;
+          final double scaleY = canvasSize.height / absoluteImageSize.height;
+
+          return GestureDetector(
+              onTapUp: handleOverlayTapUp(recognizedText, scaleX, scaleY),
+              child: CustomPaint(painter: painter, size: canvasSize));
         });
 
     // recognizedText.blocks.forEach((block) {
     //   block.lines.forEach((line) {
     //     line.elements.forEach((element) {
     //       if (element.text == "gaan") {
-    //         print("'gaan' found");
-    //         print(element.boundingBox);
+    //         log("'gaan' found");
+    //         log(element.boundingBox);
     //       }
     //     });
     //   });
@@ -238,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // child: Container(
           // width: size.width,
           child: GestureDetector(
-              onTapUp: handleTapUp,
+              onTapUp: handleCameraPreviewTapUp,
               child: imageFile != null
                   ? Image.file(imageFile!)
                   : CameraPreview(cameraController!))),
