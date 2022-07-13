@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _showAlertDialog = false;
   String? _tappedText = null;
+  List<String>? _recognizedLanguages;
 
   @override
   void initState() {
@@ -168,9 +169,11 @@ class _MyHomePageState extends State<MyHomePage> {
           for (TextElement element in line.elements) {
             final scaledBoundingBox = scaleRect(element.boundingBox);
             if (scaledBoundingBox.contains(details.localPosition)) {
-              // log("CLICKED ON: ${element.text}");
+              log("block recognized langugages: ${block.recognizedLanguages}");
+
               setState(() {
                 _tappedText = element.text;
+                _recognizedLanguages = block.recognizedLanguages;
                 _showAlertDialog = true;
               });
             }
@@ -186,7 +189,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return AlertDialog(
-      content: Text('Tapped on ${_tappedText!}'),
+      content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Tapped on: ${_tappedText!}'),
+            Text('Recognized languages: ${_recognizedLanguages!}'),
+          ]),
       actions: <Widget>[
         TextButton(
           onPressed: () => {

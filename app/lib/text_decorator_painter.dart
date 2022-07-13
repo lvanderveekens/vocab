@@ -50,10 +50,14 @@ class TextDetectorPainter extends CustomPainter {
           }
         }
 
-        // canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
+        if (drawEnabled) {
+          canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
+        }
       }
 
-      // canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
+      if (drawEnabled) {
+        canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
+      }
     }
 
     if (drawEnabled) {
