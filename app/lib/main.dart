@@ -54,6 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _cameraEnabled = true;
   File? imageFile;
 
+  bool _showAlertDialog = false;
+  String? _tappedText = null;
+
   @override
   void initState() {
     super.initState();
@@ -67,33 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return allBytes.done().buffer.asUint8List();
   }
-
-  // Future<void> recognizeText(CameraImage cameraImage) async {
-  //   final inputImage = InputImage.fromBytes(
-  //       bytes: _concatenatePlanes(cameraImage.planes),
-  //       inputImageData: InputImageData(
-  //           size: Size(
-  //               cameraImage.width.toDouble(), cameraImage.height.toDouble()),
-  //           imageRotation: InputImageRotation.rotation0deg,
-  //           inputImageFormat: InputImageFormat.bgra8888,
-  //           planeData: cameraImage.planes.map(
-  //             (Plane plane) {
-  //               return InputImagePlaneMetadata(
-  //                 bytesPerRow: plane.bytesPerRow,
-  //                 height: plane.height,
-  //                 width: plane.width,
-  //               );
-  //             },
-  //           ).toList()));
-
-  //   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-
-  //   final RecognizedText recognizedText =
-  //       await textRecognizer.processImage(inputImage);
-
-  //   _recognizedText = recognizedText.text;
-  //   textRecognizer.close();
-  // }
 
   loadCamera() async {
     log("@>loadCamera");
@@ -190,7 +166,11 @@ class _MyHomePageState extends State<MyHomePage> {
           for (TextElement element in line.elements) {
             final scaledBoundingBox = scaleRect(element.boundingBox);
             if (scaledBoundingBox.contains(details.localPosition)) {
-              log("CLICKED ON: ${element.text}");
+              // log("CLICKED ON: ${element.text}");
+              setState(() {
+                _tappedText = element.text;
+                _showAlertDialog = true;
+              });
             }
           }
         }
@@ -260,7 +240,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return MyResult(imageSize, recognizedText);
   }
 
-  _buildOverlayIfNeeded() {
+  Widget _buildAlertDialogIfNeeded() {
+    if (!_showAlertDialog || _tappedText == null) {
+      return Container();
+    }
+
+    return AlertDialog(
+      content: Text('Tapped on ${_tappedText!}'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => {
+            setState(() {
+              _showAlertDialog = false;
+            })
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOverlayIfNeeded() {
     if (_recognizedText == null) {
       return Container();
     }
@@ -281,21 +281,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: CustomPaint(painter: painter, size: customPaintSize));
   }
 
-  Widget getCameraPreviewWidget(context) {
-    final size = MediaQuery.of(context).size;
-
-    return Stack(fit: StackFit.loose, children: <Widget>[
-      Container(
-          width: size.width,
-          child: GestureDetector(
-              // onTapUp: handleCameraPreviewTapUp,
-              child: CameraPreview(cameraController!))),
-      // ))),
-      _buildOverlayIfNeeded(),
-    ]);
-    // ]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -304,36 +289,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // ),
         body: cameraController == null
             ? const Text("Loading Camera...")
-            : getCameraPreviewWidget(context),
-        floatingActionButton:
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-          FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _textScanningEnabled = !_textScanningEnabled;
-              });
-            },
-            backgroundColor: Colors.blue,
-            child: const Icon(Icons.document_scanner),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    _cameraEnabled = !_cameraEnabled;
-                  });
-
-                  if (_cameraEnabled) {
-                    loadCamera();
-                  } else {
-                    unloadCamera();
-                  }
-                },
-                backgroundColor: Colors.blue,
-                child: const Icon(Icons.camera_alt),
-              ))
-        ]));
+            : Stack(fit: StackFit.loose, children: <Widget>[
+                CameraPreview(cameraController!),
+                _buildOverlayIfNeeded(),
+                _buildAlertDialogIfNeeded(),
+              ]));
   }
 }
 
