@@ -268,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: no static image size
     final imageSize = Size(720, 1280);
 
-    final painter = TextDetectorPainter(imageSize, _recognizedText!);
+    final painter = TextDetectorPainter(imageSize, _recognizedText!, false);
 
     // scaling only works because custom paint size and image size have the same aspect ratio
     // TODO: no static custom paint size

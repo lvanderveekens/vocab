@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class TextDetectorPainter extends CustomPainter {
-  TextDetectorPainter(this.imageSize, this.recognizedText);
+  TextDetectorPainter(this.imageSize, this.recognizedText, this.drawEnabled);
 
   final Size imageSize;
   final RecognizedText recognizedText;
+  final bool drawEnabled;
 
   @override
   void paint(Canvas canvas, Size canvasSize) {
@@ -44,7 +45,9 @@ class TextDetectorPainter extends CustomPainter {
           final elementBoundingBox = element.boundingBox;
           final scaledRect = scaleRect(elementBoundingBox);
 
-          canvas.drawRect(scaledRect, redPaint);
+          if (drawEnabled) {
+            canvas.drawRect(scaledRect, redPaint);
+          }
         }
 
         // canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
@@ -53,14 +56,16 @@ class TextDetectorPainter extends CustomPainter {
       // canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
     }
 
-    canvas.drawRect(
-        scaleRect(Rect.fromLTRB(
-          0.0,
-          0.0,
-          imageSize.width,
-          imageSize.height,
-        )),
-        redPaint);
+    if (drawEnabled) {
+      canvas.drawRect(
+          scaleRect(Rect.fromLTRB(
+            0.0,
+            0.0,
+            imageSize.width,
+            imageSize.height,
+          )),
+          redPaint);
+    }
   }
 
   @override
