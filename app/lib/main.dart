@@ -49,7 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _textScanningEnabled = false;
   bool _isDetecting = false;
   bool _initialized = false;
-  String? _recognizedText;
+  bool _isRecognizing = false;
+  RecognizedText? _recognizedText;
   bool _cameraEnabled = true;
   File? imageFile;
 
@@ -67,8 +68,81 @@ class _MyHomePageState extends State<MyHomePage> {
     return allBytes.done().buffer.asUint8List();
   }
 
-  Future<void> recognizeText(CameraImage cameraImage) async {
-    final inputImage = InputImage.fromBytes(
+  // Future<void> recognizeText(CameraImage cameraImage) async {
+  //   final inputImage = InputImage.fromBytes(
+  //       bytes: _concatenatePlanes(cameraImage.planes),
+  //       inputImageData: InputImageData(
+  //           size: Size(
+  //               cameraImage.width.toDouble(), cameraImage.height.toDouble()),
+  //           imageRotation: InputImageRotation.rotation0deg,
+  //           inputImageFormat: InputImageFormat.bgra8888,
+  //           planeData: cameraImage.planes.map(
+  //             (Plane plane) {
+  //               return InputImagePlaneMetadata(
+  //                 bytesPerRow: plane.bytesPerRow,
+  //                 height: plane.height,
+  //                 width: plane.width,
+  //               );
+  //             },
+  //           ).toList()));
+
+  //   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+  //   final RecognizedText recognizedText =
+  //       await textRecognizer.processImage(inputImage);
+
+  //   _recognizedText = recognizedText.text;
+  //   textRecognizer.close();
+  // }
+
+  loadCamera() async {
+    log("@>loadCamera");
+    cameras = await availableCameras();
+
+    if (cameras == null) {
+      log("No cameras found");
+      return;
+    }
+
+    // TODO: change to low resolution for better performance?
+    cameraController = CameraController(cameras![0], ResolutionPreset.high);
+
+    cameraController!.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _initialized = true;
+      });
+
+      cameraController!.startImageStream((CameraImage cameraImage) async {
+        log("Process image, width: ${cameraImage.width}, height: ${cameraImage.height}");
+        if (_isRecognizing) {
+          return;
+        }
+
+        await recognizeText(cameraImage);
+      });
+    });
+  }
+
+  recognizeText(CameraImage cameraImage) async {
+    _isRecognizing = true;
+
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(convertToInputImage(cameraImage));
+
+    setState(() {
+      _recognizedText = recognizedText;
+    });
+
+    _isRecognizing = false;
+  }
+
+  InputImage convertToInputImage(CameraImage cameraImage) {
+    return InputImage.fromBytes(
         bytes: _concatenatePlanes(cameraImage.planes),
         inputImageData: InputImageData(
             size: Size(
@@ -84,36 +158,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ).toList()));
-
-    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
-
-    _recognizedText = recognizedText.text;
-    textRecognizer.close();
-  }
-
-  loadCamera() async {
-    log("@>loadCamera");
-    cameras = await availableCameras();
-    if (cameras != null) {
-      cameraController = CameraController(cameras![0], ResolutionPreset.max);
-
-      cameraController!.initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _initialized = true;
-        });
-
-        // TODO: is this needed?
-        cameraController!.lockCaptureOrientation(DeviceOrientation.portraitUp);
-      });
-    } else {
-      log("No cameras found");
-    }
   }
 
   unloadCamera() async {
@@ -127,8 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  handleOverlayTapUp(
-      RecognizedText recognizedText, double scaleX, double scaleY) {
+  handleOverlayTapUp(double scaleX, double scaleY) {
     Rect scaleRect(Rect boundingBox) {
       return Rect.fromLTRB(
         boundingBox.left * scaleX,
@@ -142,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
       var x = details.localPosition.dx;
       var y = details.localPosition.dy;
 
-      for (TextBlock block in recognizedText.blocks) {
+      for (TextBlock block in _recognizedText!.blocks) {
         for (TextLine line in block.lines) {
           for (TextElement element in line.elements) {
             final scaledBoundingBox = scaleRect(element.boundingBox);
@@ -217,47 +260,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return MyResult(imageSize, recognizedText);
   }
 
-  _buildOverlayIfNeeded(File? imageFile) {
-    return FutureBuilder(
-        future: getAap(imageFile),
-        builder: (BuildContext context, AsyncSnapshot<MyResult?> myResult) {
-          if (myResult.data == null) {
-            return Container();
-          }
+  _buildOverlayIfNeeded() {
+    if (_recognizedText == null) {
+      return Container();
+    }
 
-          log("draw it");
-          final absoluteImageSize = myResult.data!.imageSize;
-          final recognizedText = myResult.data!.recognizedText;
-          log("absolute image size");
-          log("$absoluteImageSize");
-          log("recognizedText");
-          log("$recognizedText");
+    // TODO: no static image size
+    final imageSize = Size(720, 1280);
 
-          final painter =
-              TextDetectorPainter(absoluteImageSize, recognizedText);
+    final painter = TextDetectorPainter(imageSize, _recognizedText!);
 
-          log("futureBuilder()");
-          // log(context.size);
+    // scaling only works because custom paint size and image size have the same aspect ratio
+    // TODO: no static custom paint size
+    final Size customPaintSize = Size(390.0, 693.3);
+    final double scaleX = customPaintSize.width / imageSize.width;
+    final double scaleY = customPaintSize.height / imageSize.height;
 
-          final Size canvasSize = Size(390.0, 693.3);
-          final double scaleX = canvasSize.width / absoluteImageSize.width;
-          final double scaleY = canvasSize.height / absoluteImageSize.height;
-
-          return GestureDetector(
-              onTapUp: handleOverlayTapUp(recognizedText, scaleX, scaleY),
-              child: CustomPaint(painter: painter, size: canvasSize));
-        });
-
-    // recognizedText.blocks.forEach((block) {
-    //   block.lines.forEach((line) {
-    //     line.elements.forEach((element) {
-    //       if (element.text == "gaan") {
-    //         log("'gaan' found");
-    //         log(element.boundingBox);
-    //       }
-    //     });
-    //   });
-    // });
+    return GestureDetector(
+        onTapUp: handleOverlayTapUp(scaleX, scaleY),
+        child: CustomPaint(painter: painter, size: customPaintSize));
   }
 
   Widget getCameraPreviewWidget(context) {
@@ -266,18 +287,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return Stack(fit: StackFit.loose, children: <Widget>[
       Container(
           width: size.width,
-          // height: size.height,
-          // child: FittedBox(
-          // fit: BoxFit.contain, // TODO: change to 'cover' later...
-          // child: Container(
-          // width: size.width,
           child: GestureDetector(
-              onTapUp: handleCameraPreviewTapUp,
-              child: imageFile != null
-                  ? Image.file(imageFile!)
-                  : CameraPreview(cameraController!))),
+              // onTapUp: handleCameraPreviewTapUp,
+              child: CameraPreview(cameraController!))),
       // ))),
-      _buildOverlayIfNeeded(imageFile),
+      _buildOverlayIfNeeded(),
     ]);
     // ]);
   }

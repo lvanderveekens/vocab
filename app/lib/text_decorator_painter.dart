@@ -9,19 +9,9 @@ class TextDetectorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size canvasSize) {
-    print("@>paint");
-
+    // only works because canvas size and image size have the same aspect ratio
     final double scaleX = canvasSize.width / imageSize.width;
     final double scaleY = canvasSize.height / imageSize.height;
-
-    print("canvas size: " + canvasSize.toString());
-    print("canvas ratio (width/height): " +
-        (canvasSize.width / canvasSize.height).toString());
-    print("image size: " + imageSize.toString());
-    print("image ratio (width/height): " +
-        (imageSize.width / imageSize.height).toString());
-
-    print("scale " + scaleX.toString() + " " + scaleY.toString());
 
     Rect scaleRect(Rect boundingBox) {
       return Rect.fromLTRB(
@@ -52,11 +42,7 @@ class TextDetectorPainter extends CustomPainter {
         for (TextElement element in line.elements) {
           // print("draw rectangle for element: " + element.text);
           final elementBoundingBox = element.boundingBox;
-          print("elementBoundingBox before scale");
-          print(elementBoundingBox);
           final scaledRect = scaleRect(elementBoundingBox);
-          print("elementBoundingBox after scale");
-          print(scaledRect);
 
           canvas.drawRect(scaledRect, redPaint);
         }
@@ -71,8 +57,8 @@ class TextDetectorPainter extends CustomPainter {
         scaleRect(Rect.fromLTRB(
           0.0,
           0.0,
-          2376.0,
-          4224.0,
+          imageSize.width,
+          imageSize.height,
         )),
         redPaint);
   }
