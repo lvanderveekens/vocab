@@ -54,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _cameraEnabled = true;
   File? imageFile;
 
+  bool _drawEnabled = false;
+
   bool _showAlertDialog = false;
   String? _tappedText = null;
 
@@ -178,68 +180,6 @@ class _MyHomePageState extends State<MyHomePage> {
     };
   }
 
-  handleCameraPreviewTapUp(TapUpDetails details) {
-    log("handle camera preview tap up!");
-    // on tap: take picture and show picture until tapped again
-    if (imageFile != null) {
-      setState(() {
-        imageFile = null;
-      });
-      return;
-    }
-
-    // or user the local position method to get the offset
-    log("${details.localPosition}");
-    var x = details.globalPosition.dx;
-    var y = details.globalPosition.dy;
-    log("global " + x.toString() + ", " + y.toString());
-
-    cameraController!.takePicture().then((file) async {
-      // final imageFile = File(file.path);
-
-      final img.Image? capturedImage =
-          img.decodeImage(await File(file.path).readAsBytes());
-      final img.Image orientedImage = img.bakeOrientation(capturedImage!);
-      await File(file.path).writeAsBytes(img.encodeJpg(orientedImage));
-
-      final imageFile = File(file.path);
-
-      setState(() {
-        this.imageFile = imageFile;
-      });
-    });
-  }
-
-  Future<MyResult?> getAap(File? imageFile) async {
-    if (imageFile == null) {
-      return null;
-    }
-
-    final bs = await imageFile.readAsBytes();
-
-    final uiImage = await decodeImageFromList(bs);
-    log("image " + uiImage.width.toString() + " " + uiImage.height.toString());
-
-    final inputImage = InputImage.fromFile(imageFile);
-
-    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
-
-    log(">>> RECOGNIZED TEXT");
-    log(recognizedText.text);
-    log("<<< RECOGNIZED TEXT");
-
-    textRecognizer.close();
-
-    final imageSize = Size(uiImage.width.toDouble(), uiImage.height.toDouble());
-    log("image size");
-    log("$imageSize");
-
-    return MyResult(imageSize, recognizedText);
-  }
-
   Widget _buildAlertDialogIfNeeded() {
     if (!_showAlertDialog || _tappedText == null) {
       return Container();
@@ -268,7 +208,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: no static image size
     final imageSize = Size(720, 1280);
 
-    final painter = TextDetectorPainter(imageSize, _recognizedText!, false);
+    final painter =
+        TextDetectorPainter(imageSize, _recognizedText!, _drawEnabled);
 
     // scaling only works because custom paint size and image size have the same aspect ratio
     // TODO: no static custom paint size
@@ -284,22 +225,28 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text(widget.title!),
-        // ),
-        body: cameraController == null
-            ? const Text("Loading Camera...")
-            : Stack(fit: StackFit.loose, children: <Widget>[
-                CameraPreview(cameraController!),
-                _buildOverlayIfNeeded(),
-                _buildAlertDialogIfNeeded(),
-              ]));
+      // appBar: AppBar(
+      //   title: Text(widget.title!),
+      // ),
+      body: cameraController == null
+          ? const Text("Loading Camera...")
+          : Stack(fit: StackFit.loose, children: <Widget>[
+              CameraPreview(cameraController!),
+              _buildOverlayIfNeeded(),
+              _buildAlertDialogIfNeeded(),
+            ]),
+      floatingActionButton:
+          Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+        FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _drawEnabled = !_drawEnabled;
+            });
+          },
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.document_scanner),
+        )
+      ]),
+    );
   }
-}
-
-class MyResult {
-  Size imageSize;
-  RecognizedText recognizedText;
-
-  MyResult(this.imageSize, this.recognizedText);
 }
