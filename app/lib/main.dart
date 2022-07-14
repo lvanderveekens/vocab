@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -10,11 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:megaphone/google_translation_response.dart';
+import 'package:megaphone/secrets.dart';
 import 'package:megaphone/text_decorator_painter.dart';
-
-// useful links:
-// https://www.fluttercampus.com/guide/266/show-live-image-preview-camera-flutter/
-// https://medium.flutterdevs.com/text-recognition-with-ml-kit-flutter-c71f27089437
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -46,24 +46,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<CameraDescription>? cameras;
   CameraController? cameraController;
-  bool _textScanningEnabled = false;
   bool _isDetecting = false;
   bool _initialized = false;
   bool _isRecognizing = false;
   RecognizedText? _recognizedText;
-  bool _cameraEnabled = true;
   File? imageFile;
-
-  bool _drawEnabled = false;
 
   bool _showAlertDialog = false;
   String? _tappedText = null;
+  String? _translatedText = null;
   List<String>? _recognizedLanguages;
+
+  bool _cameraEnabled = true;
+  bool _drawEnabled = false;
+  bool _translationEnabled = true;
 
   @override
   void initState() {
     super.initState();
-    loadCamera();
+
+    if (_cameraEnabled) {
+      loadCamera();
+    }
   }
 
   Uint8List _concatenatePlanes(List<Plane> planes) {
@@ -168,11 +172,13 @@ class _MyHomePageState extends State<MyHomePage> {
         for (TextLine line in block.lines) {
           for (TextElement element in line.elements) {
             final scaledBoundingBox = scaleRect(element.boundingBox);
+
             if (scaledBoundingBox.contains(details.localPosition)) {
               log("block recognized langugages: ${block.recognizedLanguages}");
 
               setState(() {
                 _tappedText = element.text;
+                _translatedText = null; // translated elsewhere...
                 _recognizedLanguages = block.recognizedLanguages;
                 _showAlertDialog = true;
               });
@@ -183,9 +189,41 @@ class _MyHomePageState extends State<MyHomePage> {
     };
   }
 
+  Future<String> translate(String text, String from, String to) async {
+    final response = await http.get(
+        Uri.parse('https://translation.googleapis.com/language/translate/v2')
+            .replace(queryParameters: {
+      'q': text,
+      'source': from,
+      'target': to,
+      'key': (await SecretsLoader().load()).apiKey,
+    }));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to call Google Cloud Translation API');
+    }
+
+    final googleTranslationResponse =
+        GoogleTranslationResponse.fromJson(jsonDecode(response.body));
+
+    return googleTranslationResponse.data.translations[0].translatedText;
+  }
+
   Widget _buildAlertDialogIfNeeded() {
     if (!_showAlertDialog || _tappedText == null) {
       return Container();
+    }
+
+    if (_translationEnabled &&
+        _recognizedLanguages != null &&
+        _recognizedLanguages!.length > 0) {
+      final recognizedLanguage = _recognizedLanguages![0];
+
+      translate(_tappedText!, recognizedLanguage, "en").then((value) => {
+            setState(() {
+              _translatedText = value;
+            })
+          });
     }
 
     return AlertDialog(
@@ -193,8 +231,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Tapped on: ${_tappedText!}'),
-            Text('Recognized languages: ${_recognizedLanguages!}'),
+            Text('Tapped on: $_tappedText'),
+            Text('English translation: $_translatedText'),
+            Text('Recognized languages: $_recognizedLanguages'),
           ]),
       actions: <Widget>[
         TextButton(
@@ -237,13 +276,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // appBar: AppBar(
       //   title: Text(widget.title!),
       // ),
-      body: cameraController == null
-          ? const Text("Loading Camera...")
-          : Stack(fit: StackFit.loose, children: <Widget>[
-              CameraPreview(cameraController!),
-              _buildOverlayIfNeeded(),
-              _buildAlertDialogIfNeeded(),
-            ]),
+      body: !_cameraEnabled
+          ? const Text("Camera is disabled")
+          : cameraController == null
+              ? const Text("Loading camera...")
+              : Stack(fit: StackFit.loose, children: <Widget>[
+                  CameraPreview(cameraController!),
+                  _buildOverlayIfNeeded(),
+                  _buildAlertDialogIfNeeded(),
+                ]),
       floatingActionButton:
           Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         FloatingActionButton(
