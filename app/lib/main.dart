@@ -102,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
       cameraController!.startImageStream((CameraImage cameraImage) async {
-        log("Process image, width: ${cameraImage.width}, height: ${cameraImage.height}");
         if (_isRecognizing) {
           return;
         }
@@ -111,12 +110,16 @@ class _MyHomePageState extends State<MyHomePage> {
           return;
         }
 
-        log("Processing next camera image...");
-
+        log("Processsing camera image, width: ${cameraImage.width}, height: ${cameraImage.height}");
         _processNextCameraImage = false;
 
         log("Recognizing text...");
         await recognizeText(cameraImage);
+
+        if (_recognizedText!.text.isEmpty) {
+          log("No text recognized. Will skip processing tap up location...");
+          return;
+        }
 
         // TODO: no static image size
         final imageSize = Size(720, 1280);
@@ -139,14 +142,14 @@ class _MyHomePageState extends State<MyHomePage> {
         var x = _tapUpDetails!.localPosition.dx;
         var y = _tapUpDetails!.localPosition.dy;
 
-        log("Processing tap location...");
+        log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
         for (TextBlock block in _recognizedText!.blocks) {
           for (TextLine line in block.lines) {
             for (TextElement element in line.elements) {
               final scaledBoundingBox = scaleRect(element.boundingBox);
 
               if (scaledBoundingBox.contains(_tapUpDetails!.localPosition)) {
-                log("block recognized langugages: ${block.recognizedLanguages}");
+                log("Tapped on: ${element.text}");
 
                 setState(() {
                   _tappedText = element.text;
@@ -154,10 +157,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   _recognizedLanguages = block.recognizedLanguages;
                   _showAlertDialog = true;
                 });
+                return;
               }
             }
           }
         }
+        log("User did not tap on a word.");
       });
     });
   }
