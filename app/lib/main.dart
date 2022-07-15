@@ -61,6 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _drawEnabled = false;
   bool _translationEnabled = true;
 
+  bool _processNextCameraImage = false;
+  TapUpDetails? _tapUpDetails;
+
   @override
   void initState() {
     super.initState();
@@ -104,7 +107,57 @@ class _MyHomePageState extends State<MyHomePage> {
           return;
         }
 
+        if (!_processNextCameraImage) {
+          return;
+        }
+
+        log("Processing next camera image...");
+
+        _processNextCameraImage = false;
+
+        log("Recognizing text...");
         await recognizeText(cameraImage);
+
+        // TODO: no static image size
+        final imageSize = Size(720, 1280);
+
+        // scaling only works because custom paint size and image size have the same aspect ratio
+        // TODO: no static custom paint size
+        final Size customPaintSize = Size(390.0, 693.3);
+        final double scaleX = customPaintSize.width / imageSize.width;
+        final double scaleY = customPaintSize.height / imageSize.height;
+
+        Rect scaleRect(Rect boundingBox) {
+          return Rect.fromLTRB(
+            boundingBox.left * scaleX,
+            boundingBox.top * scaleY,
+            boundingBox.right * scaleX,
+            boundingBox.bottom * scaleY,
+          );
+        }
+
+        var x = _tapUpDetails!.localPosition.dx;
+        var y = _tapUpDetails!.localPosition.dy;
+
+        log("Processing tap location...");
+        for (TextBlock block in _recognizedText!.blocks) {
+          for (TextLine line in block.lines) {
+            for (TextElement element in line.elements) {
+              final scaledBoundingBox = scaleRect(element.boundingBox);
+
+              if (scaledBoundingBox.contains(_tapUpDetails!.localPosition)) {
+                log("block recognized langugages: ${block.recognizedLanguages}");
+
+                setState(() {
+                  _tappedText = element.text;
+                  _translatedText = null; // translated elsewhere...
+                  _recognizedLanguages = block.recognizedLanguages;
+                  _showAlertDialog = true;
+                });
+              }
+            }
+          }
+        }
       });
     });
   }
@@ -154,38 +207,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  handleOverlayTapUp(double scaleX, double scaleY) {
-    Rect scaleRect(Rect boundingBox) {
-      return Rect.fromLTRB(
-        boundingBox.left * scaleX,
-        boundingBox.top * scaleY,
-        boundingBox.right * scaleX,
-        boundingBox.bottom * scaleY,
-      );
-    }
-
-    return (TapUpDetails details) {
-      var x = details.localPosition.dx;
-      var y = details.localPosition.dy;
-
-      for (TextBlock block in _recognizedText!.blocks) {
-        for (TextLine line in block.lines) {
-          for (TextElement element in line.elements) {
-            final scaledBoundingBox = scaleRect(element.boundingBox);
-
-            if (scaledBoundingBox.contains(details.localPosition)) {
-              log("block recognized langugages: ${block.recognizedLanguages}");
-
-              setState(() {
-                _tappedText = element.text;
-                _translatedText = null; // translated elsewhere...
-                _recognizedLanguages = block.recognizedLanguages;
-                _showAlertDialog = true;
-              });
-            }
-          }
-        }
-      }
+  handleCameraPreviewTapUp() {
+    return (TapUpDetails tapUpDetails) {
+      _tapUpDetails = tapUpDetails;
+      _processNextCameraImage = true;
     };
   }
 
@@ -200,7 +225,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }));
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to call Google Cloud Translation API');
+      throw Exception(
+          'Failed to call Google Cloud Translation API: ${response.body}');
     }
 
     final googleTranslationResponse =
@@ -218,12 +244,13 @@ class _MyHomePageState extends State<MyHomePage> {
         _recognizedLanguages != null &&
         _recognizedLanguages!.length > 0) {
       final recognizedLanguage = _recognizedLanguages![0];
-
-      translate(_tappedText!, recognizedLanguage, "en").then((value) => {
-            setState(() {
-              _translatedText = value;
-            })
-          });
+      if (recognizedLanguage != "en") {
+        translate(_tappedText!, recognizedLanguage, "en").then((value) => {
+              setState(() {
+                _translatedText = value;
+              })
+            });
+      }
     }
 
     return AlertDialog(
@@ -265,9 +292,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final double scaleX = customPaintSize.width / imageSize.width;
     final double scaleY = customPaintSize.height / imageSize.height;
 
+    return CustomPaint(painter: painter, size: customPaintSize);
+  }
+
+  Widget _buildCameraPreview() {
     return GestureDetector(
-        onTapUp: handleOverlayTapUp(scaleX, scaleY),
-        child: CustomPaint(painter: painter, size: customPaintSize));
+        onTapUp: handleCameraPreviewTapUp(),
+        child: CameraPreview(cameraController!));
   }
 
   @override
@@ -281,8 +312,8 @@ class _MyHomePageState extends State<MyHomePage> {
           : cameraController == null
               ? const Text("Loading camera...")
               : Stack(fit: StackFit.loose, children: <Widget>[
-                  CameraPreview(cameraController!),
-                  _buildOverlayIfNeeded(),
+                  _buildCameraPreview(),
+                  // _buildOverlayIfNeeded(),
                   _buildAlertDialogIfNeeded(),
                 ]),
       floatingActionButton:
