@@ -53,9 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   File? imageFile;
 
   bool _showAlertDialog = false;
-  String? _tappedText = null;
-  String? _translatedText = null;
-  List<String>? _recognizedLanguages;
+  List<Widget> _alertDialogChildren = [];
 
   bool _cameraEnabled = true;
   bool _drawEnabled = false;
@@ -151,18 +149,40 @@ class _MyHomePageState extends State<MyHomePage> {
               if (scaledBoundingBox.contains(_tapUpDetails!.localPosition)) {
                 log("Tapped on: ${element.text}");
 
+                final tappedText = element.text;
+                String? translation;
+                final recognizedLanguages = block.recognizedLanguages;
+
+                if (_translationEnabled && recognizedLanguages.isNotEmpty) {
+                  final recognizedLanguage = recognizedLanguages[0];
+                  if (recognizedLanguage != "en") {
+                    log("Translating...");
+                    translation =
+                        await translate(tappedText, recognizedLanguage, "en");
+
+                    log("Translation: $translation");
+                  }
+                }
+
                 setState(() {
-                  _tappedText = element.text;
-                  _translatedText = null; // translated elsewhere...
-                  _recognizedLanguages = block.recognizedLanguages;
+                  _alertDialogChildren = [
+                    Text('Tapped on: $tappedText'),
+                    Text('English translation: $translation'),
+                    Text('Recognized languages: $recognizedLanguages'),
+                  ];
                   _showAlertDialog = true;
                 });
+
                 return;
               }
             }
           }
         }
         log("User did not tap on a word.");
+        setState(() {
+          _alertDialogChildren = [const Text('No word found...')];
+          _showAlertDialog = true;
+        });
       });
     });
   }
@@ -241,32 +261,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildAlertDialogIfNeeded() {
-    if (!_showAlertDialog || _tappedText == null) {
+    if (!_showAlertDialog) {
       return Container();
-    }
-
-    if (_translationEnabled &&
-        _recognizedLanguages != null &&
-        _recognizedLanguages!.length > 0) {
-      final recognizedLanguage = _recognizedLanguages![0];
-      if (recognizedLanguage != "en") {
-        translate(_tappedText!, recognizedLanguage, "en").then((value) => {
-              setState(() {
-                _translatedText = value;
-              })
-            });
-      }
     }
 
     return AlertDialog(
       content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Tapped on: $_tappedText'),
-            Text('English translation: $_translatedText'),
-            Text('Recognized languages: $_recognizedLanguages'),
-          ]),
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _alertDialogChildren,
+      ),
       actions: <Widget>[
         TextButton(
           onPressed: () => {
