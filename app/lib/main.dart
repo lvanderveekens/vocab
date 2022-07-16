@@ -42,22 +42,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<XFile>? _imageFileList;
-
   List<CameraDescription>? cameras;
   CameraController? cameraController;
   bool _isDetecting = false;
   bool _initialized = false;
   bool _isRecognizing = false;
-  RecognizedText? _recognizedText;
-  File? imageFile;
 
   bool _showAlertDialog = false;
   List<Widget> _alertDialogChildren = [];
 
   bool _cameraEnabled = true;
-  bool _drawEnabled = false;
-  bool _translationEnabled = true;
+  bool _realTimeScanningEnabled = false;
+  bool _translationEnabled = false;
+
+  bool _processingCameraImage = false;
+
+  RecognizedText? _recognizedText;
 
   bool _processNextCameraImage = false;
   TapUpDetails? _tapUpDetails;
@@ -88,9 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    // TODO: change to low resolution for better performance?
     cameraController = CameraController(cameras![0], ResolutionPreset.high);
-
     cameraController!.initialize().then((_) {
       if (!mounted) {
         return;
@@ -99,107 +97,110 @@ class _MyHomePageState extends State<MyHomePage> {
         _initialized = true;
       });
 
-      cameraController!.startImageStream((CameraImage cameraImage) async {
-        if (_isRecognizing) {
+      cameraController!.startImageStream((CameraImage cameraImage) {
+        if (_processingCameraImage) {
+          return;
+        }
+        if (!_processNextCameraImage && !_realTimeScanningEnabled) {
           return;
         }
 
-        if (!_processNextCameraImage) {
-          return;
-        }
-
-        log("Processsing camera image, width: ${cameraImage.width}, height: ${cameraImage.height}");
+        _processingCameraImage = true;
         _processNextCameraImage = false;
 
+        log("Started processsing camera image, width: ${cameraImage.width}, height: ${cameraImage.height}");
+
         log("Recognizing text...");
-        await recognizeText(cameraImage);
+        recognizeText(cameraImage).then((recognizedText) async {
+          setState(() {
+            _recognizedText = recognizedText;
+          });
 
-        if (_recognizedText!.text.isEmpty) {
-          log("No text recognized. Will skip processing tap up location...");
-          return;
-        }
-
-        // TODO: no static image size
-        final imageSize = Size(720, 1280);
-
-        // scaling only works because custom paint size and image size have the same aspect ratio
-        // TODO: no static custom paint size
-        final Size customPaintSize = Size(390.0, 693.3);
-        final double scaleX = customPaintSize.width / imageSize.width;
-        final double scaleY = customPaintSize.height / imageSize.height;
-
-        Rect scaleRect(Rect boundingBox) {
-          return Rect.fromLTRB(
-            boundingBox.left * scaleX,
-            boundingBox.top * scaleY,
-            boundingBox.right * scaleX,
-            boundingBox.bottom * scaleY,
-          );
-        }
-
-        var x = _tapUpDetails!.localPosition.dx;
-        var y = _tapUpDetails!.localPosition.dy;
-
-        log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
-        for (TextBlock block in _recognizedText!.blocks) {
-          for (TextLine line in block.lines) {
-            for (TextElement element in line.elements) {
-              final scaledBoundingBox = scaleRect(element.boundingBox);
-
-              if (scaledBoundingBox.contains(_tapUpDetails!.localPosition)) {
-                log("Tapped on: ${element.text}");
-
-                final tappedText = element.text;
-                String? translation;
-                final recognizedLanguages = block.recognizedLanguages;
-
-                if (_translationEnabled && recognizedLanguages.isNotEmpty) {
-                  final recognizedLanguage = recognizedLanguages[0];
-                  if (recognizedLanguage != "en") {
-                    log("Translating...");
-                    translation =
-                        await translate(tappedText, recognizedLanguage, "en");
-
-                    log("Translation: $translation");
-                  }
-                }
-
-                setState(() {
-                  _alertDialogChildren = [
-                    Text('Tapped on: $tappedText'),
-                    Text('English translation: $translation'),
-                    Text('Recognized languages: $recognizedLanguages'),
-                  ];
-                  _showAlertDialog = true;
-                });
-
-                return;
-              }
-            }
+          if (_tapUpDetails != null) {
+            log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
+            await checkTapLocation(_tapUpDetails!, recognizedText)
+                .whenComplete(() => _tapUpDetails = null);
           }
-        }
-        log("User did not tap on a word.");
-        setState(() {
-          _alertDialogChildren = [const Text('No word found...')];
-          _showAlertDialog = true;
+        }).whenComplete(() {
+          log("Done processing");
+          _processingCameraImage = false;
         });
       });
     });
   }
 
-  recognizeText(CameraImage cameraImage) async {
-    _isRecognizing = true;
+  Future<void> checkTapLocation(
+      TapUpDetails tapUpDetails, RecognizedText recognizedText) async {
+    // TODO: no static image size
+    final imageSize = Size(720, 1280);
 
+    // scaling only works because custom paint size and image size have the same aspect ratio
+    // TODO: no static custom paint size
+    final Size customPaintSize = Size(390.0, 693.3);
+    final double scaleX = customPaintSize.width / imageSize.width;
+    final double scaleY = customPaintSize.height / imageSize.height;
+
+    var x = tapUpDetails.localPosition.dx;
+    var y = tapUpDetails.localPosition.dy;
+
+    for (TextBlock block in recognizedText.blocks) {
+      for (TextLine line in block.lines) {
+        for (TextElement element in line.elements) {
+          final scaledBoundingBox =
+              scaleRect(element.boundingBox, scaleX, scaleY);
+
+          if (scaledBoundingBox.contains(tapUpDetails.localPosition)) {
+            log("Tapped on: ${element.text}");
+
+            final tappedText = element.text;
+            String? translation;
+            final recognizedLanguages = block.recognizedLanguages;
+
+            if (_translationEnabled && recognizedLanguages.isNotEmpty) {
+              final recognizedLanguage = recognizedLanguages[0];
+              if (recognizedLanguage != "en") {
+                log("Translating...");
+                translation =
+                    await translate(tappedText, recognizedLanguage, "en");
+
+                log("Translation: $translation");
+              }
+            }
+
+            setState(() {
+              _alertDialogChildren = [
+                Text('Tapped on: $tappedText'),
+                Text('English translation: $translation'),
+                Text('Recognized languages: $recognizedLanguages'),
+              ];
+              _showAlertDialog = true;
+            });
+
+            return;
+          }
+        }
+      }
+    }
+    log("User did not tap on a word.");
+    setState(() {
+      _alertDialogChildren = [const Text('No word found...')];
+      _showAlertDialog = true;
+    });
+  }
+
+  Rect scaleRect(Rect boundingBox, double scaleX, double scaleY) {
+    return Rect.fromLTRB(
+      boundingBox.left * scaleX,
+      boundingBox.top * scaleY,
+      boundingBox.right * scaleX,
+      boundingBox.bottom * scaleY,
+    );
+  }
+
+  Future<RecognizedText> recognizeText(CameraImage cameraImage) async {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(convertToInputImage(cameraImage));
-
-    setState(() {
-      _recognizedText = recognizedText;
-    });
-
-    _isRecognizing = false;
+    return await textRecognizer.processImage(convertToInputImage(cameraImage));
   }
 
   InputImage convertToInputImage(CameraImage cameraImage) {
@@ -284,16 +285,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildOverlayIfNeeded() {
-    if (_recognizedText == null) {
+  Widget _buildRealTimeScannerIfNeeded() {
+    if (!_realTimeScanningEnabled || _recognizedText == null) {
       return Container();
     }
 
     // TODO: no static image size
     final imageSize = Size(720, 1280);
 
-    final painter =
-        TextDetectorPainter(imageSize, _recognizedText!, _drawEnabled);
+    final painter = TextDetectorPainter(imageSize, _recognizedText!);
 
     // scaling only works because custom paint size and image size have the same aspect ratio
     // TODO: no static custom paint size
@@ -304,10 +304,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return CustomPaint(painter: painter, size: customPaintSize);
   }
 
-  Widget _buildCameraPreview() {
+  Widget _buildCameraWidget() {
     return GestureDetector(
         onTapUp: handleCameraPreviewTapUp(),
-        child: CameraPreview(cameraController!));
+        child: Stack(fit: StackFit.loose, children: <Widget>[
+          CameraPreview(cameraController!),
+          _buildRealTimeScannerIfNeeded(),
+        ]));
   }
 
   @override
@@ -321,8 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
           : cameraController == null
               ? const Text("Loading camera...")
               : Stack(fit: StackFit.loose, children: <Widget>[
-                  _buildCameraPreview(),
-                  // _buildOverlayIfNeeded(),
+                  _buildCameraWidget(),
                   _buildAlertDialogIfNeeded(),
                 ]),
       floatingActionButton:
@@ -330,12 +332,21 @@ class _MyHomePageState extends State<MyHomePage> {
         FloatingActionButton(
           onPressed: () {
             setState(() {
-              _drawEnabled = !_drawEnabled;
+              _realTimeScanningEnabled = !_realTimeScanningEnabled;
             });
           },
-          backgroundColor: Colors.blue,
+          backgroundColor: _realTimeScanningEnabled ? Colors.blue : Colors.red,
           child: const Icon(Icons.document_scanner),
-        )
+        ),
+        FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _translationEnabled = !_translationEnabled;
+            });
+          },
+          backgroundColor: _translationEnabled ? Colors.blue : Colors.red,
+          child: const Icon(Icons.translate),
+        ),
       ]),
     );
   }
