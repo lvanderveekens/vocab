@@ -59,8 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   RecognizedText? _recognizedText;
 
-  bool _processNextCameraImage = false;
   TapUpDetails? _tapUpDetails;
+  bool _processNextCameraImage = false;
+
+  Size? _cameraImageSize;
 
   @override
   void initState() {
@@ -109,6 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _processNextCameraImage = false;
 
         log("Started processsing camera image, width: ${cameraImage.width}, height: ${cameraImage.height}");
+        _cameraImageSize =
+            Size(cameraImage.width.toDouble(), cameraImage.height.toDouble());
 
         log("Recognizing text...");
         recognizeText(cameraImage).then((recognizedText) async {
@@ -118,7 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
           if (_tapUpDetails != null) {
             log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
-            await checkTapLocation(_tapUpDetails!, recognizedText)
+            await checkTapLocation(
+                    _tapUpDetails!, recognizedText, _cameraImageSize!)
                 .whenComplete(() => _tapUpDetails = null);
           }
         }).whenComplete(() {
@@ -129,16 +134,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> checkTapLocation(
-      TapUpDetails tapUpDetails, RecognizedText recognizedText) async {
-    // TODO: no static image size
-    final imageSize = Size(720, 1280);
+  Future<void> checkTapLocation(TapUpDetails tapUpDetails,
+      RecognizedText recognizedText, Size cameraImageSize) async {
+    final cameraPreviewSize = cameraPreviewKey.currentContext!.size!;
 
     // scaling only works because custom paint size and image size have the same aspect ratio
-    // TODO: no static custom paint size
-    final Size customPaintSize = Size(390.0, 693.3);
-    final double scaleX = customPaintSize.width / imageSize.width;
-    final double scaleY = customPaintSize.height / imageSize.height;
+    final double scaleX = cameraPreviewSize.width / cameraImageSize.width;
+    final double scaleY = cameraPreviewSize.height / cameraImageSize.height;
 
     var x = tapUpDetails.localPosition.dx;
     var y = tapUpDetails.localPosition.dy;
@@ -233,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  handleCameraPreviewTapUp() {
+  handleCameraWidgetTapUp() {
     return (TapUpDetails tapUpDetails) {
       _tapUpDetails = tapUpDetails;
       _processNextCameraImage = true;
@@ -286,39 +288,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRealTimeScannerIfNeeded() {
-    if (!_realTimeScanningEnabled || _recognizedText == null) {
-      return Container();
+    if (!_realTimeScanningEnabled ||
+        _recognizedText == null ||
+        _cameraImageSize == null) {
+      return Positioned.fill(child: Container());
     }
 
-    // TODO: no static image size
-    final imageSize = Size(720, 1280);
+    final painter = TextDetectorPainter(_cameraImageSize!, _recognizedText!);
 
-    final painter = TextDetectorPainter(imageSize, _recognizedText!);
-
-    // scaling only works because custom paint size and image size have the same aspect ratio
-    // TODO: no static custom paint size
-    final Size customPaintSize = Size(390.0, 693.3);
-    final double scaleX = customPaintSize.width / imageSize.width;
-    final double scaleY = customPaintSize.height / imageSize.height;
-
-    return CustomPaint(painter: painter, size: customPaintSize);
+    return Positioned.fill(child: CustomPaint(painter: painter));
   }
+
+  final cameraPreviewKey = GlobalKey();
 
   Widget _buildCameraWidget() {
     return GestureDetector(
-        onTapUp: handleCameraPreviewTapUp(),
+        onTapUp: handleCameraWidgetTapUp(),
         child: Stack(fit: StackFit.loose, children: <Widget>[
-          CameraPreview(cameraController!),
-          _buildRealTimeScannerIfNeeded(),
+          CameraPreview(cameraController!, key: cameraPreviewKey),
+          _buildRealTimeScannerIfNeeded()
         ]));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title!),
-      // ),
       body: !_cameraEnabled
           ? const Text("Camera is disabled")
           : cameraController == null
