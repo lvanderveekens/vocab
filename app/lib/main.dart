@@ -142,12 +142,14 @@ class _MyHomePageState extends State<MyHomePage> {
       RecognizedText recognizedText, Size cameraImageSize) async {
     final cameraPreviewSize = cameraPreviewKey.currentContext!.size!;
 
+    log("Camera image (${cameraImageSize.width},${cameraImageSize.height})");
     log("Camera image aspect ratio ${cameraImageSize.width / cameraImageSize.height}");
+    log("Camera preview (${cameraPreviewSize.width},${cameraPreviewSize.height})");
     log("Camera preview aspect ratio ${cameraPreviewSize.width / cameraPreviewSize.height}");
 
-    // NOTE: scaling only works if the aspect ratios match
-    final double scaleX = cameraPreviewSize.width / cameraImageSize.width;
-    final double scaleY = cameraPreviewSize.height / cameraImageSize.height;
+    // // NOTE: scaling only works if the aspect ratios match
+    // final double scaleX = cameraPreviewSize.width / cameraImageSize.width;
+    // final double scaleY = cameraPreviewSize.height / cameraImageSize.height;
 
     var x = tapUpDetails.localPosition.dx;
     var y = tapUpDetails.localPosition.dy;
@@ -155,10 +157,10 @@ class _MyHomePageState extends State<MyHomePage> {
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
         for (TextElement element in line.elements) {
-          final scaledBoundingBox =
-              scaleRect(element.boundingBox, scaleX, scaleY);
+          // final scaledBoundingBox =
+          //     scaleRect(element.boundingBox, scaleX, scaleY);
 
-          if (scaledBoundingBox.contains(tapUpDetails.localPosition)) {
+          if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
 
             final tappedText = element.text;
@@ -197,14 +199,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Rect scaleRect(Rect boundingBox, double scaleX, double scaleY) {
-    return Rect.fromLTRB(
-      boundingBox.left * scaleX,
-      boundingBox.top * scaleY,
-      boundingBox.right * scaleX,
-      boundingBox.bottom * scaleY,
-    );
-  }
+  // Rect scaleRect(Rect boundingBox, double scaleX, double scaleY) {
+  //   return Rect.fromLTRB(
+  //     boundingBox.left * scaleX,
+  //     boundingBox.top * scaleY,
+  //     boundingBox.right * scaleX,
+  //     boundingBox.bottom * scaleY,
+  //   );
+  // }
 
   Future<RecognizedText> recognizeText(CameraImage cameraImage) async {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
@@ -298,12 +300,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!_realTimeScanningEnabled ||
         _recognizedText == null ||
         _cameraImageSize == null) {
-      return Positioned.fill(child: Container());
+      return Container();
     }
 
     final painter = TextDetectorPainter(_cameraImageSize!, _recognizedText!);
-
-    return Positioned.fill(child: CustomPaint(painter: painter));
+    return CustomPaint(painter: painter);
   }
 
   final cameraPreviewKey = GlobalKey();
@@ -322,14 +323,20 @@ class _MyHomePageState extends State<MyHomePage> {
         cameraController!.value.previewSize!.width,
         cameraController!.value.previewSize!.height);
 
-    return GestureDetector(
-        onTapUp: handleCameraWidgetTapUp(),
-        child: Stack(fit: StackFit.loose, children: <Widget>[
-          AspectRatio(
-              aspectRatio: cameraPreviewWidth / cameraPreviewHeight,
-              child: CameraPreview(cameraController!, key: cameraPreviewKey)),
-          _buildRealTimeScannerIfNeeded()
-        ]));
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: FittedBox(
+            fit: BoxFit.cover,
+            child: GestureDetector(
+                onTapUp: handleCameraWidgetTapUp(),
+                child: SizedBox(
+                    width: cameraPreviewWidth,
+                    height: cameraPreviewHeight,
+                    child: Stack(fit: StackFit.expand, children: <Widget>[
+                      CameraPreview(cameraController!, key: cameraPreviewKey),
+                      _buildRealTimeScannerIfNeeded()
+                    ])))));
   }
 
   @override

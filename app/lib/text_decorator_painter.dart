@@ -9,7 +9,10 @@ class TextDetectorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size canvasSize) {
-    // only works because canvas size and image size have the same aspect ratio
+    // only works if aspect ratios match
+
+    // TODO: aspect ratios do not match...
+    // 'recognizedText' is based on image size.
     final double scaleX = canvasSize.width / imageSize.width;
     final double scaleY = canvasSize.height / imageSize.height;
 
