@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
@@ -45,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<CameraDescription>? cameras;
   CameraController? cameraController;
   bool _isDetecting = false;
-  bool _initialized = false;
+  bool isCameraInitialized = false;
   bool _isRecognizing = false;
 
   bool _showAlertDialog = false;
@@ -90,46 +91,49 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    cameraController = CameraController(cameras![0], ResolutionPreset.high);
-    cameraController!.initialize().then((_) {
-      if (!mounted) {
+    final camera = cameras![0]; // TODO: try other cameras?
+    cameraController = CameraController(camera, ResolutionPreset.high);
+
+    await cameraController!.initialize();
+
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      isCameraInitialized = true;
+    });
+
+    cameraController!.startImageStream((CameraImage cameraImage) {
+      if (_processingCameraImage) {
         return;
       }
-      setState(() {
-        _initialized = true;
-      });
+      if (!_processNextCameraImage && !_realTimeScanningEnabled) {
+        return;
+      }
 
-      cameraController!.startImageStream((CameraImage cameraImage) {
-        if (_processingCameraImage) {
-          return;
-        }
-        if (!_processNextCameraImage && !_realTimeScanningEnabled) {
-          return;
-        }
+      _processingCameraImage = true;
+      _processNextCameraImage = false;
 
-        _processingCameraImage = true;
-        _processNextCameraImage = false;
+      log("Started processsing camera image (${cameraImage.width}, ${cameraImage.height})");
 
-        log("Started processsing camera image, width: ${cameraImage.width}, height: ${cameraImage.height}");
-        _cameraImageSize =
-            Size(cameraImage.width.toDouble(), cameraImage.height.toDouble());
+      _cameraImageSize =
+          Size(cameraImage.width.toDouble(), cameraImage.height.toDouble());
 
-        log("Recognizing text...");
-        recognizeText(cameraImage).then((recognizedText) async {
-          setState(() {
-            _recognizedText = recognizedText;
-          });
-
-          if (_tapUpDetails != null) {
-            log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
-            await checkTapLocation(
-                    _tapUpDetails!, recognizedText, _cameraImageSize!)
-                .whenComplete(() => _tapUpDetails = null);
-          }
-        }).whenComplete(() {
-          log("Done processing");
-          _processingCameraImage = false;
+      log("Recognizing text...");
+      recognizeText(cameraImage).then((recognizedText) async {
+        setState(() {
+          _recognizedText = recognizedText;
         });
+
+        if (_tapUpDetails != null) {
+          log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
+          await checkTapLocation(
+                  _tapUpDetails!, recognizedText, _cameraImageSize!)
+              .whenComplete(() => _tapUpDetails = null);
+        }
+      }).whenComplete(() {
+        log("Done processing");
+        _processingCameraImage = false;
       });
     });
   }
@@ -138,7 +142,10 @@ class _MyHomePageState extends State<MyHomePage> {
       RecognizedText recognizedText, Size cameraImageSize) async {
     final cameraPreviewSize = cameraPreviewKey.currentContext!.size!;
 
-    // scaling only works because custom paint size and image size have the same aspect ratio
+    log("Camera image aspect ratio ${cameraImageSize.width / cameraImageSize.height}");
+    log("Camera preview aspect ratio ${cameraPreviewSize.width / cameraPreviewSize.height}");
+
+    // NOTE: scaling only works if the aspect ratios match
     final double scaleX = cameraPreviewSize.width / cameraImageSize.width;
     final double scaleY = cameraPreviewSize.height / cameraImageSize.height;
 
@@ -302,10 +309,25 @@ class _MyHomePageState extends State<MyHomePage> {
   final cameraPreviewKey = GlobalKey();
 
   Widget _buildCameraWidget() {
+    if (!isCameraInitialized) {
+      return Text("Camera not initialized yet");
+    }
+
+    // somehow the camera sensor orientation is 90 which messes up the aspect ratio field...
+    // the logic below is a workaround...
+    final cameraPreviewWidth = math.min(
+        cameraController!.value.previewSize!.width,
+        cameraController!.value.previewSize!.height);
+    final cameraPreviewHeight = math.max(
+        cameraController!.value.previewSize!.width,
+        cameraController!.value.previewSize!.height);
+
     return GestureDetector(
         onTapUp: handleCameraWidgetTapUp(),
         child: Stack(fit: StackFit.loose, children: <Widget>[
-          CameraPreview(cameraController!, key: cameraPreviewKey),
+          AspectRatio(
+              aspectRatio: cameraPreviewWidth / cameraPreviewHeight,
+              child: CameraPreview(cameraController!, key: cameraPreviewKey)),
           _buildRealTimeScannerIfNeeded()
         ]));
   }
