@@ -13,9 +13,9 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   int _selectedIndex = 0;
 
-  List<Widget> _pages = [
-    HomePage(),
-    ListPage(),
+  final List<Widget> _pages = [
+    const HomePage(),
+    const ListPage(),
   ];
 
   void _onItemTapped(int index) {

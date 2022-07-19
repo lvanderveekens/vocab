@@ -190,15 +190,6 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  // Rect scaleRect(Rect boundingBox, double scaleX, double scaleY) {
-  //   return Rect.fromLTRB(
-  //     boundingBox.left * scaleX,
-  //     boundingBox.top * scaleY,
-  //     boundingBox.right * scaleX,
-  //     boundingBox.bottom * scaleY,
-  //   );
-  // }
-
   Future<RecognizedText> recognizeText(CameraImage cameraImage) async {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
