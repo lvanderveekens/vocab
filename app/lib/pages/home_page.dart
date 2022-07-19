@@ -14,11 +14,14 @@ import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:megaphone/google_translation_response.dart';
 import 'package:megaphone/secrets.dart';
+import 'package:megaphone/storage/word_repository.dart';
 import 'package:megaphone/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final WordStorage wordStorage;
+
+  const HomePage({Key? key, required this.wordStorage}) : super(key: key);
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -175,6 +178,7 @@ class HomePageState extends State<HomePage> {
                 Text('English translation: $translation'),
                 Text('Recognized languages: $recognizedLanguages'),
               ];
+              widget.wordStorage.save("$tappedText->$translation");
               _showAlertDialog = true;
             });
 

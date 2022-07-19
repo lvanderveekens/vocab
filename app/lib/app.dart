@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:megaphone/pages/home_page.dart';
 import 'package:megaphone/pages/list_page.dart';
+import 'package:megaphone/storage/word_repository.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -13,10 +14,13 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    const ListPage(),
-  ];
+  List<Widget> _getPages() {
+    final wordStorage = WordStorage();
+    return [
+      HomePage(wordStorage: wordStorage),
+      ListPage(wordStorage: wordStorage),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -32,7 +36,7 @@ class AppState extends State<App> {
         foregroundColor: Colors.blue,
         backgroundColor: Colors.white,
       ),
-      body: _pages.elementAt(_selectedIndex),
+      body: _getPages().elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
