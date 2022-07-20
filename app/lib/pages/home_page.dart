@@ -62,7 +62,6 @@ class HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
-
     if (cameraController != null) {
       cameraController!.dispose();
     }
@@ -177,8 +176,12 @@ class HomePageState extends State<HomePage> {
                 Text('Tapped on: $tappedText'),
                 Text('English translation: $translation'),
                 Text('Recognized languages: $recognizedLanguages'),
+                TextButton(
+                    onPressed: () {
+                      widget.wordStorage.save("$tappedText->$translation");
+                    },
+                    child: const Text("Add to list"))
               ];
-              widget.wordStorage.save("$tappedText->$translation");
               _showAlertDialog = true;
             });
 

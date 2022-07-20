@@ -44,9 +44,19 @@ class ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: wordList.map((value) => Text(value)).toList(),
-      ),
+      body: SingleChildScrollView(
+          child: Center(
+              child: Column(
+        children: wordList.map((value) {
+          return Container(
+              padding: const EdgeInsets.all(10.0),
+              margin: const EdgeInsets.all(5.0),
+              width: double.infinity,
+              decoration:
+                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+              child: Text(value));
+        }).toList(),
+      ))),
     );
   }
 }
