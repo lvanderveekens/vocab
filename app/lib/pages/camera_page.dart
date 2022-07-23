@@ -34,12 +34,12 @@ class CameraPageState extends State<CameraPage> {
   bool isCameraInitialized = false;
   bool _isRecognizing = false;
 
-  bool _showAlertDialog = true;
-  Widget? _alertDialogContent = null;
+  bool _showAlertDialog = false;
+  Widget? _alertDialogContent;
 
   bool _cameraEnabled = true;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = true;
+  bool _translateEnabled = true;
 
   bool _processingCameraImage = false;
 
@@ -160,7 +160,7 @@ class CameraPageState extends State<CameraPage> {
             String? translation;
             final recognizedLanguages = block.recognizedLanguages;
 
-            if (_translationEnabled && recognizedLanguages.isNotEmpty) {
+            if (_translateEnabled && recognizedLanguages.isNotEmpty) {
               final recognizedLanguage = recognizedLanguages[0];
               if (recognizedLanguage != "en") {
                 log("Translating...");
@@ -266,8 +266,7 @@ class CameraPageState extends State<CameraPage> {
     }
 
     return AlertDialog(
-      // content: _alertDialogContent,
-      content: _buildAlertDialogContentForTappedText("aap", "monkey", ["it"]),
+      content: _alertDialogContent,
       actions: <Widget>[
         TextButton(
           onPressed: () => {
@@ -324,6 +323,19 @@ class CameraPageState extends State<CameraPage> {
                     ])))));
   }
 
+  Widget _buildTip() {
+    return Container(
+      child: const Text(
+        "Tap on a word",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16.0),
+      ),
+      padding: const EdgeInsets.all(10.0),
+      width: double.infinity,
+      color: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -333,41 +345,48 @@ class CameraPageState extends State<CameraPage> {
               ? const Text("Loading camera...")
               : Stack(fit: StackFit.loose, children: <Widget>[
                   _buildCameraWidget(),
-                  Container(
-                    child: const Text(
-                      "Tap on a word",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    padding: const EdgeInsets.all(10.0),
-                    width: double.infinity,
-                    color: Colors.white,
-                  ),
+                  _buildTip(),
                   _buildAlertDialogIfNeeded(),
                 ]),
-      floatingActionButton: kDebugMode
-          ? Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-              FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    _realTimeScanningEnabled = !_realTimeScanningEnabled;
-                  });
-                },
-                backgroundColor:
-                    _realTimeScanningEnabled ? Colors.blue : Colors.red,
-                child: const Icon(Icons.document_scanner),
-              ),
-              FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    _translationEnabled = !_translationEnabled;
-                  });
-                },
-                backgroundColor: _translationEnabled ? Colors.blue : Colors.red,
-                child: const Icon(Icons.translate),
-              ),
-            ])
-          : null,
+      floatingActionButton: kDebugMode ? _buildDebugActions() : null,
     );
+  }
+
+  Widget _buildDebugActions() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton.extended(
+              onPressed: () {
+                setState(() {
+                  _showAlertDialog = true;
+                  _alertDialogContent = _buildAlertDialogContentForTappedText(
+                      "aap", "monkey", ["it"]);
+                });
+              },
+              backgroundColor: Colors.blue,
+              icon: const Icon(Icons.document_scanner),
+              label: const Text("Test tap")),
+          FloatingActionButton.extended(
+              onPressed: () {
+                setState(() {
+                  _realTimeScanningEnabled = !_realTimeScanningEnabled;
+                });
+              },
+              backgroundColor:
+                  _realTimeScanningEnabled ? Colors.green : Colors.red,
+              icon: const Icon(Icons.document_scanner),
+              label: const Text("Real-time scanning")),
+          FloatingActionButton.extended(
+              onPressed: () {
+                setState(() {
+                  _translateEnabled = !_translateEnabled;
+                });
+              },
+              backgroundColor: _translateEnabled ? Colors.green : Colors.red,
+              icon: const Icon(Icons.translate),
+              label: const Text("Translate")),
+        ]);
   }
 }
