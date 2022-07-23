@@ -89,9 +89,6 @@ class CameraPageState extends State<CameraPage> {
 
     await cameraController!.initialize();
 
-    if (!mounted) {
-      return;
-    }
     setState(() {
       isCameraInitialized = true;
     });
@@ -294,10 +291,6 @@ class CameraPageState extends State<CameraPage> {
   final cameraPreviewKey = GlobalKey();
 
   Widget _buildCameraWidget() {
-    if (!isCameraInitialized) {
-      return Text("Camera not initialized yet");
-    }
-
     // somehow the camera sensor orientation is 90 which messes up the aspect ratio field...
     // the logic below is a workaround...
     final cameraPreviewWidth = math.min(
@@ -341,7 +334,7 @@ class CameraPageState extends State<CameraPage> {
     return Scaffold(
       body: !_cameraEnabled
           ? const Text("Camera is disabled")
-          : cameraController == null
+          : !isCameraInitialized
               ? const Text("Loading camera...")
               : Stack(fit: StackFit.loose, children: <Widget>[
                   _buildCameraWidget(),
