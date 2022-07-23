@@ -14,32 +14,32 @@ import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:megaphone/google_translation_response.dart';
 import 'package:megaphone/secrets.dart';
-import 'package:megaphone/storage/word_repository.dart';
+import 'package:megaphone/storage/word_storage.dart';
 import 'package:megaphone/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
 
-class HomePage extends StatefulWidget {
+class CameraPage extends StatefulWidget {
   final WordStorage wordStorage;
 
-  const HomePage({Key? key, required this.wordStorage}) : super(key: key);
+  const CameraPage({Key? key, required this.wordStorage}) : super(key: key);
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<CameraPage> createState() => CameraPageState();
 }
 
-class HomePageState extends State<HomePage> {
+class CameraPageState extends State<CameraPage> {
   List<CameraDescription>? cameras;
   CameraController? cameraController;
   bool _isDetecting = false;
   bool isCameraInitialized = false;
   bool _isRecognizing = false;
 
-  bool _showAlertDialog = false;
-  List<Widget> _alertDialogChildren = [];
+  bool _showAlertDialog = true;
+  Widget? _alertDialogContent = null;
 
   bool _cameraEnabled = true;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = false;
+  bool _translationEnabled = true;
 
   bool _processingCameraImage = false;
 
@@ -172,16 +172,8 @@ class HomePageState extends State<HomePage> {
             }
 
             setState(() {
-              _alertDialogChildren = [
-                Text('Tapped on: $tappedText'),
-                Text('English translation: $translation'),
-                Text('Recognized languages: $recognizedLanguages'),
-                TextButton(
-                    onPressed: () {
-                      widget.wordStorage.save("$tappedText->$translation");
-                    },
-                    child: const Text("Add to list"))
-              ];
+              _alertDialogContent = _buildAlertDialogContentForTappedText(
+                  tappedText, translation, recognizedLanguages);
               _showAlertDialog = true;
             });
 
@@ -192,9 +184,27 @@ class HomePageState extends State<HomePage> {
     }
     log("User did not tap on a word.");
     setState(() {
-      _alertDialogChildren = [const Text('No word found...')];
+      _alertDialogContent = const Text('No word found...');
       _showAlertDialog = true;
     });
+  }
+
+  Widget _buildAlertDialogContentForTappedText(String tappedText,
+      String? translation, List<String> recognizedLanguages) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Tapped text: $tappedText'),
+        Text('English translation: $translation'),
+        Text('Recognized languages: $recognizedLanguages'),
+        TextButton(
+            onPressed: () {
+              widget.wordStorage.save("$tappedText->$translation");
+            },
+            child: const Text("Add to list"))
+      ],
+    );
   }
 
   Future<RecognizedText> recognizeText(CameraImage cameraImage) async {
@@ -256,11 +266,8 @@ class HomePageState extends State<HomePage> {
     }
 
     return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _alertDialogChildren,
-      ),
+      // content: _alertDialogContent,
+      content: _buildAlertDialogContentForTappedText("aap", "monkey", ["it"]),
       actions: <Widget>[
         TextButton(
           onPressed: () => {
@@ -326,29 +333,41 @@ class HomePageState extends State<HomePage> {
               ? const Text("Loading camera...")
               : Stack(fit: StackFit.loose, children: <Widget>[
                   _buildCameraWidget(),
+                  Container(
+                    child: const Text(
+                      "Tap on a word",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    padding: const EdgeInsets.all(10.0),
+                    width: double.infinity,
+                    color: Colors.white,
+                  ),
                   _buildAlertDialogIfNeeded(),
                 ]),
-      floatingActionButton:
-          Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-        FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _realTimeScanningEnabled = !_realTimeScanningEnabled;
-            });
-          },
-          backgroundColor: _realTimeScanningEnabled ? Colors.blue : Colors.red,
-          child: const Icon(Icons.document_scanner),
-        ),
-        FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _translationEnabled = !_translationEnabled;
-            });
-          },
-          backgroundColor: _translationEnabled ? Colors.blue : Colors.red,
-          child: const Icon(Icons.translate),
-        ),
-      ]),
+      floatingActionButton: kDebugMode
+          ? Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+              FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    _realTimeScanningEnabled = !_realTimeScanningEnabled;
+                  });
+                },
+                backgroundColor:
+                    _realTimeScanningEnabled ? Colors.blue : Colors.red,
+                child: const Icon(Icons.document_scanner),
+              ),
+              FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    _translationEnabled = !_translationEnabled;
+                  });
+                },
+                backgroundColor: _translationEnabled ? Colors.blue : Colors.red,
+                child: const Icon(Icons.translate),
+              ),
+            ])
+          : null,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:megaphone/pages/home_page.dart';
+import 'package:megaphone/pages/camera_page.dart';
 import 'package:megaphone/pages/list_page.dart';
-import 'package:megaphone/storage/word_repository.dart';
+import 'package:megaphone/storage/word_storage.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class AppState extends State<App> {
   List<Widget> _getPages() {
     final wordStorage = WordStorage();
     return [
-      HomePage(wordStorage: wordStorage),
+      CameraPage(wordStorage: wordStorage),
       ListPage(wordStorage: wordStorage),
     ];
   }
@@ -32,16 +32,20 @@ class AppState extends State<App> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reading companion'),
-        foregroundColor: Colors.blue,
+        title: const Text('Reading aid',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24.0,
+            )),
+        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
       body: _getPages().elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.camera_alt),
+            label: 'Camera',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
@@ -49,7 +53,7 @@ class AppState extends State<App> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.black,
         onTap: _onItemTapped,
       ),
     );
