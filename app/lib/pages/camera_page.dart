@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:megaphone/dialog/tap_dialog.dart';
 import 'package:megaphone/google_translation_response.dart';
 import 'package:megaphone/secrets.dart';
 import 'package:megaphone/storage/word_storage.dart';
@@ -34,9 +35,6 @@ class CameraPageState extends State<CameraPage> {
   bool isCameraInitialized = false;
   bool _isRecognizing = false;
 
-  bool _showAlertDialog = false;
-  Widget? _alertDialogContent;
-
   bool _cameraEnabled = true;
   bool _realTimeScanningEnabled = false;
   bool _translateEnabled = true;
@@ -49,6 +47,9 @@ class CameraPageState extends State<CameraPage> {
   bool _processNextCameraImage = false;
 
   Size? _cameraImageSize;
+
+  bool _showTapDialog = false;
+  String? _tappedOnWord;
 
   @override
   void initState() {
@@ -153,55 +154,15 @@ class CameraPageState extends State<CameraPage> {
           if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
 
-            final tappedText = element.text;
-            String? translation;
-            final recognizedLanguages = block.recognizedLanguages;
+            final tappedOnWord = element.text;
 
-            if (_translateEnabled && recognizedLanguages.isNotEmpty) {
-              final recognizedLanguage = recognizedLanguages[0];
-              if (recognizedLanguage != "en") {
-                log("Translating...");
-                translation =
-                    await translate(tappedText, recognizedLanguage, "en");
-
-                log("Translation: $translation");
-              }
-            }
-
-            setState(() {
-              _alertDialogContent = _buildAlertDialogContentForTappedText(
-                  tappedText, translation, recognizedLanguages);
-              _showAlertDialog = true;
-            });
-
-            return;
+            return showTapDialog(tappedOnWord);
           }
         }
       }
     }
     log("User did not tap on a word.");
-    setState(() {
-      _alertDialogContent = const Text('No word found...');
-      _showAlertDialog = true;
-    });
-  }
-
-  Widget _buildAlertDialogContentForTappedText(String tappedText,
-      String? translation, List<String> recognizedLanguages) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Tapped text: $tappedText'),
-        Text('English translation: $translation'),
-        Text('Recognized languages: $recognizedLanguages'),
-        TextButton(
-            onPressed: () {
-              widget.wordStorage.save("$tappedText->$translation");
-            },
-            child: const Text("Add to list"))
-      ],
-    );
+    return showTapDialog(null);
   }
 
   Future<RecognizedText> recognizeText(CameraImage cameraImage) async {
@@ -255,26 +216,6 @@ class CameraPageState extends State<CameraPage> {
         GoogleTranslationResponse.fromJson(jsonDecode(response.body));
 
     return googleTranslationResponse.data.translations[0].translatedText;
-  }
-
-  Widget _buildAlertDialogIfNeeded() {
-    if (!_showAlertDialog) {
-      return Container();
-    }
-
-    return AlertDialog(
-      content: _alertDialogContent,
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => {
-            setState(() {
-              _showAlertDialog = false;
-            })
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    );
   }
 
   Widget _buildRealTimeScannerIfNeeded() {
@@ -339,7 +280,6 @@ class CameraPageState extends State<CameraPage> {
               : Stack(fit: StackFit.loose, children: <Widget>[
                   _buildCameraWidget(),
                   _buildTip(),
-                  _buildAlertDialogIfNeeded(),
                 ]),
       floatingActionButton: kDebugMode ? _buildDebugActions() : null,
     );
@@ -352,11 +292,7 @@ class CameraPageState extends State<CameraPage> {
         children: <Widget>[
           FloatingActionButton.extended(
               onPressed: () {
-                setState(() {
-                  _showAlertDialog = true;
-                  _alertDialogContent = _buildAlertDialogContentForTappedText(
-                      "aap", "monkey", ["it"]);
-                });
+                showTapDialog("aap");
               },
               backgroundColor: Colors.blue,
               icon: const Icon(Icons.document_scanner),
@@ -381,5 +317,14 @@ class CameraPageState extends State<CameraPage> {
               icon: const Icon(Icons.translate),
               label: const Text("Translate")),
         ]);
+  }
+
+  void showTapDialog(String? tappedOnWord) {
+    showDialog(
+        context: context,
+        builder: (ctx) => TapDialog(
+              onClose: () {},
+              tappedOnWord: tappedOnWord,
+            ));
   }
 }
