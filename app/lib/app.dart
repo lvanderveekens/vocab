@@ -30,32 +30,43 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reading aid',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24.0,
-            )),
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-      ),
-      body: _getPages().elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt),
-            label: 'Camera',
+    return MaterialApp(
+        theme: ThemeData(
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: Colors.black,
+              ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+              primary: Colors.black,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'List',
+        ),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Reading aid',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                )),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white,
           ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        onTap: _onItemTapped,
-      ),
-    );
+          body: _getPages().elementAt(_selectedIndex),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.camera_alt),
+                label: 'Camera',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                label: 'List',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.black,
+            onTap: _onItemTapped,
+          ),
+        ));
   }
 }

@@ -25,14 +25,14 @@ class TapDialogState extends State<TapDialog> {
   }
 
   Widget _buildDialogChild() {
-    String dialogText =
-        widget.tappedOnWord != null ? widget.tappedOnWord! : 'No word found...';
-
     return Container(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_buildDialogHeader(), _buildDialogContent(dialogText)]));
+            children: [
+          _buildDialogHeader(),
+          _buildDialogContentWrapper(),
+        ]));
 
     // return Column(
     //   mainAxisSize: MainAxisSize.min,
@@ -48,9 +48,58 @@ class TapDialogState extends State<TapDialog> {
     // );
   }
 
-  Widget _buildDialogContent(String text) {
+  Widget _buildDialogContentWrapper() {
     return Container(
-        margin: EdgeInsets.fromLTRB(16, 16, 16, 32), child: Text(text));
+      margin: EdgeInsets.fromLTRB(16, 16, 16, 32),
+      child: _buildDialogContent(),
+    );
+  }
+
+  Widget _buildDialogContent() {
+    if (widget.tappedOnWord == null) {
+      return Text("No word found.");
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Tapped on word:",
+        ),
+        Container(
+            margin: EdgeInsets.only(top: 32.0, bottom: 32.0),
+            child: Center(
+                child: Text(widget.tappedOnWord!,
+                    style: TextStyle(
+                      fontSize: 24.0,
+                    )))),
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            padding: EdgeInsets.all(16.0),
+            // primary: Colors.black, //<-- SEE HERE
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          child: Container(
+              width: double.infinity,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Translate'),
+                  Icon(
+                    Icons.translate,
+                    size: 16.0,
+                  ),
+                ],
+              )),
+          onPressed: () {
+            log("Pressed on translate");
+          },
+        ),
+      ],
+    );
   }
 
   Widget _buildDialogHeader() {
