@@ -32,10 +32,11 @@ class CameraPageState extends State<CameraPage> {
   List<CameraDescription>? cameras;
   CameraController? cameraController;
   bool _isDetecting = false;
-  bool isCameraInitialized = false;
   bool _isRecognizing = false;
 
   bool _cameraEnabled = true;
+  bool _cameraAvailable = true;
+  bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
   bool _translateEnabled = true;
 
@@ -85,13 +86,20 @@ class CameraPageState extends State<CameraPage> {
       return;
     }
 
+    if (cameras!.isEmpty) {
+      setState(() {
+        _cameraAvailable = false;
+      });
+      return;
+    }
+
     final camera = cameras![0]; // TODO: try other cameras?
     cameraController = CameraController(camera, ResolutionPreset.high);
 
     await cameraController!.initialize();
 
     setState(() {
-      isCameraInitialized = true;
+      _cameraInitialized = true;
     });
 
     cameraController!.startImageStream((CameraImage cameraImage) {
@@ -275,12 +283,14 @@ class CameraPageState extends State<CameraPage> {
     return Scaffold(
       body: !_cameraEnabled
           ? const Text("Camera is disabled")
-          : !isCameraInitialized
-              ? const Text("Loading camera...")
-              : Stack(fit: StackFit.loose, children: <Widget>[
-                  _buildCameraWidget(),
-                  _buildTip(),
-                ]),
+          : !_cameraAvailable
+              ? const Text("Camera not available")
+              : !_cameraInitialized
+                  ? const Text("Loading camera...")
+                  : Stack(fit: StackFit.loose, children: <Widget>[
+                      _buildCameraWidget(),
+                      _buildTip(),
+                    ]),
       floatingActionButton: kDebugMode ? _buildDebugActions() : null,
     );
   }

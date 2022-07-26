@@ -25,14 +25,14 @@ class TapDialogState extends State<TapDialog> {
   }
 
   Widget _buildDialogChild() {
-    String text =
+    String dialogText =
         widget.tappedOnWord != null ? widget.tappedOnWord! : 'No word found...';
 
     return Container(
         child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_buildDialogHeader(), _buildDialogContent(text)]));
+            children: [_buildDialogHeader(), _buildDialogContent(dialogText)]));
 
     // return Column(
     //   mainAxisSize: MainAxisSize.min,
