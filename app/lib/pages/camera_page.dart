@@ -333,7 +333,10 @@ class CameraPageState extends State<CameraPage> {
     showDialog(
         context: context,
         builder: (ctx) => TapDialog(
-              onClose: () {},
+              onClose: () {
+                log("dialog onClose called");
+                Navigator.pop(context);
+              },
               tappedOnWord: tappedOnWord,
             ));
   }

@@ -32,7 +32,12 @@ class AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
-          textTheme: Theme.of(context).textTheme.apply(
+          textTheme: ThemeData(
+                  textTheme: TextTheme(
+            bodyText1: TextStyle(fontSize: 16.0),
+            bodyText2: TextStyle(fontSize: 16.0),
+            button: TextStyle(fontSize: 16.0),
+          )).textTheme.apply(
                 bodyColor: Colors.black,
               ),
           outlinedButtonTheme: OutlinedButtonThemeData(
@@ -43,7 +48,7 @@ class AppState extends State<App> {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Reading aid',
+            title: const Text('Vocab',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0,
@@ -63,6 +68,8 @@ class AppState extends State<App> {
                 label: 'List',
               ),
             ],
+            selectedLabelStyle: TextStyle(fontSize: 16.0),
+            unselectedLabelStyle: TextStyle(fontSize: 16.0),
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.black,
             onTap: _onItemTapped,
