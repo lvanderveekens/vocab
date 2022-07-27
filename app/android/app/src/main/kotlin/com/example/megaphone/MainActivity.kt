@@ -1,4 +1,4 @@
-package com.example.megaphone
+package com.example.vocab
 
 import io.flutter.embedding.android.FlutterActivity
 

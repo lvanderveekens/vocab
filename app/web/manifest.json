@@ -1,6 +1,6 @@
 {
-    "name": "megaphone",
-    "short_name": "megaphone",
+    "name": "vocab",
+    "short_name": "vocab",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

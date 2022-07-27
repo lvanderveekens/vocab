@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:megaphone/pages/camera_page.dart';
-import 'package:megaphone/pages/list_page.dart';
-import 'package:megaphone/storage/word_storage.dart';
+import 'package:vocab/pages/camera_page.dart';
+import 'package:vocab/pages/list_page.dart';
+import 'package:vocab/storage/word_storage.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);

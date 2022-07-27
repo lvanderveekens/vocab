@@ -1,3 +1,3 @@
-# megaphone
+# vocab
 
 TODO

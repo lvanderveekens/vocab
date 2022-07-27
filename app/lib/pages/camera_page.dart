@@ -12,11 +12,11 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:megaphone/dialog/tap_dialog.dart';
-import 'package:megaphone/google_translation_response.dart';
-import 'package:megaphone/secrets.dart';
-import 'package:megaphone/storage/word_storage.dart';
-import 'package:megaphone/text_decorator_painter.dart';
+import 'package:vocab/dialog/tap_dialog.dart';
+import 'package:vocab/google_translation_response.dart';
+import 'package:vocab/secrets.dart';
+import 'package:vocab/storage/word_storage.dart';
+import 'package:vocab/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
 
 class CameraPage extends StatefulWidget {

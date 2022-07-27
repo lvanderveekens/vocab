@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(megaphone LANGUAGES CXX)
+project(vocab LANGUAGES CXX)
 
-set(BINARY_NAME "megaphone")
+set(BINARY_NAME "vocab")
 
 cmake_policy(SET CMP0063 NEW)
 
