@@ -338,6 +338,7 @@ class CameraPageState extends State<CameraPage> {
                 Navigator.pop(context);
               },
               tappedOnWord: tappedOnWord,
+              wordStorage: widget.wordStorage,
             ));
   }
 }

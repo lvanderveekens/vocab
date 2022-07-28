@@ -2,14 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../storage/word_storage.dart';
+
 class TapDialog extends StatefulWidget {
-  final VoidCallback? onClose;
+  final VoidCallback onClose;
   final String? tappedOnWord;
+  final WordStorage wordStorage;
 
   const TapDialog({
     Key? key,
     required this.onClose,
     required this.tappedOnWord,
+    required this.wordStorage,
   }) : super(key: key);
 
   @override
@@ -18,6 +22,8 @@ class TapDialog extends StatefulWidget {
 
 class TapDialogState extends State<TapDialog> {
   bool _showTranslateDialogPage = false;
+
+  String? _translation = "monkey";
 
   @override
   Widget build(BuildContext context) {
@@ -86,39 +92,46 @@ class TapDialogState extends State<TapDialog> {
                     // TODO: where to get target language from?
                     Text('English', style: TextStyle(fontSize: 10.0)),
                     // TODO: translation
-                    Text('monkey', style: TextStyle(fontSize: 24.0)),
+                    Text(_translation != null ? _translation! : "",
+                        style: TextStyle(fontSize: 24.0)),
                   ])),
         ]),
       ),
       Container(
           margin: EdgeInsets.only(bottom: 8.0),
           child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.all(16.0),
-              side: BorderSide(color: Colors.black),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.all(16.0),
+                // side: BorderSide(color: Colors.black),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
-            ),
-            child: Container(
-                width: double.infinity,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Add to list'),
-                    const Icon(Icons.list, size: 24.0),
-                  ],
-                )),
-            onPressed: () {
-              log("Pressed on 'Add to list'");
-            },
-          )),
+              child: Container(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Add to list'),
+                      const Icon(Icons.list, size: 24.0),
+                    ],
+                  )),
+              onPressed: _translation != null
+                  ? () {
+                      log("Pressed on 'Add to list'");
+                      widget.wordStorage
+                          .save("${widget.tappedOnWord}->${_translation!}");
+                      widget.onClose();
+
+                      const snackBar = SnackBar(content: Text('Added to list'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  : null)),
       Container(
           child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           padding: EdgeInsets.all(16.0),
-          side: BorderSide(color: Colors.black),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -161,7 +174,6 @@ class TapDialogState extends State<TapDialog> {
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             padding: EdgeInsets.all(16.0),
-            side: BorderSide(color: Colors.black),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),

@@ -43,6 +43,13 @@ class AppState extends State<App> {
           outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
               primary: Colors.black,
+            ).copyWith(
+              side: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return BorderSide(color: Colors.grey);
+                }
+                return BorderSide(color: Colors.black);
+              }),
             ),
           ),
         ),
