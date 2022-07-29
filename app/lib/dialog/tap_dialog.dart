@@ -25,9 +25,10 @@ class TapDialog extends StatefulWidget {
 
 class TapDialogState extends State<TapDialog> {
   bool _showTranslateDialogPage = false;
+  bool _showChangeLanguageDialogPage = false;
 
-  Language fromLanguage = Languages.english;
-  Language toLanguage = Languages.russian;
+  Language originalLanguage = Languages.english;
+  Language translationLanguage = Languages.russian;
   String? _translation = "monkey";
 
   @override
@@ -40,21 +41,98 @@ class TapDialogState extends State<TapDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              if (_showTranslateDialogPage) ...[
-                _buildDialogHeader(
-                    title: "Translate",
-                    onBack: () {
-                      setState(() {
-                        this._showTranslateDialogPage = false;
-                      });
-                    }),
-                _buildDialogContentWrapper(
-                    child: _buildTranslateDialogPageContent())
-              ] else ...[
-                _buildDialogHeader(title: "Tap"),
-                _buildDialogContentWrapper(child: _buildTapDialogPageContent())
-              ]
+              if (_showTranslateDialogPage)
+                if (_showChangeLanguageDialogPage)
+                  ..._buildChangeLanguageDialogPage()
+                else
+                  ..._buildTranslateDialogPage()
+              else
+                ..._buildTapDialogPage()
             ])));
+  }
+
+  List<Widget> _buildTapDialogPage() {
+    return [
+      _buildDialogHeader(title: "Tap"),
+      _buildDialogContentWrapper(child: _buildTapDialogPageContent())
+    ];
+  }
+
+  List<Widget> _buildTranslateDialogPage() {
+    return [
+      _buildDialogHeader(
+          title: "Translate",
+          onBack: () {
+            setState(() {
+              this._showTranslateDialogPage = false;
+            });
+          }),
+      _buildDialogContentWrapper(child: _buildTranslateDialogPageContent())
+    ];
+  }
+
+  List<Widget> _buildChangeLanguageDialogPage() {
+    return [
+      _buildDialogHeader(
+          title: "Change language",
+          onBack: () {
+            setState(() {
+              this._showChangeLanguageDialogPage = false;
+            });
+          }),
+      _buildDialogContentWrapper(child: _buildChangeLanguageDialogPageContent())
+    ];
+  }
+
+  Widget _buildChangeLanguageDialogPageContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            margin: EdgeInsets.only(bottom: 16.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text("Original"),
+              DropdownButton(
+                value: originalLanguage,
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: widget.supportedLanguages.map((Language language) {
+                  return DropdownMenuItem(
+                    value: language,
+                    child: Text(language.name),
+                  );
+                }).toList(),
+                onChanged: (Language? newValue) {
+                  setState(() {
+                    originalLanguage = newValue!;
+                  });
+                },
+              )
+            ])),
+        Container(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Translation"),
+            DropdownButton(
+              value: translationLanguage,
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: widget.supportedLanguages.map((Language language) {
+                return DropdownMenuItem(
+                  value: language,
+                  child: Text(language.name),
+                );
+              }).toList(),
+              onChanged: (Language? newValue) {
+                setState(() {
+                  translationLanguage = newValue!;
+                });
+              },
+            ),
+          ],
+        ))
+      ],
+    );
   }
 
   Widget _buildDialogContentWrapper({required Widget child}) {
@@ -80,7 +158,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get source language from?
-                    Text(this.fromLanguage.name,
+                    Text(this.originalLanguage.name,
                         style: TextStyle(fontSize: 10.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
@@ -96,7 +174,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get target language from?
-                    Text(this.toLanguage.name,
+                    Text(this.translationLanguage.name,
                         style: TextStyle(fontSize: 10.0)),
                     // TODO: translation
                     Text(_translation != null ? _translation! : "",
@@ -155,6 +233,9 @@ class TapDialogState extends State<TapDialog> {
             )),
         onPressed: () {
           log("Pressed on 'Change language'");
+          setState(() {
+            this._showChangeLanguageDialogPage = true;
+          });
         },
       )),
     ]);
