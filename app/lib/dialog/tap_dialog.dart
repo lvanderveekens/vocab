@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:language_picker/languages.dart';
 
 import '../storage/word_storage.dart';
 
@@ -8,12 +9,14 @@ class TapDialog extends StatefulWidget {
   final VoidCallback onClose;
   final String? tappedOnWord;
   final WordStorage wordStorage;
+  final List<Language> supportedLanguages;
 
   const TapDialog({
     Key? key,
     required this.onClose,
     required this.tappedOnWord,
     required this.wordStorage,
+    required this.supportedLanguages,
   }) : super(key: key);
 
   @override
@@ -23,6 +26,8 @@ class TapDialog extends StatefulWidget {
 class TapDialogState extends State<TapDialog> {
   bool _showTranslateDialogPage = false;
 
+  Language fromLanguage = Languages.english;
+  Language toLanguage = Languages.russian;
   String? _translation = "monkey";
 
   @override
@@ -75,7 +80,8 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get source language from?
-                    Text('Dutch', style: TextStyle(fontSize: 10.0)),
+                    Text(this.fromLanguage.name,
+                        style: TextStyle(fontSize: 10.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
                   ])),
@@ -90,7 +96,8 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get target language from?
-                    Text('English', style: TextStyle(fontSize: 10.0)),
+                    Text(this.toLanguage.name,
+                        style: TextStyle(fontSize: 10.0)),
                     // TODO: translation
                     Text(_translation != null ? _translation! : "",
                         style: TextStyle(fontSize: 24.0)),
@@ -222,7 +229,7 @@ class TapDialogState extends State<TapDialog> {
                       icon: Icon(Icons.close),
                       onPressed: () {
                         if (widget.onClose != null) {
-                          widget.onClose!();
+                          widget.onClose();
                         }
                       }))))
     ]);

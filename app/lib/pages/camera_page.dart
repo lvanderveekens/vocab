@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:language_picker/languages.dart';
 import 'package:vocab/dialog/tap_dialog.dart';
 import 'package:vocab/google_translation_response.dart';
 import 'package:vocab/secrets.dart';
@@ -21,8 +22,11 @@ import 'package:http/http.dart' as http;
 
 class CameraPage extends StatefulWidget {
   final WordStorage wordStorage;
+  final List<Language> supportedLanguages;
 
-  const CameraPage({Key? key, required this.wordStorage}) : super(key: key);
+  const CameraPage(
+      {Key? key, required this.wordStorage, required this.supportedLanguages})
+      : super(key: key);
 
   @override
   State<CameraPage> createState() => CameraPageState();
@@ -339,6 +343,7 @@ class CameraPageState extends State<CameraPage> {
               },
               tappedOnWord: tappedOnWord,
               wordStorage: widget.wordStorage,
+              supportedLanguages: widget.supportedLanguages,
             ));
   }
 }

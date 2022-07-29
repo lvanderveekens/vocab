@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:language_picker/languages.dart';
 
 import 'package:vocab/pages/camera_page.dart';
 import 'package:vocab/pages/list_page.dart';
 import 'package:vocab/storage/word_storage.dart';
+import 'package:vocab/translate/google_translation_supported_languages.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -13,13 +17,24 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   int _selectedIndex = 0;
+  final wordStorage = WordStorage();
+  List<Language> supportedLanguages = [];
 
   List<Widget> _getPages() {
-    final wordStorage = WordStorage();
     return [
-      CameraPage(wordStorage: wordStorage),
+      CameraPage(
+          wordStorage: wordStorage, supportedLanguages: supportedLanguages),
       ListPage(wordStorage: wordStorage),
     ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    GoogleTranslationSupportedLanguages.load().then((value) {
+      this.supportedLanguages = value;
+    });
   }
 
   void _onItemTapped(int index) {
