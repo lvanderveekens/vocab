@@ -18,7 +18,6 @@ import 'package:vocab/google_translation_response.dart';
 import 'package:vocab/secrets.dart';
 import 'package:vocab/storage/word_storage.dart';
 import 'package:vocab/text_decorator_painter.dart';
-import 'package:http/http.dart' as http;
 
 class CameraPage extends StatefulWidget {
   final WordStorage wordStorage;
@@ -42,7 +41,7 @@ class CameraPageState extends State<CameraPage> {
   bool _cameraAvailable = true;
   bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
-  bool _translateEnabled = true;
+  bool _translationEnabled = true;
 
   bool _processingCameraImage = false;
 
@@ -209,27 +208,6 @@ class CameraPageState extends State<CameraPage> {
     };
   }
 
-  Future<String> translate(String text, String from, String to) async {
-    final response = await http.get(
-        Uri.parse('https://translation.googleapis.com/language/translate/v2')
-            .replace(queryParameters: {
-      'q': text,
-      'source': from,
-      'target': to,
-      'key': (await SecretsLoader().load()).apiKey,
-    }));
-
-    if (response.statusCode != 200) {
-      throw Exception(
-          'Failed to call Google Cloud Translation API: ${response.body}');
-    }
-
-    final googleTranslationResponse =
-        GoogleTranslationResponse.fromJson(jsonDecode(response.body));
-
-    return googleTranslationResponse.data.translations[0].translatedText;
-  }
-
   Widget _buildRealTimeScannerIfNeeded() {
     if (!_realTimeScanningEnabled ||
         _recognizedText == null ||
@@ -324,12 +302,12 @@ class CameraPageState extends State<CameraPage> {
           FloatingActionButton.extended(
               onPressed: () {
                 setState(() {
-                  _translateEnabled = !_translateEnabled;
+                  _translationEnabled = !_translationEnabled;
                 });
               },
-              backgroundColor: _translateEnabled ? Colors.green : Colors.red,
+              backgroundColor: _translationEnabled ? Colors.green : Colors.red,
               icon: const Icon(Icons.translate),
-              label: const Text("Translate")),
+              label: const Text("Translation")),
         ]);
   }
 
@@ -344,6 +322,7 @@ class CameraPageState extends State<CameraPage> {
               tappedOnWord: tappedOnWord,
               wordStorage: widget.wordStorage,
               supportedLanguages: widget.supportedLanguages,
+              translationEnabled: _translationEnabled,
             ));
   }
 }

@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
+import 'package:http/http.dart' as http;
+import 'package:vocab/google_translation_response.dart';
+import 'package:vocab/secrets.dart';
 
 import '../storage/word_storage.dart';
 
@@ -10,6 +14,7 @@ class TapDialog extends StatefulWidget {
   final String? tappedOnWord;
   final WordStorage wordStorage;
   final List<Language> supportedLanguages;
+  final bool translationEnabled;
 
   const TapDialog({
     Key? key,
@@ -17,6 +22,7 @@ class TapDialog extends StatefulWidget {
     required this.tappedOnWord,
     required this.wordStorage,
     required this.supportedLanguages,
+    required this.translationEnabled,
   }) : super(key: key);
 
   @override
@@ -24,12 +30,20 @@ class TapDialog extends StatefulWidget {
 }
 
 class TapDialogState extends State<TapDialog> {
-  bool _showTranslateDialogPage = false;
+  ValueNotifier<bool> _showTranslateDialogPage = ValueNotifier(false);
   bool _showChangeLanguageDialogPage = false;
 
-  Language originalLanguage = Languages.english;
-  Language translationLanguage = Languages.russian;
-  String? _translation = "monkey";
+  ValueNotifier<Language> _originalLanguage = ValueNotifier(Languages.english);
+  ValueNotifier<Language> _translationLanguage =
+      ValueNotifier(Languages.russian);
+  String? _translation;
+
+  @override
+  initState() {
+    _showTranslateDialogPage.addListener(() => _translate());
+    _originalLanguage.addListener(() => _translate());
+    _translationLanguage.addListener(() => _translate());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +55,7 @@ class TapDialogState extends State<TapDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              if (_showTranslateDialogPage)
+              if (_showTranslateDialogPage.value)
                 if (_showChangeLanguageDialogPage)
                   ..._buildChangeLanguageDialogPage()
                 else
@@ -59,12 +73,18 @@ class TapDialogState extends State<TapDialog> {
   }
 
   List<Widget> _buildTranslateDialogPage() {
+    log("@>_buildTranslateDialogPage");
+
+    // TODO: if source or target language changed
+    // if (widget.translationEnabled) {
+    //   _translate();
+    // }
     return [
       _buildDialogHeader(
           title: "Translate",
           onBack: () {
             setState(() {
-              this._showTranslateDialogPage = false;
+              this._showTranslateDialogPage.value = false;
             });
           }),
       _buildDialogContentWrapper(child: _buildTranslateDialogPageContent())
@@ -94,7 +114,7 @@ class TapDialogState extends State<TapDialog> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text("Original"),
               DropdownButton(
-                value: originalLanguage,
+                value: _originalLanguage.value,
                 icon: const Icon(Icons.keyboard_arrow_down),
                 items: widget.supportedLanguages.map((Language language) {
                   return DropdownMenuItem(
@@ -104,7 +124,7 @@ class TapDialogState extends State<TapDialog> {
                 }).toList(),
                 onChanged: (Language? newValue) {
                   setState(() {
-                    originalLanguage = newValue!;
+                    _originalLanguage.value = newValue!;
                   });
                 },
               )
@@ -115,7 +135,7 @@ class TapDialogState extends State<TapDialog> {
           children: [
             Text("Translation"),
             DropdownButton(
-              value: translationLanguage,
+              value: _translationLanguage.value,
               icon: const Icon(Icons.keyboard_arrow_down),
               items: widget.supportedLanguages.map((Language language) {
                 return DropdownMenuItem(
@@ -125,7 +145,7 @@ class TapDialogState extends State<TapDialog> {
               }).toList(),
               onChanged: (Language? newValue) {
                 setState(() {
-                  translationLanguage = newValue!;
+                  _translationLanguage.value = newValue!;
                 });
               },
             ),
@@ -143,6 +163,7 @@ class TapDialogState extends State<TapDialog> {
   }
 
   Widget _buildTranslateDialogPageContent() {
+    // TODO: right place?
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         width: double.infinity,
@@ -158,7 +179,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get source language from?
-                    Text(this.originalLanguage.name,
+                    Text(this._originalLanguage.value.name,
                         style: TextStyle(fontSize: 10.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
@@ -174,7 +195,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get target language from?
-                    Text(this.translationLanguage.name,
+                    Text(this._translationLanguage.value.name,
                         style: TextStyle(fontSize: 10.0)),
                     // TODO: translation
                     Text(_translation != null ? _translation! : "",
@@ -279,7 +300,7 @@ class TapDialogState extends State<TapDialog> {
           onPressed: () {
             log("Pressed on translate");
             setState(() {
-              this._showTranslateDialogPage = true;
+              this._showTranslateDialogPage.value = true;
             });
           },
         ),
@@ -316,18 +337,38 @@ class TapDialogState extends State<TapDialog> {
     ]);
   }
 
-  // // TODO: move translation
-  // String? translation;
-  // final recognizedLanguages = block.recognizedLanguages;
+  void _translate() async {
+    if (!widget.translationEnabled) {
+      return;
+    }
+    log("Translating...");
+    String? translation = await googleTranslate(widget.tappedOnWord!,
+        _originalLanguage.value.isoCode, _translationLanguage.value.isoCode);
+    log("Translation: $translation");
+    setState(() {
+      _translation = translation;
+    });
+  }
 
-  // if (_translateEnabled && recognizedLanguages.isNotEmpty) {
-  //   final recognizedLanguage = recognizedLanguages[0];
-  //   if (recognizedLanguage != "en") {
-  //     log("Translating...");
-  //     translation =
-  //         await translate(tappedOnText, recognizedLanguage, "en");
+  Future<String> googleTranslate(
+      String text, String sourceCode, String targetCode) async {
+    final response = await http.get(
+        Uri.parse('https://translation.googleapis.com/language/translate/v2')
+            .replace(queryParameters: {
+      'q': text,
+      'source': sourceCode,
+      'target': targetCode,
+      'key': (await SecretsLoader().load()).apiKey,
+    }));
 
-  //     log("Translation: $translation");
-  //   }
-  // }
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to call Google Cloud Translation API: ${response.body}');
+    }
+
+    final googleTranslationResponse =
+        GoogleTranslationResponse.fromJson(jsonDecode(response.body));
+
+    return googleTranslationResponse.data.translations[0].translatedText;
+  }
 }

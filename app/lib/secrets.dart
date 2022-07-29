@@ -12,9 +12,9 @@ class Secrets {
 }
 
 class SecretsLoader {
-  final String pathToFile;
+  final String pathToFile = "assets/secrets.json";
 
-  SecretsLoader({this.pathToFile = "secrets.json"});
+  SecretsLoader();
 
   Future<Secrets> load() {
     return rootBundle.loadStructuredData<Secrets>(pathToFile, (jsonStr) async {
