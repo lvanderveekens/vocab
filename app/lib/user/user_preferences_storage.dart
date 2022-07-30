@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-class WordStorage {
-  static const filename = "words";
+class UserPreferencesStorage {
+  static const filename = "user-preferences";
 
   Future<List<String>> findAll() async {
     final file = await _getFile();

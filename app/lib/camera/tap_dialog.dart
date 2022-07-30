@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 import 'package:http/http.dart' as http;
-import 'package:vocab/google_translation_response.dart';
-import 'package:vocab/secrets.dart';
+import 'package:vocab/translate/google_translation_response.dart';
+import 'package:vocab/secret/secrets.dart';
 
-import '../storage/word_storage.dart';
+import '../list/word_storage.dart';
 
 class TapDialog extends StatefulWidget {
   final VoidCallback onClose;
@@ -33,16 +33,16 @@ class TapDialogState extends State<TapDialog> {
   ValueNotifier<bool> _showTranslateDialogPage = ValueNotifier(false);
   bool _showChangeLanguageDialogPage = false;
 
-  ValueNotifier<Language> _originalLanguage = ValueNotifier(Languages.english);
-  ValueNotifier<Language> _translationLanguage =
-      ValueNotifier(Languages.russian);
+  // TODO: get from stored location (last used source language)
+  ValueNotifier<Language> _sourceLanguage = ValueNotifier(Languages.english);
+  ValueNotifier<Language> _targetLanguage = ValueNotifier(Languages.russian);
   String? _translation;
 
   @override
   initState() {
     _showTranslateDialogPage.addListener(() => _translate());
-    _originalLanguage.addListener(() => _translate());
-    _translationLanguage.addListener(() => _translate());
+    _sourceLanguage.addListener(() => _translate());
+    _targetLanguage.addListener(() => _translate());
   }
 
   @override
@@ -114,7 +114,7 @@ class TapDialogState extends State<TapDialog> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text("Original"),
               DropdownButton(
-                value: _originalLanguage.value,
+                value: _sourceLanguage.value,
                 icon: const Icon(Icons.keyboard_arrow_down),
                 items: widget.supportedLanguages.map((Language language) {
                   return DropdownMenuItem(
@@ -124,7 +124,7 @@ class TapDialogState extends State<TapDialog> {
                 }).toList(),
                 onChanged: (Language? newValue) {
                   setState(() {
-                    _originalLanguage.value = newValue!;
+                    _sourceLanguage.value = newValue!;
                   });
                 },
               )
@@ -135,7 +135,7 @@ class TapDialogState extends State<TapDialog> {
           children: [
             Text("Translation"),
             DropdownButton(
-              value: _translationLanguage.value,
+              value: _targetLanguage.value,
               icon: const Icon(Icons.keyboard_arrow_down),
               items: widget.supportedLanguages.map((Language language) {
                 return DropdownMenuItem(
@@ -145,7 +145,7 @@ class TapDialogState extends State<TapDialog> {
               }).toList(),
               onChanged: (Language? newValue) {
                 setState(() {
-                  _translationLanguage.value = newValue!;
+                  _targetLanguage.value = newValue!;
                 });
               },
             ),
@@ -179,7 +179,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get source language from?
-                    Text(this._originalLanguage.value.name,
+                    Text(this._sourceLanguage.value.name,
                         style: TextStyle(fontSize: 10.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
@@ -195,7 +195,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: where to get target language from?
-                    Text(this._translationLanguage.value.name,
+                    Text(this._targetLanguage.value.name,
                         style: TextStyle(fontSize: 10.0)),
                     // TODO: translation
                     Text(_translation != null ? _translation! : "",
@@ -343,7 +343,7 @@ class TapDialogState extends State<TapDialog> {
     }
     log("Translating...");
     String? translation = await googleTranslate(widget.tappedOnWord!,
-        _originalLanguage.value.isoCode, _translationLanguage.value.isoCode);
+        _sourceLanguage.value.isoCode, _targetLanguage.value.isoCode);
     log("Translation: $translation");
     setState(() {
       _translation = translation;

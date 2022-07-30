@@ -12,10 +12,10 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:vocab/google_translation_response.dart';
-import 'package:vocab/secrets.dart';
-import 'package:vocab/storage/word_storage.dart';
-import 'package:vocab/text_decorator_painter.dart';
+import 'package:vocab/translate/google_translation_response.dart';
+import 'package:vocab/secret/secrets.dart';
+import 'package:vocab/list/word_storage.dart';
+import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 

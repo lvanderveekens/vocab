@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 
-import 'package:vocab/pages/camera_page.dart';
-import 'package:vocab/pages/list_page.dart';
-import 'package:vocab/storage/word_storage.dart';
-import 'package:vocab/translate/google_translation_supported_languages.dart';
+import 'package:vocab/camera/camera_page.dart';
+import 'package:vocab/list/list_page.dart';
+import 'package:vocab/list/word_storage.dart';
+import 'package:vocab/translation/google_translation_supported_languages.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -33,7 +33,9 @@ class AppState extends State<App> {
     super.initState();
 
     GoogleTranslationSupportedLanguages.load().then((value) {
-      this.supportedLanguages = value;
+      setState(() {
+        supportedLanguages = value;
+      });
     });
   }
 

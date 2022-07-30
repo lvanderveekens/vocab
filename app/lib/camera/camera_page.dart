@@ -13,11 +13,11 @@ import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:language_picker/languages.dart';
-import 'package:vocab/dialog/tap_dialog.dart';
-import 'package:vocab/google_translation_response.dart';
-import 'package:vocab/secrets.dart';
-import 'package:vocab/storage/word_storage.dart';
-import 'package:vocab/text_decorator_painter.dart';
+import 'package:vocab/camera/tap_dialog.dart';
+import 'package:vocab/translate/google_translation_response.dart';
+import 'package:vocab/secret/secrets.dart';
+import 'package:vocab/list/word_storage.dart';
+import 'package:vocab/camera/text_decorator_painter.dart';
 
 class CameraPage extends StatefulWidget {
   final WordStorage wordStorage;
@@ -41,7 +41,7 @@ class CameraPageState extends State<CameraPage> {
   bool _cameraAvailable = true;
   bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = true;
+  bool _translationEnabled = false;
 
   bool _processingCameraImage = false;
 
