@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 import 'package:http/http.dart' as http;
-import 'package:vocab/translate/google_translation_response.dart';
 import 'package:vocab/secret/secrets.dart';
+import 'package:vocab/translation/google_translation_response.dart';
 
 import '../list/word_storage.dart';
 
