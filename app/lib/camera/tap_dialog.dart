@@ -6,24 +6,28 @@ import 'package:language_picker/languages.dart';
 import 'package:http/http.dart' as http;
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/translation/google_translation_response.dart';
+import 'package:vocab/user/user_preferences.dart';
+import 'package:vocab/user/user_preferences_storage.dart';
 
 import '../list/word_storage.dart';
 
 class TapDialog extends StatefulWidget {
   final VoidCallback onClose;
   final String? tappedOnWord;
-  final WordStorage wordStorage;
   final List<Language> supportedLanguages;
   final bool translationEnabled;
+  final WordStorage wordStorage;
+  final UserPreferencesStorage userPreferencesStorage;
 
-  const TapDialog({
-    Key? key,
-    required this.onClose,
-    required this.tappedOnWord,
-    required this.wordStorage,
-    required this.supportedLanguages,
-    required this.translationEnabled,
-  }) : super(key: key);
+  const TapDialog(
+      {Key? key,
+      required this.onClose,
+      required this.tappedOnWord,
+      required this.supportedLanguages,
+      required this.translationEnabled,
+      required this.wordStorage,
+      required this.userPreferencesStorage})
+      : super(key: key);
 
   @override
   State<TapDialog> createState() => TapDialogState();
@@ -34,15 +38,56 @@ class TapDialogState extends State<TapDialog> {
   bool _showChangeLanguageDialogPage = false;
 
   // TODO: get from stored location (last used source language)
-  ValueNotifier<Language> _sourceLanguage = ValueNotifier(Languages.english);
-  ValueNotifier<Language> _targetLanguage = ValueNotifier(Languages.russian);
+  // TODO: update language
+
+  final ValueNotifier<Language> _sourceLanguage =
+      ValueNotifier(Languages.italian);
+  final ValueNotifier<Language> _targetLanguage =
+      ValueNotifier(Languages.english);
   String? _translation;
+
+  UserPreferences? _userPreferences;
 
   @override
   initState() {
-    _showTranslateDialogPage.addListener(() => _translate());
-    _sourceLanguage.addListener(() => _translate());
-    _targetLanguage.addListener(() => _translate());
+    super.initState();
+
+    log("Loading user preferences...");
+    widget.userPreferencesStorage.get().then((value) {
+      _userPreferences = value;
+
+      if (value.sourceLanguage != null) {
+        setState(() {
+          _sourceLanguage.value = value.sourceLanguage!;
+        });
+      }
+      if (value.targetLanguage != null) {
+        setState(() {
+          _targetLanguage.value = value.targetLanguage!;
+        });
+      }
+
+      log("Adding listeners...");
+      _showTranslateDialogPage.addListener(() => _translate());
+      _sourceLanguage.addListener(onSourceLanguageChanged);
+      _targetLanguage.addListener(onTargetLanguageChanged);
+    });
+  }
+
+  void onSourceLanguageChanged() {
+    _translate();
+    if (_userPreferences != null) {
+      _userPreferences!.sourceLanguage = _sourceLanguage.value;
+      widget.userPreferencesStorage.save(_userPreferences!);
+    }
+  }
+
+  void onTargetLanguageChanged() {
+    _translate();
+    if (_userPreferences != null) {
+      _userPreferences!.targetLanguage = _targetLanguage.value;
+      widget.userPreferencesStorage.save(_userPreferences!);
+    }
   }
 
   @override

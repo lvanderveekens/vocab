@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-// TODO: rename to list later?
+// TODO: rename to list storage later?
 class WordStorage {
   static const filename = "words";
 
@@ -30,7 +30,7 @@ class WordStorage {
 
     wordList.add(word);
 
-    file.writeAsString(json.encode(wordList));
+    await file.writeAsString(json.encode(wordList));
   }
 
   Future<File> _getFile() async {

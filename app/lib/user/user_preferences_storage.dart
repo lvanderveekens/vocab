@@ -1,35 +1,33 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:vocab/user/user_preferences.dart';
 
 class UserPreferencesStorage {
   static const filename = "user-preferences";
 
-  Future<List<String>> findAll() async {
+  Future<UserPreferences> get() async {
+    log("Retrieving user preferences...");
     final file = await _getFile();
 
     if (await file.exists()) {
-      return (jsonDecode(await file.readAsString()) as List)
-          .map((value) => value.toString())
-          .toList();
+      Map<String, dynamic> json = jsonDecode(await file.readAsString());
+
+      var userPreferences = UserPreferences.fromJson(json);
+      log("Existing: ${userPreferences.toJson()}");
+      return userPreferences;
     }
-    return [];
+
+    return UserPreferences();
   }
 
-  Future<void> save(String word) async {
+  Future<void> save(UserPreferences userPreferences) async {
+    log("Saving user preferences: ${userPreferences.toJson()}");
     final file = await _getFile();
-
-    List<String> wordList = [];
-    if (await file.exists()) {
-      wordList = (jsonDecode(await file.readAsString()) as List)
-          .map((value) => value.toString())
-          .toList();
-    }
-
-    wordList.add(word);
-
-    file.writeAsString(json.encode(wordList));
+    await file.writeAsString(jsonEncode(userPreferences.toJson()));
   }
 
   Future<File> _getFile() async {

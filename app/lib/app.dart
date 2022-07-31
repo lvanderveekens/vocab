@@ -7,6 +7,7 @@ import 'package:vocab/camera/camera_page.dart';
 import 'package:vocab/list/list_page.dart';
 import 'package:vocab/list/word_storage.dart';
 import 'package:vocab/translation/google_translation_supported_languages.dart';
+import 'package:vocab/user/user_preferences_storage.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -18,12 +19,16 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   int _selectedIndex = 0;
   final wordStorage = WordStorage();
+  final userPreferencesStorage = UserPreferencesStorage();
   List<Language> supportedLanguages = [];
 
   List<Widget> _getPages() {
     return [
       CameraPage(
-          wordStorage: wordStorage, supportedLanguages: supportedLanguages),
+        wordStorage: wordStorage,
+        userPreferencesStorage: userPreferencesStorage,
+        supportedLanguages: supportedLanguages,
+      ),
       ListPage(wordStorage: wordStorage),
     ];
   }

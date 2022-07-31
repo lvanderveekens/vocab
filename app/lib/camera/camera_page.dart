@@ -17,14 +17,19 @@ import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/list/word_storage.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
+import 'package:vocab/user/user_preferences_storage.dart';
 
 class CameraPage extends StatefulWidget {
   final WordStorage wordStorage;
+  final UserPreferencesStorage userPreferencesStorage;
   final List<Language> supportedLanguages;
 
-  const CameraPage(
-      {Key? key, required this.wordStorage, required this.supportedLanguages})
-      : super(key: key);
+  const CameraPage({
+    Key? key,
+    required this.wordStorage,
+    required this.userPreferencesStorage,
+    required this.supportedLanguages,
+  }) : super(key: key);
 
   @override
   State<CameraPage> createState() => CameraPageState();
@@ -314,14 +319,14 @@ class CameraPageState extends State<CameraPage> {
     showDialog(
         context: context,
         builder: (ctx) => TapDialog(
-              onClose: () {
-                log("dialog onClose called");
-                Navigator.pop(context);
-              },
-              tappedOnWord: tappedOnWord,
-              wordStorage: widget.wordStorage,
-              supportedLanguages: widget.supportedLanguages,
-              translationEnabled: _translationEnabled,
-            ));
+            onClose: () {
+              log("dialog onClose called");
+              Navigator.pop(context);
+            },
+            tappedOnWord: tappedOnWord,
+            wordStorage: widget.wordStorage,
+            supportedLanguages: widget.supportedLanguages,
+            translationEnabled: _translationEnabled,
+            userPreferencesStorage: widget.userPreferencesStorage));
   }
 }
