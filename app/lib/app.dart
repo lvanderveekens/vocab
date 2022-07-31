@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 
 import 'package:vocab/camera/camera_page.dart';
-import 'package:vocab/list/list_page.dart';
-import 'package:vocab/list/word_storage.dart';
 import 'package:vocab/translation/google_translation_supported_languages.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
+
+import 'deck/deck_page.dart';
+import 'deck/deck_storage.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -18,18 +19,18 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   int _selectedIndex = 0;
-  final wordStorage = WordStorage();
+  final deckStorage = DeckStorage();
   final userPreferencesStorage = UserPreferencesStorage();
   List<Language> supportedLanguages = [];
 
   List<Widget> _getPages() {
     return [
       CameraPage(
-        wordStorage: wordStorage,
+        deckStorage: deckStorage,
         userPreferencesStorage: userPreferencesStorage,
         supportedLanguages: supportedLanguages,
       ),
-      ListPage(wordStorage: wordStorage),
+      DeckPage(deckStorage: deckStorage),
     ];
   }
 
@@ -89,12 +90,14 @@ class AppState extends State<App> {
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.camera_alt),
+                icon: Icon(Icons.camera_alt_outlined),
+                activeIcon: Icon(Icons.camera_alt),
                 label: 'Camera',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'List',
+                icon: Icon(Icons.style_outlined),
+                activeIcon: Icon(Icons.style),
+                label: 'Deck',
               ),
             ],
             selectedLabelStyle: TextStyle(fontSize: 16.0),

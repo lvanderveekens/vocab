@@ -4,19 +4,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 import 'package:http/http.dart' as http;
+import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/translation/google_translation_response.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
-
-import '../list/word_storage.dart';
 
 class TapDialog extends StatefulWidget {
   final VoidCallback onClose;
   final String? tappedOnWord;
   final List<Language> supportedLanguages;
   final bool translationEnabled;
-  final WordStorage wordStorage;
+  final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
 
   const TapDialog(
@@ -25,7 +24,7 @@ class TapDialog extends StatefulWidget {
       required this.tappedOnWord,
       required this.supportedLanguages,
       required this.translationEnabled,
-      required this.wordStorage,
+      required this.deckStorage,
       required this.userPreferencesStorage})
       : super(key: key);
 
@@ -264,18 +263,18 @@ class TapDialogState extends State<TapDialog> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Add to list'),
+                      const Text('Add to deck'),
                       const Icon(Icons.list, size: 24.0),
                     ],
                   )),
               onPressed: _translation != null
                   ? () {
-                      log("Pressed on 'Add to list'");
-                      widget.wordStorage
+                      log("Pressed on 'Add to deck'");
+                      widget.deckStorage
                           .save("${widget.tappedOnWord}->${_translation!}");
                       widget.onClose();
 
-                      const snackBar = SnackBar(content: Text('Added to list'));
+                      const snackBar = SnackBar(content: Text('Added to deck'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   : null)),

@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-// TODO: rename to list storage later?
-class WordStorage {
-  static const filename = "words";
+class DeckStorage {
+  static const filename = "deck";
 
+  // TODO: WIP
   Future<List<String>> findAll() async {
     final file = await _getFile();
 

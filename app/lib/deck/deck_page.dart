@@ -12,28 +12,28 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/secret/secrets.dart';
-import 'package:vocab/list/word_storage.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-class ListPage extends StatefulWidget {
-  final WordStorage wordStorage;
+class DeckPage extends StatefulWidget {
+  final DeckStorage deckStorage;
 
-  const ListPage({Key? key, required this.wordStorage}) : super(key: key);
+  const DeckPage({Key? key, required this.deckStorage}) : super(key: key);
 
   @override
-  State<ListPage> createState() => ListPageState();
+  State<DeckPage> createState() => DeckPageState();
 }
 
-class ListPageState extends State<ListPage> {
+class DeckPageState extends State<DeckPage> {
   List<String> wordList = [];
 
   @override
   void initState() {
     super.initState();
-    widget.wordStorage.findAll().then((value) {
+    widget.deckStorage.findAll().then((value) {
       setState(() {
         wordList = value;
       });
