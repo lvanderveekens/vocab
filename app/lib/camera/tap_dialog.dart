@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 import 'package:http/http.dart' as http;
 import 'package:vocab/deck/deck_storage.dart';
+import 'package:vocab/deck/deck.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/translation/google_translation_response.dart';
 import 'package:vocab/user/user_preferences.dart';
@@ -268,10 +269,20 @@ class TapDialogState extends State<TapDialog> {
                     ],
                   )),
               onPressed: _translation != null
-                  ? () {
+                  ? () async {
                       log("Pressed on 'Add to deck'");
-                      widget.deckStorage
-                          .save("${widget.tappedOnWord}->${_translation!}");
+
+                      await widget.deckStorage.get().then((deck) {
+                        deck.cards.add(Flashcard(
+                          sourceLanguage: _sourceLanguage.value,
+                          sourceWord: widget.tappedOnWord!,
+                          targetLanguage: _targetLanguage.value,
+                          targetWord: _translation!,
+                        ));
+
+                        return widget.deckStorage.save(deck);
+                      });
+
                       widget.onClose();
 
                       const snackBar = SnackBar(content: Text('Added to deck'));

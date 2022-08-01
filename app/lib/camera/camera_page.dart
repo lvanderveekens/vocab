@@ -46,7 +46,7 @@ class CameraPageState extends State<CameraPage> {
   bool _cameraAvailable = true;
   bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = false;
+  bool _translationEnabled = true;
 
   bool _processingCameraImage = false;
 

@@ -24,8 +24,10 @@ class UserPreferences {
     return userPreferences;
   }
 
-  Map<String, dynamic> toJson() => {
-        'sourceLanguageCode': sourceLanguage?.isoCode,
-        'targetLanguageCode': targetLanguage?.isoCode,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'sourceLanguageCode': sourceLanguage?.isoCode,
+      'targetLanguageCode': targetLanguage?.isoCode,
+    };
+  }
 }

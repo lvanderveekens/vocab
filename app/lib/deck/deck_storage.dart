@@ -2,35 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:vocab/deck/deck.dart';
 
 class DeckStorage {
   static const filename = "deck";
 
-  // TODO: WIP
-  Future<List<String>> findAll() async {
+  Future<Deck> get() async {
     final file = await _getFile();
-
     if (await file.exists()) {
-      return (jsonDecode(await file.readAsString()) as List)
-          .map((value) => value.toString())
-          .toList();
+      Map<String, dynamic> json = jsonDecode(await file.readAsString());
+      return Deck.fromJson(json);
     }
-    return [];
+    return Deck(cards: []);
   }
 
-  Future<void> save(String word) async {
+  Future<void> save(Deck deck) async {
     final file = await _getFile();
-
-    List<String> wordList = [];
-    if (await file.exists()) {
-      wordList = (jsonDecode(await file.readAsString()) as List)
-          .map((value) => value.toString())
-          .toList();
-    }
-
-    wordList.add(word);
-
-    await file.writeAsString(json.encode(wordList));
+    await file.writeAsString(jsonEncode(deck));
   }
 
   Future<File> _getFile() async {

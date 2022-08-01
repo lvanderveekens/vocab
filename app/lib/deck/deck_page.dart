@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:vocab/deck/deck.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
@@ -28,14 +29,14 @@ class DeckPage extends StatefulWidget {
 }
 
 class DeckPageState extends State<DeckPage> {
-  List<String> wordList = [];
+  Deck? _deck;
 
   @override
   void initState() {
     super.initState();
-    widget.deckStorage.findAll().then((value) {
+    widget.deckStorage.get().then((deck) {
       setState(() {
-        wordList = value;
+        _deck = deck;
       });
     });
   }
@@ -45,14 +46,20 @@ class DeckPageState extends State<DeckPage> {
     return Scaffold(
       body: SingleChildScrollView(
           child: Column(
-        children: wordList.map((value) {
+        children: (_deck?.cards ?? []).map((card) {
           return Container(
               padding: const EdgeInsets.all(10.0),
               margin: const EdgeInsets.all(5.0),
               width: double.infinity,
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Center(child: Text(value)));
+              child: Center(
+                  child: Column(children: [
+                Text(card.sourceLanguage.name),
+                Text(card.sourceWord),
+                Text(card.targetLanguage.name),
+                Text(card.targetWord),
+              ])));
         }).toList(),
       )),
     );
