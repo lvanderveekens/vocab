@@ -225,7 +225,7 @@ class TapDialogState extends State<TapDialog> {
                   children: [
                     // TODO: where to get source language from?
                     Text(this._sourceLanguage.value.name,
-                        style: TextStyle(fontSize: 10.0)),
+                        style: TextStyle(fontSize: 12.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
                   ])),
@@ -241,7 +241,7 @@ class TapDialogState extends State<TapDialog> {
                   children: [
                     // TODO: where to get target language from?
                     Text(this._targetLanguage.value.name,
-                        style: TextStyle(fontSize: 10.0)),
+                        style: TextStyle(fontSize: 12.0)),
                     // TODO: translation
                     Text(_translation != null ? _translation! : "",
                         style: TextStyle(fontSize: 24.0)),
