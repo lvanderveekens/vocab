@@ -21,6 +21,8 @@ class Deck {
 }
 
 class Flashcard {
+  final String id;
+
   final Language sourceLanguage;
   final String sourceWord;
 
@@ -28,6 +30,7 @@ class Flashcard {
   final String targetWord;
 
   Flashcard({
+    required this.id,
     required this.sourceLanguage,
     required this.sourceWord,
     required this.targetLanguage,
@@ -36,6 +39,7 @@ class Flashcard {
 
   factory Flashcard.fromJson(Map<String, dynamic> json) {
     return Flashcard(
+      id: json['id'],
       sourceLanguage: Language.fromIsoCode(json['sourceLanguageCode']),
       sourceWord: json['sourceWord'],
       targetLanguage: Language.fromIsoCode(json['targetLanguageCode']),
@@ -45,6 +49,7 @@ class Flashcard {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'sourceLanguageCode': sourceLanguage.isoCode,
       'sourceWord': sourceWord,
       'targetLanguageCode': targetLanguage.isoCode,

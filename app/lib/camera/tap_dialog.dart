@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:language_picker/languages.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/secret/secrets.dart';
@@ -274,6 +275,7 @@ class TapDialogState extends State<TapDialog> {
 
                       await widget.deckStorage.get().then((deck) {
                         deck.cards.add(Flashcard(
+                          id: const Uuid().v4(),
                           sourceLanguage: _sourceLanguage.value,
                           sourceWord: widget.tappedOnWord!,
                           targetLanguage: _targetLanguage.value,
