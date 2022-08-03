@@ -271,24 +271,29 @@ class TapDialogState extends State<TapDialog> {
                   )),
               onPressed: _translation != null
                   ? () async {
-                      log("Pressed on 'Add to deck'");
+                      Deck deck = await widget.deckStorage.get();
 
-                      await widget.deckStorage.get().then((deck) {
-                        deck.cards.add(Flashcard(
-                          id: const Uuid().v4(),
-                          sourceLanguage: _sourceLanguage.value,
-                          sourceWord: widget.tappedOnWord!,
-                          targetLanguage: _targetLanguage.value,
-                          targetWord: _translation!,
-                        ));
-
-                        return widget.deckStorage.save(deck);
-                      });
+                      Flashcard addedCard = Flashcard(
+                        id: const Uuid().v4(),
+                        sourceLanguage: _sourceLanguage.value,
+                        sourceWord: widget.tappedOnWord!,
+                        targetLanguage: _targetLanguage.value,
+                        targetWord: _translation!,
+                      );
+                      deck.cards.add(addedCard);
+                      widget.deckStorage.save(deck);
 
                       widget.onClose();
 
-                      const snackBar = SnackBar(content: Text('Added to deck'));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text('Added to deck'),
+                          action: SnackBarAction(
+                            label: "Undo",
+                            onPressed: () {
+                              deck.cards.remove(addedCard);
+                              widget.deckStorage.save(deck);
+                            },
+                          )));
                     }
                   : null)),
       Container(

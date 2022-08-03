@@ -46,7 +46,7 @@ class DeckPageState extends State<DeckPage> {
     var cards = _deck?.cards ?? [];
 
     if (cards.isEmpty) {
-      return Center(child: Text("You don't have any flashcards yet."));
+      return Center(child: Text("Your deck is empty."));
     }
 
     return Scaffold(
@@ -67,10 +67,12 @@ class DeckPageState extends State<DeckPage> {
                       content: const Text('Card deleted'),
                       action: SnackBarAction(
                         label: "Undo",
-                        onPressed: () => setState(() {
-                          cards.insert(index, deletedCard);
-                          widget.deckStorage.save(_deck!);
-                        }),
+                        onPressed: () {
+                          _setStateIfMounted(() {
+                            cards.insert(index, deletedCard);
+                            widget.deckStorage.save(_deck!);
+                          });
+                        },
                       )));
                 });
               },
@@ -89,6 +91,15 @@ class DeckPageState extends State<DeckPage> {
         // return ;
       },
     ));
+  }
+
+  void _setStateIfMounted(VoidCallback fn) {
+    if (!mounted) {
+      return fn();
+    }
+    setState(() {
+      return fn();
+    });
   }
 
   Widget _buildFlashcard(Flashcard card) {
