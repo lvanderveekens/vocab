@@ -266,15 +266,21 @@ class CameraPageState extends State<CameraPage> {
 
   Widget _buildUsageTip() {
     return Container(
-      child: const Text(
-        "Aim at a word and tap on it.",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0),
-      ),
-      padding: const EdgeInsets.all(10.0),
-      width: double.infinity,
-      color: Colors.white,
-    );
+        alignment: Alignment.topCenter,
+        width: double.infinity,
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: const Text(
+            "Aim at a word and tap on it.",
+            // textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+        ));
   }
 
   @override
