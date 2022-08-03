@@ -44,35 +44,39 @@ class DeckPageState extends State<DeckPage> {
   @override
   Widget build(BuildContext context) {
     var cards = _deck?.cards ?? [];
+
+    if (cards.isEmpty) {
+      return Center(child: Text("You don't have any flashcards yet."));
+    }
+
     return Scaffold(
         body: ListView.builder(
       itemCount: cards.length,
       itemBuilder: (context, index) {
-        return Dismissible(
-          // Each Dismissible must contain a Key. Keys allow Flutter to
-          // uniquely identify widgets.
-          key: Key(cards[index].id),
-          direction: DismissDirection.endToStart,
-          // Provide a function that tells the app
-          // what to do after an item has been swiped away.
-          onDismissed: (direction) {
-            // Remove the item from the data source.
-            setState(() {
-              // TODO: remove from storage
-              cards.removeAt(index);
-            });
+        return Container(
+            margin: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            child: Dismissible(
+              key: Key(cards[index].id),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) {
+                setState(() {
+                  cards.removeAt(index);
+                });
 
-            // Then show a snackbar.
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('Card deleted')));
-          },
-          background: Container(
-            color: Colors.red,
-            child: Icon(Icons.delete),
-            alignment: Alignment.centerRight,
-          ),
-          child: _buildFlashcard(cards[index]),
-        );
+                widget.deckStorage.save(_deck!);
+
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Card deleted')));
+              },
+              background: Container(
+                color: Colors.red,
+                child: Container(
+                    margin: EdgeInsets.only(right: 16.0),
+                    child: Icon(Icons.delete)),
+                alignment: Alignment.centerRight,
+              ),
+              child: _buildFlashcard(cards[index]),
+            ));
 
         // return ;
       },
@@ -82,9 +86,9 @@ class DeckPageState extends State<DeckPage> {
   Widget _buildFlashcard(Flashcard card) {
     return Container(
         padding: const EdgeInsets.all(16.0),
-        margin: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-        width: double.infinity,
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(10.0)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
               margin: EdgeInsets.only(bottom: 16.0),

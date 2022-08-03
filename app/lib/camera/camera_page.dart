@@ -226,7 +226,19 @@ class CameraPageState extends State<CameraPage> {
 
   final cameraPreviewKey = GlobalKey();
 
-  Widget _buildCameraWidget() {
+  Widget _buildCameraPreview() {
+    if (!_cameraEnabled) {
+      return const Center(child: Text("Camera is disabled."));
+    }
+
+    if (!_cameraAvailable) {
+      return const Center(child: Text("Camera not available."));
+    }
+
+    if (!_cameraInitialized) {
+      return const Center(child: Text("Camera not initialized."));
+    }
+
     // somehow the camera sensor orientation is 90 which messes up the aspect ratio field...
     // the logic below is a workaround...
     final cameraPreviewWidth = math.min(
@@ -252,10 +264,10 @@ class CameraPageState extends State<CameraPage> {
                     ])))));
   }
 
-  Widget _buildTip() {
+  Widget _buildUsageTip() {
     return Container(
       child: const Text(
-        "Tap on a word",
+        "Aim at a word and tap on it.",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 16.0),
       ),
@@ -268,16 +280,10 @@ class CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !_cameraEnabled
-          ? const Text("Camera is disabled")
-          : !_cameraAvailable
-              ? const Text("Camera not available")
-              : !_cameraInitialized
-                  ? const Text("Loading camera...")
-                  : Stack(fit: StackFit.loose, children: <Widget>[
-                      _buildCameraWidget(),
-                      _buildTip(),
-                    ]),
+      body: Stack(fit: StackFit.loose, children: <Widget>[
+        _buildCameraPreview(),
+        _buildUsageTip(),
+      ]),
       floatingActionButton: kDebugMode ? _buildDebugActions() : null,
     );
   }
