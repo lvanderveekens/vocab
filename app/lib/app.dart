@@ -78,11 +78,19 @@ class AppState extends State<App> {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('Vocab',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0,
-                )),
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(right: 4.0),
+                      child: Icon(Icons.document_scanner)),
+                  const Text('Vocab',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.0,
+                      )),
+                ]),
             foregroundColor: Colors.black,
             backgroundColor: Colors.white,
           ),
