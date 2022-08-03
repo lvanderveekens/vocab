@@ -60,19 +60,27 @@ class DeckPageState extends State<DeckPage> {
               direction: DismissDirection.endToStart,
               onDismissed: (direction) {
                 setState(() {
-                  cards.removeAt(index);
+                  Flashcard deletedCard = cards.removeAt(index);
+                  widget.deckStorage.save(_deck!);
+
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('Card deleted'),
+                      action: SnackBarAction(
+                        label: "Undo",
+                        onPressed: () => setState(() {
+                          cards.insert(index, deletedCard);
+                          widget.deckStorage.save(_deck!);
+                        }),
+                      )));
                 });
-
-                widget.deckStorage.save(_deck!);
-
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('Card deleted')));
               },
               background: Container(
                 color: Colors.red,
                 child: Container(
                     margin: EdgeInsets.only(right: 16.0),
-                    child: Icon(Icons.delete)),
+                    child: Text("Delete",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold))),
                 alignment: Alignment.centerRight,
               ),
               child: _buildFlashcard(cards[index]),
