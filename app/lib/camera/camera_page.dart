@@ -17,6 +17,7 @@ import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
+import 'package:vocab/widgets/bullet_text.dart';
 
 import '../deck/deck_storage.dart';
 
@@ -266,7 +267,7 @@ class CameraPageState extends State<CameraPage> {
 
   Widget _buildUsageTip() {
     return Container(
-        alignment: Alignment.topCenter,
+        alignment: Alignment.bottomCenter,
         width: double.infinity,
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -283,12 +284,41 @@ class CameraPageState extends State<CameraPage> {
         ));
   }
 
+  Widget _buildInfoIcon() {
+    return Container(
+        alignment: Alignment.topRight,
+        width: double.infinity,
+        child: Container(
+          child: IconButton(
+            padding: EdgeInsets.all(16.0),
+            icon: Icon(Icons.info),
+            iconSize: 32.0,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                          content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("Supported languages:"),
+                          // TODO
+                          BulletText("Dutch"),
+                          BulletText("English"),
+                        ],
+                      )));
+            },
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(fit: StackFit.loose, children: <Widget>[
         _buildCameraPreview(),
         _buildUsageTip(),
+        _buildInfoIcon(),
       ]),
       floatingActionButton: kDebugMode ? _buildDebugActions() : null,
     );
@@ -296,36 +326,38 @@ class CameraPageState extends State<CameraPage> {
 
   Widget _buildDebugActions() {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton.extended(
-              onPressed: () {
-                showTapDialog("aap");
-              },
-              backgroundColor: Colors.blue,
-              icon: const Icon(Icons.document_scanner),
-              label: const Text("Test tap")),
-          FloatingActionButton.extended(
-              onPressed: () {
-                setState(() {
-                  _realTimeScanningEnabled = !_realTimeScanningEnabled;
-                });
-              },
-              backgroundColor:
-                  _realTimeScanningEnabled ? Colors.green : Colors.red,
-              icon: const Icon(Icons.document_scanner),
-              label: const Text("Real-time scanning")),
-          FloatingActionButton.extended(
-              onPressed: () {
-                setState(() {
-                  _translationEnabled = !_translationEnabled;
-                });
-              },
-              backgroundColor: _translationEnabled ? Colors.green : Colors.red,
-              icon: const Icon(Icons.translate),
-              label: const Text("Translation")),
-        ]);
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        FloatingActionButton.extended(
+            onPressed: () {
+              showTapDialog("aap");
+            },
+            backgroundColor: Colors.blue,
+            icon: const Icon(Icons.document_scanner),
+            label: const Text("Test tap")),
+        FloatingActionButton.extended(
+            onPressed: () {
+              setState(() {
+                _realTimeScanningEnabled = !_realTimeScanningEnabled;
+              });
+            },
+            backgroundColor:
+                _realTimeScanningEnabled ? Colors.green : Colors.red,
+            icon: const Icon(Icons.document_scanner),
+            label: const Text("Real-time scanning")),
+        FloatingActionButton.extended(
+            onPressed: () {
+              setState(() {
+                _translationEnabled = !_translationEnabled;
+              });
+            },
+            backgroundColor: _translationEnabled ? Colors.green : Colors.red,
+            icon: const Icon(Icons.translate),
+            label: const Text("Translation")),
+        Container(margin: EdgeInsets.only(bottom: 80))
+      ],
+    );
   }
 
   void showTapDialog(String? tappedOnWord) {
