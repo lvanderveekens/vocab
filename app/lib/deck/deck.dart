@@ -1,4 +1,6 @@
-import 'package:language_picker/languages.dart';
+import 'dart:convert';
+
+import 'package:vocab/language/language.dart';
 
 class Deck {
   List<Flashcard> cards;
@@ -15,7 +17,7 @@ class Deck {
 
   Map<String, dynamic> toJson() {
     return {
-      'cards': cards.map((c) => c.toJson()).toList(),
+      'cards': cards.map((c) => jsonEncode(c)).toList(),
     };
   }
 }
@@ -23,37 +25,27 @@ class Deck {
 class Flashcard {
   final String id;
 
-  final Language sourceLanguage;
+  final String sourceLanguageCode;
   final String sourceWord;
 
-  final Language targetLanguage;
+  final String targetLanguageCode;
   final String targetWord;
 
   Flashcard({
     required this.id,
-    required this.sourceLanguage,
+    required this.sourceLanguageCode,
     required this.sourceWord,
-    required this.targetLanguage,
+    required this.targetLanguageCode,
     required this.targetWord,
   });
 
   factory Flashcard.fromJson(Map<String, dynamic> json) {
     return Flashcard(
       id: json['id'],
-      sourceLanguage: Language.fromIsoCode(json['sourceLanguageCode']),
+      sourceLanguageCode: json['sourceLanguageCode'],
       sourceWord: json['sourceWord'],
-      targetLanguage: Language.fromIsoCode(json['targetLanguageCode']),
+      targetLanguageCode: json['targetLanguageCode'],
       targetWord: json['targetWord'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'sourceLanguageCode': sourceLanguage.isoCode,
-      'sourceWord': sourceWord,
-      'targetLanguageCode': targetLanguage.isoCode,
-      'targetWord': targetWord,
-    };
   }
 }

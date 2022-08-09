@@ -114,7 +114,7 @@ class DeckPageState extends State<DeckPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(card.sourceLanguage.name,
+                    Text(card.sourceLanguageCode,
                         style: TextStyle(fontSize: 12.0)),
                     Text(card.sourceWord, style: TextStyle(fontSize: 24.0)),
                   ])),
@@ -124,7 +124,7 @@ class DeckPageState extends State<DeckPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(card.targetLanguage.name,
+                    Text(card.targetLanguageCode,
                         style: TextStyle(fontSize: 12.0)),
                     Text(card.targetWord, style: TextStyle(fontSize: 24.0)),
                   ])),

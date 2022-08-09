@@ -12,10 +12,11 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:language_picker/languages.dart';
+import 'package:vocab/language/language.dart';
 import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
+import 'package:vocab/translation/google_translation_languages.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 import 'package:vocab/widgets/bullet_text.dart';
 
@@ -24,13 +25,13 @@ import '../deck/deck_storage.dart';
 class CameraPage extends StatefulWidget {
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
-  final List<Language> supportedLanguages;
+  final List<GoogleTranslationLanguage> googleTranslationLanguages;
 
   const CameraPage({
     Key? key,
     required this.deckStorage,
     required this.userPreferencesStorage,
-    required this.supportedLanguages,
+    required this.googleTranslationLanguages,
   }) : super(key: key);
 
   @override
@@ -364,14 +365,15 @@ class CameraPageState extends State<CameraPage> {
     showDialog(
         context: context,
         builder: (ctx) => TapDialog(
-            onClose: () {
-              log("dialog onClose called");
-              Navigator.pop(context);
-            },
-            tappedOnWord: tappedOnWord,
-            deckStorage: widget.deckStorage,
-            supportedLanguages: widget.supportedLanguages,
-            translationEnabled: _translationEnabled,
-            userPreferencesStorage: widget.userPreferencesStorage));
+              onClose: () {
+                log("dialog onClose called");
+                Navigator.pop(context);
+              },
+              tappedOnWord: tappedOnWord,
+              deckStorage: widget.deckStorage,
+              translationEnabled: _translationEnabled,
+              userPreferencesStorage: widget.userPreferencesStorage,
+              googleTranslationLanguages: widget.googleTranslationLanguages,
+            ));
   }
 }

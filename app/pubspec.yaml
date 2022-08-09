@@ -37,7 +37,6 @@ dependencies:
   camera: ^0.9.4
   image: ^3.1.0
   path_provider: ^2.0.11
-  language_picker: ^0.4.1
   uuid: ^3.0.6
 
   # The following adds the Cupertino Icons font to your application.
@@ -69,7 +68,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/secrets.json
-    - assets/google_translation_supported_languages.json
+    - assets/languages.json
+    - assets/google_translation_languages.json
+    - assets/mlkit_text_recognition_languages.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

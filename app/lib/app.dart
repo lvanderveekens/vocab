@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:language_picker/languages.dart';
+import 'package:vocab/language/language.dart';
 
 import 'package:vocab/camera/camera_page.dart';
-import 'package:vocab/translation/google_translation_supported_languages.dart';
+import 'package:vocab/translation/google_translation_languages.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
 import 'deck/deck_page.dart';
@@ -21,28 +21,29 @@ class AppState extends State<App> {
   int _selectedIndex = 0;
   final deckStorage = DeckStorage();
   final userPreferencesStorage = UserPreferencesStorage();
-  List<Language> supportedLanguages = [];
+
+  List<GoogleTranslationLanguage> _googleTranslationLanguages = [];
+
+  @override
+  initState() {
+    super.initState();
+
+    GoogleTranslationLanguages.load().then((value) {
+      setState(() {
+        _googleTranslationLanguages = value;
+      });
+    });
+  }
 
   List<Widget> _getPages() {
     return [
       CameraPage(
         deckStorage: deckStorage,
         userPreferencesStorage: userPreferencesStorage,
-        supportedLanguages: supportedLanguages,
+        googleTranslationLanguages: _googleTranslationLanguages,
       ),
       DeckPage(deckStorage: deckStorage),
     ];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    GoogleTranslationSupportedLanguages.load().then((value) {
-      setState(() {
-        supportedLanguages = value;
-      });
-    });
   }
 
   void _onItemTapped(int index) {

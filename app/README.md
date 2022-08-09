@@ -2,15 +2,22 @@
 
 A new Flutter project.
 
-## Getting Started
+## Languages
 
-This project is a starting point for a Flutter application.
+### Formats
 
-A few resources to get you started if this is your first Flutter project:
+ISO-639-1 (alpha2): "nl"
+ISO-639-2 (alpha3-b): "dut"
+ISO-639-2 (alpha3-t): "nld"
+BCP-47 (language tag): "nl-NL" or "sr-Latn"
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### List of language codes
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Obtained file from: https://datahub.io/core/language-codes
+
+### Supported languages
+
+Text recognition: https://developers.google.com/ml-kit/vision/text-recognition/languages
+
+Translation API: https://translation.googleapis.com/language/translate/v2/languages
+
