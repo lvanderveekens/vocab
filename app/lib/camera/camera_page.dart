@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:vocab/camera/info_dialog.dart';
 import 'package:vocab/language/language.dart';
 import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
@@ -295,22 +296,19 @@ class CameraPageState extends State<CameraPage> {
         child: Container(
           child: IconButton(
             padding: EdgeInsets.all(16.0),
-            icon: Icon(Icons.info),
+            icon: Icon(Icons.info, color: Colors.black),
             iconSize: 32.0,
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (ctx) => AlertDialog(
-                          content: SingleChildScrollView(
-                              child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Text("Supported languages:"),
-                          ...widget.textRecognitionLanguages
-                              .map((trl) => BulletText(trl.language.name))
-                        ],
-                      ))));
+                  builder: (ctx) => InfoDialog(
+                        onClose: () {
+                          log("dialog onClose called");
+                          Navigator.pop(context);
+                        },
+                        textRecognitionLanguages:
+                            widget.textRecognitionLanguages,
+                      ));
             },
           ),
         ));
