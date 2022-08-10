@@ -6,24 +6,23 @@ import 'package:vocab/language/languages.dart';
 
 // https://developers.google.com/ml-kit/vision/text-recognition/languages
 
-class MLKitTextRecognitionLanguages {
-  static const String pathToFile =
-      "assets/mlkit_text_recognition_languages.json";
+class TextRecognitionLanguages {
+  static const String pathToFile = "assets/text_recognition_languages.json";
 
-  MLKitTextRecognitionLanguages();
+  TextRecognitionLanguages();
 
-  static Future<List<MLKitTextRecognitionLanguage>> load() async {
+  static Future<List<TextRecognitionLanguage>> load() async {
     // TODO: reads weird
     var languages = await Languages.getInstance();
 
-    return rootBundle.loadStructuredData<List<MLKitTextRecognitionLanguage>>(
+    return rootBundle.loadStructuredData<List<TextRecognitionLanguage>>(
         pathToFile, (jsonStr) async {
       var languageCodesJson = json.decode(jsonStr) as List;
 
-      List<MLKitTextRecognitionLanguage> textRecognitionLanguages =
+      List<TextRecognitionLanguage> textRecognitionLanguages =
           languageCodesJson.map((languageCodeJson) {
         var code = languageCodeJson;
-        return MLKitTextRecognitionLanguage(
+        return TextRecognitionLanguage(
             code: code, language: languages.findByCode(code)!);
       }).toList();
 
@@ -32,11 +31,11 @@ class MLKitTextRecognitionLanguages {
   }
 }
 
-class MLKitTextRecognitionLanguage {
+class TextRecognitionLanguage {
   final String code;
   final Language language;
 
-  const MLKitTextRecognitionLanguage({
+  const TextRecognitionLanguage({
     required this.code,
     required this.language,
   });

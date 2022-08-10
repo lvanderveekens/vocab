@@ -16,6 +16,7 @@ import 'package:vocab/language/language.dart';
 import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
+import 'package:vocab/text_recognition/text_recognition_languages.dart';
 import 'package:vocab/translation/google_translation_languages.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 import 'package:vocab/widgets/bullet_text.dart';
@@ -26,12 +27,14 @@ class CameraPage extends StatefulWidget {
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
   final List<GoogleTranslationLanguage> googleTranslationLanguages;
+  final List<TextRecognitionLanguage> textRecognitionLanguages;
 
   const CameraPage({
     Key? key,
     required this.deckStorage,
     required this.userPreferencesStorage,
     required this.googleTranslationLanguages,
+    required this.textRecognitionLanguages,
   }) : super(key: key);
 
   @override
@@ -298,16 +301,16 @@ class CameraPageState extends State<CameraPage> {
               showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                          content: Column(
+                          content: SingleChildScrollView(
+                              child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Supported languages:"),
-                          // TODO
-                          BulletText("Dutch"),
-                          BulletText("English"),
+                          const Text("Supported languages:"),
+                          ...widget.textRecognitionLanguages
+                              .map((trl) => BulletText(trl.language.name))
                         ],
-                      )));
+                      ))));
             },
           ),
         ));

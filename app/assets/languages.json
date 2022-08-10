@@ -1,2936 +1,2167 @@
 [
     {
-        "alpha2": "aa",
-        "alpha3-b": "aar",
-        "alpha3-t": null,
-        "name": "Afar"
+        "name": "Afar",
+        "iso639_2b": "aar",
+        "iso639_1": "aa"
     },
     {
-        "alpha2": "ab",
-        "alpha3-b": "abk",
-        "alpha3-t": null,
-        "name": "Abkhazian"
+        "name": "Abkhazian",
+        "iso639_2b": "abk",
+        "iso639_1": "ab"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ace",
-        "alpha3-t": null,
-        "name": "Achinese"
+        "name": "Achinese",
+        "iso639_2b": "ace"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ach",
-        "alpha3-t": null,
-        "name": "Acoli"
+        "name": "Acoli",
+        "iso639_2b": "ach"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ada",
-        "alpha3-t": null,
-        "name": "Adangme"
+        "name": "Adangme",
+        "iso639_2b": "ada"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ady",
-        "alpha3-t": null,
-        "name": "Adyghe; Adygei"
+        "name": "Adyghe; Adygei",
+        "iso639_2b": "ady"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "afa",
-        "alpha3-t": null,
-        "name": "Afro-Asiatic languages"
+        "name": "Afro-Asiatic languages",
+        "iso639_2b": "afa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "afh",
-        "alpha3-t": null,
-        "name": "Afrihili"
+        "name": "Afrihili",
+        "iso639_2b": "afh"
     },
     {
-        "alpha2": "af",
-        "alpha3-b": "afr",
-        "alpha3-t": null,
-        "name": "Afrikaans"
+        "name": "Afrikaans",
+        "iso639_2b": "afr",
+        "iso639_1": "af"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ain",
-        "alpha3-t": null,
-        "name": "Ainu"
+        "name": "Ainu",
+        "iso639_2b": "ain"
     },
     {
-        "alpha2": "ak",
-        "alpha3-b": "aka",
-        "alpha3-t": null,
-        "name": "Akan"
+        "name": "Akan",
+        "iso639_2b": "aka",
+        "iso639_1": "ak"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "akk",
-        "alpha3-t": null,
-        "name": "Akkadian"
+        "name": "Akkadian",
+        "iso639_2b": "akk"
     },
     {
-        "alpha2": "sq",
-        "alpha3-b": "alb",
-        "alpha3-t": "sqi",
-        "name": "Albanian"
+        "name": "Albanian",
+        "iso639_2t": "sqi",
+        "iso639_2b": "alb",
+        "iso639_1": "sq"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ale",
-        "alpha3-t": null,
-        "name": "Aleut"
+        "name": "Aleut",
+        "iso639_2b": "ale"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "alg",
-        "alpha3-t": null,
-        "name": "Algonquian languages"
+        "name": "Algonquian languages",
+        "iso639_2b": "alg"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "alt",
-        "alpha3-t": null,
-        "name": "Southern Altai"
+        "name": "Southern Altai",
+        "iso639_2b": "alt"
     },
     {
-        "alpha2": "am",
-        "alpha3-b": "amh",
-        "alpha3-t": null,
-        "name": "Amharic"
+        "name": "Amharic",
+        "iso639_2b": "amh",
+        "iso639_1": "am"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ang",
-        "alpha3-t": null,
-        "name": "English, Old (ca.450-1100)"
+        "name": "English, Old (ca.450-1100)",
+        "iso639_2b": "ang"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "anp",
-        "alpha3-t": null,
-        "name": "Angika"
+        "name": "Angika",
+        "iso639_2b": "anp"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "apa",
-        "alpha3-t": null,
-        "name": "Apache languages"
+        "name": "Apache languages",
+        "iso639_2b": "apa"
     },
     {
-        "alpha2": "ar",
-        "alpha3-b": "ara",
-        "alpha3-t": null,
-        "name": "Arabic"
+        "name": "Arabic",
+        "iso639_2b": "ara",
+        "iso639_1": "ar"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "arc",
-        "alpha3-t": null,
-        "name": "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)"
+        "name": "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)",
+        "iso639_2b": "arc"
     },
     {
-        "alpha2": "an",
-        "alpha3-b": "arg",
-        "alpha3-t": null,
-        "name": "Aragonese"
+        "name": "Aragonese",
+        "iso639_2b": "arg",
+        "iso639_1": "an"
     },
     {
-        "alpha2": "hy",
-        "alpha3-b": "arm",
-        "alpha3-t": "hye",
-        "name": "Armenian"
+        "name": "Armenian",
+        "iso639_2t": "hye",
+        "iso639_2b": "arm",
+        "iso639_1": "hy"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "arn",
-        "alpha3-t": null,
-        "name": "Mapudungun; Mapuche"
+        "name": "Mapudungun; Mapuche",
+        "iso639_2b": "arn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "arp",
-        "alpha3-t": null,
-        "name": "Arapaho"
+        "name": "Arapaho",
+        "iso639_2b": "arp"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "art",
-        "alpha3-t": null,
-        "name": "Artificial languages"
+        "name": "Artificial languages",
+        "iso639_2b": "art"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "arw",
-        "alpha3-t": null,
-        "name": "Arawak"
+        "name": "Arawak",
+        "iso639_2b": "arw"
     },
     {
-        "alpha2": "as",
-        "alpha3-b": "asm",
-        "alpha3-t": null,
-        "name": "Assamese"
+        "name": "Assamese",
+        "iso639_2b": "asm",
+        "iso639_1": "as"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ast",
-        "alpha3-t": null,
-        "name": "Asturian; Bable; Leonese; Asturleonese"
+        "name": "Asturian; Bable; Leonese; Asturleonese",
+        "iso639_2b": "ast"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ath",
-        "alpha3-t": null,
-        "name": "Athapascan languages"
+        "name": "Athapascan languages",
+        "iso639_2b": "ath"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "aus",
-        "alpha3-t": null,
-        "name": "Australian languages"
+        "name": "Australian languages",
+        "iso639_2b": "aus"
     },
     {
-        "alpha2": "av",
-        "alpha3-b": "ava",
-        "alpha3-t": null,
-        "name": "Avaric"
+        "name": "Avaric",
+        "iso639_2b": "ava",
+        "iso639_1": "av"
     },
     {
-        "alpha2": "ae",
-        "alpha3-b": "ave",
-        "alpha3-t": null,
-        "name": "Avestan"
+        "name": "Avestan",
+        "iso639_2b": "ave",
+        "iso639_1": "ae"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "awa",
-        "alpha3-t": null,
-        "name": "Awadhi"
+        "name": "Awadhi",
+        "iso639_2b": "awa"
     },
     {
-        "alpha2": "ay",
-        "alpha3-b": "aym",
-        "alpha3-t": null,
-        "name": "Aymara"
+        "name": "Aymara",
+        "iso639_2b": "aym",
+        "iso639_1": "ay"
     },
     {
-        "alpha2": "az",
-        "alpha3-b": "aze",
-        "alpha3-t": null,
-        "name": "Azerbaijani"
+        "name": "Azerbaijani",
+        "iso639_2b": "aze",
+        "iso639_1": "az"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bad",
-        "alpha3-t": null,
-        "name": "Banda languages"
+        "name": "Banda languages",
+        "iso639_2b": "bad"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bai",
-        "alpha3-t": null,
-        "name": "Bamileke languages"
+        "name": "Bamileke languages",
+        "iso639_2b": "bai"
     },
     {
-        "alpha2": "ba",
-        "alpha3-b": "bak",
-        "alpha3-t": null,
-        "name": "Bashkir"
+        "name": "Bashkir",
+        "iso639_2b": "bak",
+        "iso639_1": "ba"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bal",
-        "alpha3-t": null,
-        "name": "Baluchi"
+        "name": "Baluchi",
+        "iso639_2b": "bal"
     },
     {
-        "alpha2": "bm",
-        "alpha3-b": "bam",
-        "alpha3-t": null,
-        "name": "Bambara"
+        "name": "Bambara",
+        "iso639_2b": "bam",
+        "iso639_1": "bm"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ban",
-        "alpha3-t": null,
-        "name": "Balinese"
+        "name": "Balinese",
+        "iso639_2b": "ban"
     },
     {
-        "alpha2": "eu",
-        "alpha3-b": "baq",
-        "alpha3-t": "eus",
-        "name": "Basque"
+        "name": "Basque",
+        "iso639_2t": "eus",
+        "iso639_2b": "baq",
+        "iso639_1": "eu"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bas",
-        "alpha3-t": null,
-        "name": "Basa"
+        "name": "Basa",
+        "iso639_2b": "bas"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bat",
-        "alpha3-t": null,
-        "name": "Baltic languages"
+        "name": "Baltic languages",
+        "iso639_2b": "bat"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bej",
-        "alpha3-t": null,
-        "name": "Beja; Bedawiyet"
+        "name": "Beja; Bedawiyet",
+        "iso639_2b": "bej"
     },
     {
-        "alpha2": "be",
-        "alpha3-b": "bel",
-        "alpha3-t": null,
-        "name": "Belarusian"
+        "name": "Belarusian",
+        "iso639_2b": "bel",
+        "iso639_1": "be"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bem",
-        "alpha3-t": null,
-        "name": "Bemba"
+        "name": "Bemba",
+        "iso639_2b": "bem"
     },
     {
-        "alpha2": "bn",
-        "alpha3-b": "ben",
-        "alpha3-t": null,
-        "name": "Bengali"
+        "name": "Bengali",
+        "iso639_2b": "ben",
+        "iso639_1": "bn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ber",
-        "alpha3-t": null,
-        "name": "Berber languages"
+        "name": "Berber languages",
+        "iso639_2b": "ber"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bho",
-        "alpha3-t": null,
-        "name": "Bhojpuri"
+        "name": "Bhojpuri",
+        "iso639_2b": "bho"
     },
     {
-        "alpha2": "bh",
-        "alpha3-b": "bih",
-        "alpha3-t": null,
-        "name": "Bihari languages"
+        "name": "Bihari languages",
+        "iso639_2b": "bih",
+        "iso639_1": "bh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bik",
-        "alpha3-t": null,
-        "name": "Bikol"
+        "name": "Bikol",
+        "iso639_2b": "bik"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bin",
-        "alpha3-t": null,
-        "name": "Bini; Edo"
+        "name": "Bini; Edo",
+        "iso639_2b": "bin"
     },
     {
-        "alpha2": "bi",
-        "alpha3-b": "bis",
-        "alpha3-t": null,
-        "name": "Bislama"
+        "name": "Bislama",
+        "iso639_2b": "bis",
+        "iso639_1": "bi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bla",
-        "alpha3-t": null,
-        "name": "Siksika"
+        "name": "Siksika",
+        "iso639_2b": "bla"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bnt",
-        "alpha3-t": null,
-        "name": "Bantu languages"
+        "name": "Bantu languages",
+        "iso639_2b": "bnt"
     },
     {
-        "alpha2": "bs",
-        "alpha3-b": "bos",
-        "alpha3-t": null,
-        "name": "Bosnian"
+        "name": "Bosnian",
+        "iso639_2b": "bos",
+        "iso639_1": "bs"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bra",
-        "alpha3-t": null,
-        "name": "Braj"
+        "name": "Braj",
+        "iso639_2b": "bra"
     },
     {
-        "alpha2": "br",
-        "alpha3-b": "bre",
-        "alpha3-t": null,
-        "name": "Breton"
+        "name": "Breton",
+        "iso639_2b": "bre",
+        "iso639_1": "br"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "btk",
-        "alpha3-t": null,
-        "name": "Batak languages"
+        "name": "Batak languages",
+        "iso639_2b": "btk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bua",
-        "alpha3-t": null,
-        "name": "Buriat"
+        "name": "Buriat",
+        "iso639_2b": "bua"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "bug",
-        "alpha3-t": null,
-        "name": "Buginese"
+        "name": "Buginese",
+        "iso639_2b": "bug"
     },
     {
-        "alpha2": "bg",
-        "alpha3-b": "bul",
-        "alpha3-t": null,
-        "name": "Bulgarian"
+        "name": "Bulgarian",
+        "iso639_2b": "bul",
+        "iso639_1": "bg"
     },
     {
-        "alpha2": "my",
-        "alpha3-b": "bur",
-        "alpha3-t": "mya",
-        "name": "Burmese"
+        "name": "Burmese",
+        "iso639_2t": "mya",
+        "iso639_2b": "bur",
+        "iso639_1": "my"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "byn",
-        "alpha3-t": null,
-        "name": "Blin; Bilin"
+        "name": "Blin; Bilin",
+        "iso639_2b": "byn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cad",
-        "alpha3-t": null,
-        "name": "Caddo"
+        "name": "Caddo",
+        "iso639_2b": "cad"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cai",
-        "alpha3-t": null,
-        "name": "Central American Indian languages"
+        "name": "Central American Indian languages",
+        "iso639_2b": "cai"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "car",
-        "alpha3-t": null,
-        "name": "Galibi Carib"
+        "name": "Galibi Carib",
+        "iso639_2b": "car"
     },
     {
-        "alpha2": "ca",
-        "alpha3-b": "cat",
-        "alpha3-t": null,
-        "name": "Catalan; Valencian"
+        "name": "Catalan; Valencian",
+        "iso639_2b": "cat",
+        "iso639_1": "ca"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cau",
-        "alpha3-t": null,
-        "name": "Caucasian languages"
+        "name": "Caucasian languages",
+        "iso639_2b": "cau"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ceb",
-        "alpha3-t": null,
-        "name": "Cebuano"
+        "name": "Cebuano",
+        "iso639_2b": "ceb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cel",
-        "alpha3-t": null,
-        "name": "Celtic languages"
+        "name": "Celtic languages",
+        "iso639_2b": "cel"
     },
     {
-        "alpha2": "ch",
-        "alpha3-b": "cha",
-        "alpha3-t": null,
-        "name": "Chamorro"
+        "name": "Chamorro",
+        "iso639_2b": "cha",
+        "iso639_1": "ch"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chb",
-        "alpha3-t": null,
-        "name": "Chibcha"
+        "name": "Chibcha",
+        "iso639_2b": "chb"
     },
     {
-        "alpha2": "ce",
-        "alpha3-b": "che",
-        "alpha3-t": null,
-        "name": "Chechen"
+        "name": "Chechen",
+        "iso639_2b": "che",
+        "iso639_1": "ce"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chg",
-        "alpha3-t": null,
-        "name": "Chagatai"
+        "name": "Chagatai",
+        "iso639_2b": "chg"
     },
     {
-        "alpha2": "zh",
-        "alpha3-b": "chi",
-        "alpha3-t": "zho",
-        "name": "Chinese"
+        "name": "Chinese",
+        "iso639_2t": "zho",
+        "iso639_2b": "chi",
+        "iso639_1": "zh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chk",
-        "alpha3-t": null,
-        "name": "Chuukese"
+        "name": "Chuukese",
+        "iso639_2b": "chk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chm",
-        "alpha3-t": null,
-        "name": "Mari"
+        "name": "Mari",
+        "iso639_2b": "chm"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chn",
-        "alpha3-t": null,
-        "name": "Chinook jargon"
+        "name": "Chinook jargon",
+        "iso639_2b": "chn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cho",
-        "alpha3-t": null,
-        "name": "Choctaw"
+        "name": "Choctaw",
+        "iso639_2b": "cho"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chp",
-        "alpha3-t": null,
-        "name": "Chipewyan; Dene Suline"
+        "name": "Chipewyan; Dene Suline",
+        "iso639_2b": "chp"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chr",
-        "alpha3-t": null,
-        "name": "Cherokee"
+        "name": "Cherokee",
+        "iso639_2b": "chr"
     },
     {
-        "alpha2": "cu",
-        "alpha3-b": "chu",
-        "alpha3-t": null,
-        "name": "Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic"
+        "name": "Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic",
+        "iso639_2b": "chu",
+        "iso639_1": "cu"
     },
     {
-        "alpha2": "cv",
-        "alpha3-b": "chv",
-        "alpha3-t": null,
-        "name": "Chuvash"
+        "name": "Chuvash",
+        "iso639_2b": "chv",
+        "iso639_1": "cv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "chy",
-        "alpha3-t": null,
-        "name": "Cheyenne"
+        "name": "Cheyenne",
+        "iso639_2b": "chy"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cmc",
-        "alpha3-t": null,
-        "name": "Chamic languages"
+        "name": "Chamic languages",
+        "iso639_2b": "cmc"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cnr",
-        "alpha3-t": null,
-        "name": "Montenegrin"
+        "name": "Montenegrin",
+        "iso639_2b": "cnr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cop",
-        "alpha3-t": null,
-        "name": "Coptic"
+        "name": "Coptic",
+        "iso639_2b": "cop"
     },
     {
-        "alpha2": "kw",
-        "alpha3-b": "cor",
-        "alpha3-t": null,
-        "name": "Cornish"
+        "name": "Cornish",
+        "iso639_2b": "cor",
+        "iso639_1": "kw"
     },
     {
-        "alpha2": "co",
-        "alpha3-b": "cos",
-        "alpha3-t": null,
-        "name": "Corsican"
+        "name": "Corsican",
+        "iso639_2b": "cos",
+        "iso639_1": "co"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cpe",
-        "alpha3-t": null,
-        "name": "Creoles and pidgins, English based"
+        "name": "Creoles and pidgins, English based",
+        "iso639_2b": "cpe"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cpf",
-        "alpha3-t": null,
-        "name": "Creoles and pidgins, French-based"
+        "name": "Creoles and pidgins, French-based",
+        "iso639_2b": "cpf"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cpp",
-        "alpha3-t": null,
-        "name": "Creoles and pidgins, Portuguese-based"
+        "name": "Creoles and pidgins, Portuguese-based",
+        "iso639_2b": "cpp"
     },
     {
-        "alpha2": "cr",
-        "alpha3-b": "cre",
-        "alpha3-t": null,
-        "name": "Cree"
+        "name": "Cree",
+        "iso639_2b": "cre",
+        "iso639_1": "cr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "crh",
-        "alpha3-t": null,
-        "name": "Crimean Tatar; Crimean Turkish"
+        "name": "Crimean Tatar; Crimean Turkish",
+        "iso639_2b": "crh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "crp",
-        "alpha3-t": null,
-        "name": "Creoles and pidgins"
+        "name": "Creoles and pidgins",
+        "iso639_2b": "crp"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "csb",
-        "alpha3-t": null,
-        "name": "Kashubian"
+        "name": "Kashubian",
+        "iso639_2b": "csb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "cus",
-        "alpha3-t": null,
-        "name": "Cushitic languages"
+        "name": "Cushitic languages",
+        "iso639_2b": "cus"
     },
     {
-        "alpha2": "cs",
-        "alpha3-b": "cze",
-        "alpha3-t": "ces",
-        "name": "Czech"
+        "name": "Czech",
+        "iso639_2t": "ces",
+        "iso639_2b": "cze",
+        "iso639_1": "cs"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dak",
-        "alpha3-t": null,
-        "name": "Dakota"
+        "name": "Dakota",
+        "iso639_2b": "dak"
     },
     {
-        "alpha2": "da",
-        "alpha3-b": "dan",
-        "alpha3-t": null,
-        "name": "Danish"
+        "name": "Danish",
+        "iso639_2b": "dan",
+        "iso639_1": "da"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dar",
-        "alpha3-t": null,
-        "name": "Dargwa"
+        "name": "Dargwa",
+        "iso639_2b": "dar"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "day",
-        "alpha3-t": null,
-        "name": "Land Dayak languages"
+        "name": "Land Dayak languages",
+        "iso639_2b": "day"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "del",
-        "alpha3-t": null,
-        "name": "Delaware"
+        "name": "Delaware",
+        "iso639_2b": "del"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "den",
-        "alpha3-t": null,
-        "name": "Slave (Athapascan)"
+        "name": "Slave (Athapascan)",
+        "iso639_2b": "den"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dgr",
-        "alpha3-t": null,
-        "name": "Dogrib"
+        "name": "Dogrib",
+        "iso639_2b": "dgr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "din",
-        "alpha3-t": null,
-        "name": "Dinka"
+        "name": "Dinka",
+        "iso639_2b": "din"
     },
     {
-        "alpha2": "dv",
-        "alpha3-b": "div",
-        "alpha3-t": null,
-        "name": "Divehi; Dhivehi; Maldivian"
+        "name": "Divehi; Dhivehi; Maldivian",
+        "iso639_2b": "div",
+        "iso639_1": "dv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "doi",
-        "alpha3-t": null,
-        "name": "Dogri"
+        "name": "Dogri",
+        "iso639_2b": "doi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dra",
-        "alpha3-t": null,
-        "name": "Dravidian languages"
+        "name": "Dravidian languages",
+        "iso639_2b": "dra"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dsb",
-        "alpha3-t": null,
-        "name": "Lower Sorbian"
+        "name": "Lower Sorbian",
+        "iso639_2b": "dsb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dua",
-        "alpha3-t": null,
-        "name": "Duala"
+        "name": "Duala",
+        "iso639_2b": "dua"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dum",
-        "alpha3-t": null,
-        "name": "Dutch, Middle (ca.1050-1350)"
+        "name": "Dutch, Middle (ca.1050-1350)",
+        "iso639_2b": "dum"
     },
     {
-        "alpha2": "nl",
-        "alpha3-b": "dut",
-        "alpha3-t": "nld",
-        "name": "Dutch; Flemish"
+        "name": "Dutch",
+        "iso639_2t": "nld",
+        "iso639_2b": "dut",
+        "iso639_1": "nl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "dyu",
-        "alpha3-t": null,
-        "name": "Dyula"
+        "name": "Dyula",
+        "iso639_2b": "dyu"
     },
     {
-        "alpha2": "dz",
-        "alpha3-b": "dzo",
-        "alpha3-t": null,
-        "name": "Dzongkha"
+        "name": "Dzongkha",
+        "iso639_2b": "dzo",
+        "iso639_1": "dz"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "efi",
-        "alpha3-t": null,
-        "name": "Efik"
+        "name": "Efik",
+        "iso639_2b": "efi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "egy",
-        "alpha3-t": null,
-        "name": "Egyptian (Ancient)"
+        "name": "Egyptian (Ancient)",
+        "iso639_2b": "egy"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "eka",
-        "alpha3-t": null,
-        "name": "Ekajuk"
+        "name": "Ekajuk",
+        "iso639_2b": "eka"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "elx",
-        "alpha3-t": null,
-        "name": "Elamite"
+        "name": "Elamite",
+        "iso639_2b": "elx"
     },
     {
-        "alpha2": "en",
-        "alpha3-b": "eng",
-        "alpha3-t": null,
-        "name": "English"
+        "name": "English",
+        "iso639_2b": "eng",
+        "iso639_1": "en"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "enm",
-        "alpha3-t": null,
-        "name": "English, Middle (1100-1500)"
+        "name": "English, Middle (1100-1500)",
+        "iso639_2b": "enm"
     },
     {
-        "alpha2": "eo",
-        "alpha3-b": "epo",
-        "alpha3-t": null,
-        "name": "Esperanto"
+        "name": "Esperanto",
+        "iso639_2b": "epo",
+        "iso639_1": "eo"
     },
     {
-        "alpha2": "et",
-        "alpha3-b": "est",
-        "alpha3-t": null,
-        "name": "Estonian"
+        "name": "Estonian",
+        "iso639_2b": "est",
+        "iso639_1": "et"
     },
     {
-        "alpha2": "ee",
-        "alpha3-b": "ewe",
-        "alpha3-t": null,
-        "name": "Ewe"
+        "name": "Ewe",
+        "iso639_2b": "ewe",
+        "iso639_1": "ee"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ewo",
-        "alpha3-t": null,
-        "name": "Ewondo"
+        "name": "Ewondo",
+        "iso639_2b": "ewo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fan",
-        "alpha3-t": null,
-        "name": "Fang"
+        "name": "Fang",
+        "iso639_2b": "fan"
     },
     {
-        "alpha2": "fo",
-        "alpha3-b": "fao",
-        "alpha3-t": null,
-        "name": "Faroese"
+        "name": "Faroese",
+        "iso639_2b": "fao",
+        "iso639_1": "fo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fat",
-        "alpha3-t": null,
-        "name": "Fanti"
+        "name": "Fanti",
+        "iso639_2b": "fat"
     },
     {
-        "alpha2": "fj",
-        "alpha3-b": "fij",
-        "alpha3-t": null,
-        "name": "Fijian"
+        "name": "Fijian",
+        "iso639_2b": "fij",
+        "iso639_1": "fj"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fil",
-        "alpha3-t": null,
-        "name": "Filipino; Pilipino"
+        "name": "Filipino; Pilipino",
+        "iso639_2b": "fil"
     },
     {
-        "alpha2": "fi",
-        "alpha3-b": "fin",
-        "alpha3-t": null,
-        "name": "Finnish"
+        "name": "Finnish",
+        "iso639_2b": "fin",
+        "iso639_1": "fi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fiu",
-        "alpha3-t": null,
-        "name": "Finno-Ugrian languages"
+        "name": "Finno-Ugrian languages",
+        "iso639_2b": "fiu"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fon",
-        "alpha3-t": null,
-        "name": "Fon"
+        "name": "Fon",
+        "iso639_2b": "fon"
     },
     {
-        "alpha2": "fr",
-        "alpha3-b": "fre",
-        "alpha3-t": "fra",
-        "name": "French"
+        "name": "French",
+        "iso639_2t": "fra",
+        "iso639_2b": "fre",
+        "iso639_1": "fr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "frm",
-        "alpha3-t": null,
-        "name": "French, Middle (ca.1400-1600)"
+        "name": "French, Middle (ca.1400-1600)",
+        "iso639_2b": "frm"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fro",
-        "alpha3-t": null,
-        "name": "French, Old (842-ca.1400)"
+        "name": "French, Old (842-ca.1400)",
+        "iso639_2b": "fro"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "frr",
-        "alpha3-t": null,
-        "name": "Northern Frisian"
+        "name": "Northern Frisian",
+        "iso639_2b": "frr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "frs",
-        "alpha3-t": null,
-        "name": "Eastern Frisian"
+        "name": "Eastern Frisian",
+        "iso639_2b": "frs"
     },
     {
-        "alpha2": "fy",
-        "alpha3-b": "fry",
-        "alpha3-t": null,
-        "name": "Western Frisian"
+        "name": "Western Frisian",
+        "iso639_2b": "fry",
+        "iso639_1": "fy"
     },
     {
-        "alpha2": "ff",
-        "alpha3-b": "ful",
-        "alpha3-t": null,
-        "name": "Fulah"
+        "name": "Fulah",
+        "iso639_2b": "ful",
+        "iso639_1": "ff"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "fur",
-        "alpha3-t": null,
-        "name": "Friulian"
+        "name": "Friulian",
+        "iso639_2b": "fur"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gaa",
-        "alpha3-t": null,
-        "name": "Ga"
+        "name": "Ga",
+        "iso639_2b": "gaa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gay",
-        "alpha3-t": null,
-        "name": "Gayo"
+        "name": "Gayo",
+        "iso639_2b": "gay"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gba",
-        "alpha3-t": null,
-        "name": "Gbaya"
+        "name": "Gbaya",
+        "iso639_2b": "gba"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gem",
-        "alpha3-t": null,
-        "name": "Germanic languages"
+        "name": "Germanic languages",
+        "iso639_2b": "gem"
     },
     {
-        "alpha2": "ka",
-        "alpha3-b": "geo",
-        "alpha3-t": "kat",
-        "name": "Georgian"
+        "name": "Georgian",
+        "iso639_2t": "kat",
+        "iso639_2b": "geo",
+        "iso639_1": "ka"
     },
     {
-        "alpha2": "de",
-        "alpha3-b": "ger",
-        "alpha3-t": "deu",
-        "name": "German"
+        "name": "German",
+        "iso639_2t": "deu",
+        "iso639_2b": "ger",
+        "iso639_1": "de"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gez",
-        "alpha3-t": null,
-        "name": "Geez"
+        "name": "Geez",
+        "iso639_2b": "gez"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gil",
-        "alpha3-t": null,
-        "name": "Gilbertese"
+        "name": "Gilbertese",
+        "iso639_2b": "gil"
     },
     {
-        "alpha2": "gd",
-        "alpha3-b": "gla",
-        "alpha3-t": null,
-        "name": "Gaelic; Scottish Gaelic"
+        "name": "Gaelic; Scottish Gaelic",
+        "iso639_2b": "gla",
+        "iso639_1": "gd"
     },
     {
-        "alpha2": "ga",
-        "alpha3-b": "gle",
-        "alpha3-t": null,
-        "name": "Irish"
+        "name": "Irish",
+        "iso639_2b": "gle",
+        "iso639_1": "ga"
     },
     {
-        "alpha2": "gl",
-        "alpha3-b": "glg",
-        "alpha3-t": null,
-        "name": "Galician"
+        "name": "Galician",
+        "iso639_2b": "glg",
+        "iso639_1": "gl"
     },
     {
-        "alpha2": "gv",
-        "alpha3-b": "glv",
-        "alpha3-t": null,
-        "name": "Manx"
+        "name": "Manx",
+        "iso639_2b": "glv",
+        "iso639_1": "gv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gmh",
-        "alpha3-t": null,
-        "name": "German, Middle High (ca.1050-1500)"
+        "name": "German, Middle High (ca.1050-1500)",
+        "iso639_2b": "gmh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "goh",
-        "alpha3-t": null,
-        "name": "German, Old High (ca.750-1050)"
+        "name": "German, Old High (ca.750-1050)",
+        "iso639_2b": "goh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gon",
-        "alpha3-t": null,
-        "name": "Gondi"
+        "name": "Gondi",
+        "iso639_2b": "gon"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gor",
-        "alpha3-t": null,
-        "name": "Gorontalo"
+        "name": "Gorontalo",
+        "iso639_2b": "gor"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "got",
-        "alpha3-t": null,
-        "name": "Gothic"
+        "name": "Gothic",
+        "iso639_2b": "got"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "grb",
-        "alpha3-t": null,
-        "name": "Grebo"
+        "name": "Grebo",
+        "iso639_2b": "grb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "grc",
-        "alpha3-t": null,
-        "name": "Greek, Ancient (to 1453)"
+        "name": "Greek, Ancient (to 1453)",
+        "iso639_2b": "grc"
     },
     {
-        "alpha2": "el",
-        "alpha3-b": "gre",
-        "alpha3-t": "ell",
-        "name": "Greek, Modern (1453-)"
+        "name": "Greek, Modern (1453-)",
+        "iso639_2t": "ell",
+        "iso639_2b": "gre",
+        "iso639_1": "el"
     },
     {
-        "alpha2": "gn",
-        "alpha3-b": "grn",
-        "alpha3-t": null,
-        "name": "Guarani"
+        "name": "Guarani",
+        "iso639_2b": "grn",
+        "iso639_1": "gn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gsw",
-        "alpha3-t": null,
-        "name": "Swiss German; Alemannic; Alsatian"
+        "name": "Swiss German; Alemannic; Alsatian",
+        "iso639_2b": "gsw"
     },
     {
-        "alpha2": "gu",
-        "alpha3-b": "guj",
-        "alpha3-t": null,
-        "name": "Gujarati"
+        "name": "Gujarati",
+        "iso639_2b": "guj",
+        "iso639_1": "gu"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "gwi",
-        "alpha3-t": null,
-        "name": "Gwich'in"
+        "name": "Gwich'in",
+        "iso639_2b": "gwi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "hai",
-        "alpha3-t": null,
-        "name": "Haida"
+        "name": "Haida",
+        "iso639_2b": "hai"
     },
     {
-        "alpha2": "ht",
-        "alpha3-b": "hat",
-        "alpha3-t": null,
-        "name": "Haitian; Haitian Creole"
+        "name": "Haitian; Haitian Creole",
+        "iso639_2b": "hat",
+        "iso639_1": "ht"
     },
     {
-        "alpha2": "ha",
-        "alpha3-b": "hau",
-        "alpha3-t": null,
-        "name": "Hausa"
+        "name": "Hausa",
+        "iso639_2b": "hau",
+        "iso639_1": "ha"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "haw",
-        "alpha3-t": null,
-        "name": "Hawaiian"
+        "name": "Hawaiian",
+        "iso639_2b": "haw"
     },
     {
-        "alpha2": "he",
-        "alpha3-b": "heb",
-        "name": "Hebrew"
+        "name": "Hebrew",
+        "iso639_2b": "heb",
+        "iso639_1": "he"
     },
     {
-        "alpha2": "iw",
-        "name": "Hebrew"
+        "name": "Hebrew",
+        "iso639_1": "iw"
     },
     {
-        "alpha2": "hz",
-        "alpha3-b": "her",
-        "alpha3-t": null,
-        "name": "Herero"
+        "name": "Herero",
+        "iso639_2b": "her",
+        "iso639_1": "hz"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "hil",
-        "alpha3-t": null,
-        "name": "Hiligaynon"
+        "name": "Hiligaynon",
+        "iso639_2b": "hil"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "him",
-        "alpha3-t": null,
-        "name": "Himachali languages; Western Pahari languages"
+        "name": "Himachali languages; Western Pahari languages",
+        "iso639_2b": "him"
     },
     {
-        "alpha2": "hi",
-        "alpha3-b": "hin",
-        "alpha3-t": null,
-        "name": "Hindi"
+        "name": "Hindi",
+        "iso639_2b": "hin",
+        "iso639_1": "hi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "hit",
-        "alpha3-t": null,
-        "name": "Hittite"
+        "name": "Hittite",
+        "iso639_2b": "hit"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "hmn",
-        "alpha3-t": null,
-        "name": "Hmong; Mong"
+        "name": "Hmong; Mong",
+        "iso639_2b": "hmn"
     },
     {
-        "alpha2": "ho",
-        "alpha3-b": "hmo",
-        "alpha3-t": null,
-        "name": "Hiri Motu"
+        "name": "Hiri Motu",
+        "iso639_2b": "hmo",
+        "iso639_1": "ho"
     },
     {
-        "alpha2": "hr",
-        "alpha3-b": "hrv",
-        "alpha3-t": null,
-        "name": "Croatian"
+        "name": "Croatian",
+        "iso639_2b": "hrv",
+        "iso639_1": "hr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "hsb",
-        "alpha3-t": null,
-        "name": "Upper Sorbian"
+        "name": "Upper Sorbian",
+        "iso639_2b": "hsb"
     },
     {
-        "alpha2": "hu",
-        "alpha3-b": "hun",
-        "alpha3-t": null,
-        "name": "Hungarian"
+        "name": "Hungarian",
+        "iso639_2b": "hun",
+        "iso639_1": "hu"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "hup",
-        "alpha3-t": null,
-        "name": "Hupa"
+        "name": "Hupa",
+        "iso639_2b": "hup"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "iba",
-        "alpha3-t": null,
-        "name": "Iban"
+        "name": "Iban",
+        "iso639_2b": "iba"
     },
     {
-        "alpha2": "ig",
-        "alpha3-b": "ibo",
-        "alpha3-t": null,
-        "name": "Igbo"
+        "name": "Igbo",
+        "iso639_2b": "ibo",
+        "iso639_1": "ig"
     },
     {
-        "alpha2": "is",
-        "alpha3-b": "ice",
-        "alpha3-t": "isl",
-        "name": "Icelandic"
+        "name": "Icelandic",
+        "iso639_2t": "isl",
+        "iso639_2b": "ice",
+        "iso639_1": "is"
     },
     {
-        "alpha2": "io",
-        "alpha3-b": "ido",
-        "alpha3-t": null,
-        "name": "Ido"
+        "name": "Ido",
+        "iso639_2b": "ido",
+        "iso639_1": "io"
     },
     {
-        "alpha2": "ii",
-        "alpha3-b": "iii",
-        "alpha3-t": null,
-        "name": "Sichuan Yi; Nuosu"
+        "name": "Sichuan Yi; Nuosu",
+        "iso639_2b": "iii",
+        "iso639_1": "ii"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ijo",
-        "alpha3-t": null,
-        "name": "Ijo languages"
+        "name": "Ijo languages",
+        "iso639_2b": "ijo"
     },
     {
-        "alpha2": "iu",
-        "alpha3-b": "iku",
-        "alpha3-t": null,
-        "name": "Inuktitut"
+        "name": "Inuktitut",
+        "iso639_2b": "iku",
+        "iso639_1": "iu"
     },
     {
-        "alpha2": "ie",
-        "alpha3-b": "ile",
-        "alpha3-t": null,
-        "name": "Interlingue; Occidental"
+        "name": "Interlingue; Occidental",
+        "iso639_2b": "ile",
+        "iso639_1": "ie"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ilo",
-        "alpha3-t": null,
-        "name": "Iloko"
+        "name": "Iloko",
+        "iso639_2b": "ilo"
     },
     {
-        "alpha2": "ia",
-        "alpha3-b": "ina",
-        "alpha3-t": null,
-        "name": "Interlingua (International Auxiliary Language Association)"
+        "name": "Interlingua (International Auxiliary Language Association)",
+        "iso639_2b": "ina",
+        "iso639_1": "ia"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "inc",
-        "alpha3-t": null,
-        "name": "Indic languages"
+        "name": "Indic languages",
+        "iso639_2b": "inc"
     },
     {
-        "alpha2": "id",
-        "alpha3-b": "ind",
-        "alpha3-t": null,
-        "name": "Indonesian"
+        "name": "Indonesian",
+        "iso639_2b": "ind",
+        "iso639_1": "id"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ine",
-        "alpha3-t": null,
-        "name": "Indo-European languages"
+        "name": "Indo-European languages",
+        "iso639_2b": "ine"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "inh",
-        "alpha3-t": null,
-        "name": "Ingush"
+        "name": "Ingush",
+        "iso639_2b": "inh"
     },
     {
-        "alpha2": "ik",
-        "alpha3-b": "ipk",
-        "alpha3-t": null,
-        "name": "Inupiaq"
+        "name": "Inupiaq",
+        "iso639_2b": "ipk",
+        "iso639_1": "ik"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ira",
-        "alpha3-t": null,
-        "name": "Iranian languages"
+        "name": "Iranian languages",
+        "iso639_2b": "ira"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "iro",
-        "alpha3-t": null,
-        "name": "Iroquoian languages"
+        "name": "Iroquoian languages",
+        "iso639_2b": "iro"
     },
     {
-        "alpha2": "it",
-        "alpha3-b": "ita",
-        "alpha3-t": null,
-        "name": "Italian"
+        "name": "Italian",
+        "iso639_2b": "ita",
+        "iso639_1": "it"
     },
     {
-        "alpha2": "jv",
-        "alpha3-b": "jav",
-        "alpha3-t": null,
-        "name": "Javanese"
+        "name": "Javanese",
+        "iso639_2b": "jav",
+        "iso639_1": "jv"
     },
     {
-        "alpha2": "jw",
-        "name": "Javanese"
+        "name": "Javanese",
+        "iso639_1": "jw"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "jbo",
-        "alpha3-t": null,
-        "name": "Lojban"
+        "name": "Lojban",
+        "iso639_2b": "jbo"
     },
     {
-        "alpha2": "ja",
-        "alpha3-b": "jpn",
-        "alpha3-t": null,
-        "name": "Japanese"
+        "name": "Japanese",
+        "iso639_2b": "jpn",
+        "iso639_1": "ja"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "jpr",
-        "alpha3-t": null,
-        "name": "Judeo-Persian"
+        "name": "Judeo-Persian",
+        "iso639_2b": "jpr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "jrb",
-        "alpha3-t": null,
-        "name": "Judeo-Arabic"
+        "name": "Judeo-Arabic",
+        "iso639_2b": "jrb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kaa",
-        "alpha3-t": null,
-        "name": "Kara-Kalpak"
+        "name": "Kara-Kalpak",
+        "iso639_2b": "kaa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kab",
-        "alpha3-t": null,
-        "name": "Kabyle"
+        "name": "Kabyle",
+        "iso639_2b": "kab"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kac",
-        "alpha3-t": null,
-        "name": "Kachin; Jingpho"
+        "name": "Kachin; Jingpho",
+        "iso639_2b": "kac"
     },
     {
-        "alpha2": "kl",
-        "alpha3-b": "kal",
-        "alpha3-t": null,
-        "name": "Kalaallisut; Greenlandic"
+        "name": "Kalaallisut; Greenlandic",
+        "iso639_2b": "kal",
+        "iso639_1": "kl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kam",
-        "alpha3-t": null,
-        "name": "Kamba"
+        "name": "Kamba",
+        "iso639_2b": "kam"
     },
     {
-        "alpha2": "kn",
-        "alpha3-b": "kan",
-        "alpha3-t": null,
-        "name": "Kannada"
+        "name": "Kannada",
+        "iso639_2b": "kan",
+        "iso639_1": "kn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kar",
-        "alpha3-t": null,
-        "name": "Karen languages"
+        "name": "Karen languages",
+        "iso639_2b": "kar"
     },
     {
-        "alpha2": "ks",
-        "alpha3-b": "kas",
-        "alpha3-t": null,
-        "name": "Kashmiri"
+        "name": "Kashmiri",
+        "iso639_2b": "kas",
+        "iso639_1": "ks"
     },
     {
-        "alpha2": "kr",
-        "alpha3-b": "kau",
-        "alpha3-t": null,
-        "name": "Kanuri"
+        "name": "Kanuri",
+        "iso639_2b": "kau",
+        "iso639_1": "kr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kaw",
-        "alpha3-t": null,
-        "name": "Kawi"
+        "name": "Kawi",
+        "iso639_2b": "kaw"
     },
     {
-        "alpha2": "kk",
-        "alpha3-b": "kaz",
-        "alpha3-t": null,
-        "name": "Kazakh"
+        "name": "Kazakh",
+        "iso639_2b": "kaz",
+        "iso639_1": "kk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kbd",
-        "alpha3-t": null,
-        "name": "Kabardian"
+        "name": "Kabardian",
+        "iso639_2b": "kbd"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kha",
-        "alpha3-t": null,
-        "name": "Khasi"
+        "name": "Khasi",
+        "iso639_2b": "kha"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "khi",
-        "alpha3-t": null,
-        "name": "Khoisan languages"
+        "name": "Khoisan languages",
+        "iso639_2b": "khi"
     },
     {
-        "alpha2": "km",
-        "alpha3-b": "khm",
-        "alpha3-t": null,
-        "name": "Central Khmer"
+        "name": "Central Khmer",
+        "iso639_2b": "khm",
+        "iso639_1": "km"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kho",
-        "alpha3-t": null,
-        "name": "Khotanese; Sakan"
+        "name": "Khotanese; Sakan",
+        "iso639_2b": "kho"
     },
     {
-        "alpha2": "ki",
-        "alpha3-b": "kik",
-        "alpha3-t": null,
-        "name": "Kikuyu; Gikuyu"
+        "name": "Kikuyu; Gikuyu",
+        "iso639_2b": "kik",
+        "iso639_1": "ki"
     },
     {
-        "alpha2": "rw",
-        "alpha3-b": "kin",
-        "alpha3-t": null,
-        "name": "Kinyarwanda"
+        "name": "Kinyarwanda",
+        "iso639_2b": "kin",
+        "iso639_1": "rw"
     },
     {
-        "alpha2": "ky",
-        "alpha3-b": "kir",
-        "alpha3-t": null,
-        "name": "Kirghiz; Kyrgyz"
+        "name": "Kirghiz; Kyrgyz",
+        "iso639_2b": "kir",
+        "iso639_1": "ky"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kmb",
-        "alpha3-t": null,
-        "name": "Kimbundu"
+        "name": "Kimbundu",
+        "iso639_2b": "kmb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kok",
-        "alpha3-t": null,
-        "name": "Konkani"
+        "name": "Konkani",
+        "iso639_2b": "kok"
     },
     {
-        "alpha2": "kv",
-        "alpha3-b": "kom",
-        "alpha3-t": null,
-        "name": "Komi"
+        "name": "Komi",
+        "iso639_2b": "kom",
+        "iso639_1": "kv"
     },
     {
-        "alpha2": "kg",
-        "alpha3-b": "kon",
-        "alpha3-t": null,
-        "name": "Kongo"
+        "name": "Kongo",
+        "iso639_2b": "kon",
+        "iso639_1": "kg"
     },
     {
-        "alpha2": "ko",
-        "alpha3-b": "kor",
-        "alpha3-t": null,
-        "name": "Korean"
+        "name": "Korean",
+        "iso639_2b": "kor",
+        "iso639_1": "ko"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kos",
-        "alpha3-t": null,
-        "name": "Kosraean"
+        "name": "Kosraean",
+        "iso639_2b": "kos"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kpe",
-        "alpha3-t": null,
-        "name": "Kpelle"
+        "name": "Kpelle",
+        "iso639_2b": "kpe"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "krc",
-        "alpha3-t": null,
-        "name": "Karachay-Balkar"
+        "name": "Karachay-Balkar",
+        "iso639_2b": "krc"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "krl",
-        "alpha3-t": null,
-        "name": "Karelian"
+        "name": "Karelian",
+        "iso639_2b": "krl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kro",
-        "alpha3-t": null,
-        "name": "Kru languages"
+        "name": "Kru languages",
+        "iso639_2b": "kro"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kru",
-        "alpha3-t": null,
-        "name": "Kurukh"
+        "name": "Kurukh",
+        "iso639_2b": "kru"
     },
     {
-        "alpha2": "kj",
-        "alpha3-b": "kua",
-        "alpha3-t": null,
-        "name": "Kuanyama; Kwanyama"
+        "name": "Kuanyama; Kwanyama",
+        "iso639_2b": "kua",
+        "iso639_1": "kj"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kum",
-        "alpha3-t": null,
-        "name": "Kumyk"
+        "name": "Kumyk",
+        "iso639_2b": "kum"
     },
     {
-        "alpha2": "ku",
-        "alpha3-b": "kur",
-        "alpha3-t": null,
-        "name": "Kurdish"
+        "name": "Kurdish",
+        "iso639_2b": "kur",
+        "iso639_1": "ku"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "kut",
-        "alpha3-t": null,
-        "name": "Kutenai"
+        "name": "Kutenai",
+        "iso639_2b": "kut"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lad",
-        "alpha3-t": null,
-        "name": "Ladino"
+        "name": "Ladino",
+        "iso639_2b": "lad"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lah",
-        "alpha3-t": null,
-        "name": "Lahnda"
+        "name": "Lahnda",
+        "iso639_2b": "lah"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lam",
-        "alpha3-t": null,
-        "name": "Lamba"
+        "name": "Lamba",
+        "iso639_2b": "lam"
     },
     {
-        "alpha2": "lo",
-        "alpha3-b": "lao",
-        "alpha3-t": null,
-        "name": "Lao"
+        "name": "Lao",
+        "iso639_2b": "lao",
+        "iso639_1": "lo"
     },
     {
-        "alpha2": "la",
-        "alpha3-b": "lat",
-        "alpha3-t": null,
-        "name": "Latin"
+        "name": "Latin",
+        "iso639_2b": "lat",
+        "iso639_1": "la"
     },
     {
-        "alpha2": "lv",
-        "alpha3-b": "lav",
-        "alpha3-t": null,
-        "name": "Latvian"
+        "name": "Latvian",
+        "iso639_2b": "lav",
+        "iso639_1": "lv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lez",
-        "alpha3-t": null,
-        "name": "Lezghian"
+        "name": "Lezghian",
+        "iso639_2b": "lez"
     },
     {
-        "alpha2": "li",
-        "alpha3-b": "lim",
-        "alpha3-t": null,
-        "name": "Limburgan; Limburger; Limburgish"
+        "name": "Limburgan; Limburger; Limburgish",
+        "iso639_2b": "lim",
+        "iso639_1": "li"
     },
     {
-        "alpha2": "ln",
-        "alpha3-b": "lin",
-        "alpha3-t": null,
-        "name": "Lingala"
+        "name": "Lingala",
+        "iso639_2b": "lin",
+        "iso639_1": "ln"
     },
     {
-        "alpha2": "lt",
-        "alpha3-b": "lit",
-        "alpha3-t": null,
-        "name": "Lithuanian"
+        "name": "Lithuanian",
+        "iso639_2b": "lit",
+        "iso639_1": "lt"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lol",
-        "alpha3-t": null,
-        "name": "Mongo"
+        "name": "Mongo",
+        "iso639_2b": "lol"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "loz",
-        "alpha3-t": null,
-        "name": "Lozi"
+        "name": "Lozi",
+        "iso639_2b": "loz"
     },
     {
-        "alpha2": "lb",
-        "alpha3-b": "ltz",
-        "alpha3-t": null,
-        "name": "Luxembourgish; Letzeburgesch"
+        "name": "Luxembourgish; Letzeburgesch",
+        "iso639_2b": "ltz",
+        "iso639_1": "lb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lua",
-        "alpha3-t": null,
-        "name": "Luba-Lulua"
+        "name": "Luba-Lulua",
+        "iso639_2b": "lua"
     },
     {
-        "alpha2": "lu",
-        "alpha3-b": "lub",
-        "alpha3-t": null,
-        "name": "Luba-Katanga"
+        "name": "Luba-Katanga",
+        "iso639_2b": "lub",
+        "iso639_1": "lu"
     },
     {
-        "alpha2": "lg",
-        "alpha3-b": "lug",
-        "alpha3-t": null,
-        "name": "Ganda"
+        "name": "Ganda",
+        "iso639_2b": "lug",
+        "iso639_1": "lg"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lui",
-        "alpha3-t": null,
-        "name": "Luiseno"
+        "name": "Luiseno",
+        "iso639_2b": "lui"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lun",
-        "alpha3-t": null,
-        "name": "Lunda"
+        "name": "Lunda",
+        "iso639_2b": "lun"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "luo",
-        "alpha3-t": null,
-        "name": "Luo (Kenya and Tanzania)"
+        "name": "Luo (Kenya and Tanzania)",
+        "iso639_2b": "luo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "lus",
-        "alpha3-t": null,
-        "name": "Lushai"
+        "name": "Lushai",
+        "iso639_2b": "lus"
     },
     {
-        "alpha2": "mk",
-        "alpha3-b": "mac",
-        "alpha3-t": "mkd",
-        "name": "Macedonian"
+        "name": "Macedonian",
+        "iso639_2t": "mkd",
+        "iso639_2b": "mac",
+        "iso639_1": "mk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mad",
-        "alpha3-t": null,
-        "name": "Madurese"
+        "name": "Madurese",
+        "iso639_2b": "mad"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mag",
-        "alpha3-t": null,
-        "name": "Magahi"
+        "name": "Magahi",
+        "iso639_2b": "mag"
     },
     {
-        "alpha2": "mh",
-        "alpha3-b": "mah",
-        "alpha3-t": null,
-        "name": "Marshallese"
+        "name": "Marshallese",
+        "iso639_2b": "mah",
+        "iso639_1": "mh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mai",
-        "alpha3-t": null,
-        "name": "Maithili"
+        "name": "Maithili",
+        "iso639_2b": "mai"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mak",
-        "alpha3-t": null,
-        "name": "Makasar"
+        "name": "Makasar",
+        "iso639_2b": "mak"
     },
     {
-        "alpha2": "ml",
-        "alpha3-b": "mal",
-        "alpha3-t": null,
-        "name": "Malayalam"
+        "name": "Malayalam",
+        "iso639_2b": "mal",
+        "iso639_1": "ml"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "man",
-        "alpha3-t": null,
-        "name": "Mandingo"
+        "name": "Mandingo",
+        "iso639_2b": "man"
     },
     {
-        "alpha2": "mi",
-        "alpha3-b": "mao",
-        "alpha3-t": "mri",
-        "name": "Maori"
+        "name": "Maori",
+        "iso639_2t": "mri",
+        "iso639_2b": "mao",
+        "iso639_1": "mi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "map",
-        "alpha3-t": null,
-        "name": "Austronesian languages"
+        "name": "Austronesian languages",
+        "iso639_2b": "map"
     },
     {
-        "alpha2": "mr",
-        "alpha3-b": "mar",
-        "alpha3-t": null,
-        "name": "Marathi"
+        "name": "Marathi",
+        "iso639_2b": "mar",
+        "iso639_1": "mr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mas",
-        "alpha3-t": null,
-        "name": "Masai"
+        "name": "Masai",
+        "iso639_2b": "mas"
     },
     {
-        "alpha2": "ms",
-        "alpha3-b": "may",
-        "alpha3-t": "msa",
-        "name": "Malay"
+        "name": "Malay",
+        "iso639_2t": "msa",
+        "iso639_2b": "may",
+        "iso639_1": "ms"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mdf",
-        "alpha3-t": null,
-        "name": "Moksha"
+        "name": "Moksha",
+        "iso639_2b": "mdf"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mdr",
-        "alpha3-t": null,
-        "name": "Mandar"
+        "name": "Mandar",
+        "iso639_2b": "mdr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "men",
-        "alpha3-t": null,
-        "name": "Mende"
+        "name": "Mende",
+        "iso639_2b": "men"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mga",
-        "alpha3-t": null,
-        "name": "Irish, Middle (900-1200)"
+        "name": "Irish, Middle (900-1200)",
+        "iso639_2b": "mga"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mic",
-        "alpha3-t": null,
-        "name": "Mi'kmaq; Micmac"
+        "name": "Mi'kmaq; Micmac",
+        "iso639_2b": "mic"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "min",
-        "alpha3-t": null,
-        "name": "Minangkabau"
+        "name": "Minangkabau",
+        "iso639_2b": "min"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mis",
-        "alpha3-t": null,
-        "name": "Uncoded languages"
+        "name": "Uncoded languages",
+        "iso639_2b": "mis"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mkh",
-        "alpha3-t": null,
-        "name": "Mon-Khmer languages"
+        "name": "Mon-Khmer languages",
+        "iso639_2b": "mkh"
     },
     {
-        "alpha2": "mg",
-        "alpha3-b": "mlg",
-        "alpha3-t": null,
-        "name": "Malagasy"
+        "name": "Malagasy",
+        "iso639_2b": "mlg",
+        "iso639_1": "mg"
     },
     {
-        "alpha2": "mt",
-        "alpha3-b": "mlt",
-        "alpha3-t": null,
-        "name": "Maltese"
+        "name": "Maltese",
+        "iso639_2b": "mlt",
+        "iso639_1": "mt"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mnc",
-        "alpha3-t": null,
-        "name": "Manchu"
+        "name": "Manchu",
+        "iso639_2b": "mnc"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mni",
-        "alpha3-t": null,
-        "name": "Manipuri"
+        "name": "Manipuri",
+        "iso639_2b": "mni"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mno",
-        "alpha3-t": null,
-        "name": "Manobo languages"
+        "name": "Manobo languages",
+        "iso639_2b": "mno"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "moh",
-        "alpha3-t": null,
-        "name": "Mohawk"
+        "name": "Mohawk",
+        "iso639_2b": "moh"
     },
     {
-        "alpha2": "mn",
-        "alpha3-b": "mon",
-        "alpha3-t": null,
-        "name": "Mongolian"
+        "name": "Mongolian",
+        "iso639_2b": "mon",
+        "iso639_1": "mn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mos",
-        "alpha3-t": null,
-        "name": "Mossi"
+        "name": "Mossi",
+        "iso639_2b": "mos"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mul",
-        "alpha3-t": null,
-        "name": "Multiple languages"
+        "name": "Multiple languages",
+        "iso639_2b": "mul"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mun",
-        "alpha3-t": null,
-        "name": "Munda languages"
+        "name": "Munda languages",
+        "iso639_2b": "mun"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mus",
-        "alpha3-t": null,
-        "name": "Creek"
+        "name": "Creek",
+        "iso639_2b": "mus"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mwl",
-        "alpha3-t": null,
-        "name": "Mirandese"
+        "name": "Mirandese",
+        "iso639_2b": "mwl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "mwr",
-        "alpha3-t": null,
-        "name": "Marwari"
+        "name": "Marwari",
+        "iso639_2b": "mwr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "myn",
-        "alpha3-t": null,
-        "name": "Mayan languages"
+        "name": "Mayan languages",
+        "iso639_2b": "myn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "myv",
-        "alpha3-t": null,
-        "name": "Erzya"
+        "name": "Erzya",
+        "iso639_2b": "myv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nah",
-        "alpha3-t": null,
-        "name": "Nahuatl languages"
+        "name": "Nahuatl languages",
+        "iso639_2b": "nah"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nai",
-        "alpha3-t": null,
-        "name": "North American Indian languages"
+        "name": "North American Indian languages",
+        "iso639_2b": "nai"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nap",
-        "alpha3-t": null,
-        "name": "Neapolitan"
+        "name": "Neapolitan",
+        "iso639_2b": "nap"
     },
     {
-        "alpha2": "na",
-        "alpha3-b": "nau",
-        "alpha3-t": null,
-        "name": "Nauru"
+        "name": "Nauru",
+        "iso639_2b": "nau",
+        "iso639_1": "na"
     },
     {
-        "alpha2": "nv",
-        "alpha3-b": "nav",
-        "alpha3-t": null,
-        "name": "Navajo; Navaho"
+        "name": "Navajo; Navaho",
+        "iso639_2b": "nav",
+        "iso639_1": "nv"
     },
     {
-        "alpha2": "nr",
-        "alpha3-b": "nbl",
-        "alpha3-t": null,
-        "name": "Ndebele, South; South Ndebele"
+        "name": "Ndebele, South; South Ndebele",
+        "iso639_2b": "nbl",
+        "iso639_1": "nr"
     },
     {
-        "alpha2": "nd",
-        "alpha3-b": "nde",
-        "alpha3-t": null,
-        "name": "Ndebele, North; North Ndebele"
+        "name": "Ndebele, North; North Ndebele",
+        "iso639_2b": "nde",
+        "iso639_1": "nd"
     },
     {
-        "alpha2": "ng",
-        "alpha3-b": "ndo",
-        "alpha3-t": null,
-        "name": "Ndonga"
+        "name": "Ndonga",
+        "iso639_2b": "ndo",
+        "iso639_1": "ng"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nds",
-        "alpha3-t": null,
-        "name": "Low German; Low Saxon; German, Low; Saxon, Low"
+        "name": "Low German; Low Saxon; German, Low; Saxon, Low",
+        "iso639_2b": "nds"
     },
     {
-        "alpha2": "ne",
-        "alpha3-b": "nep",
-        "alpha3-t": null,
-        "name": "Nepali"
+        "name": "Nepali",
+        "iso639_2b": "nep",
+        "iso639_1": "ne"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "new",
-        "alpha3-t": null,
-        "name": "Nepal Bhasa; Newari"
+        "name": "Nepal Bhasa; Newari",
+        "iso639_2b": "new"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nia",
-        "alpha3-t": null,
-        "name": "Nias"
+        "name": "Nias",
+        "iso639_2b": "nia"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nic",
-        "alpha3-t": null,
-        "name": "Niger-Kordofanian languages"
+        "name": "Niger-Kordofanian languages",
+        "iso639_2b": "nic"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "niu",
-        "alpha3-t": null,
-        "name": "Niuean"
+        "name": "Niuean",
+        "iso639_2b": "niu"
     },
     {
-        "alpha2": "nn",
-        "alpha3-b": "nno",
-        "alpha3-t": null,
-        "name": "Norwegian Nynorsk; Nynorsk, Norwegian"
+        "name": "Norwegian Nynorsk; Nynorsk, Norwegian",
+        "iso639_2b": "nno",
+        "iso639_1": "nn"
     },
     {
-        "alpha2": "nb",
-        "alpha3-b": "nob",
-        "alpha3-t": null,
-        "name": "Bokm\u00e5l, Norwegian; Norwegian Bokm\u00e5l"
+        "name": "Bokm\u00e5l, Norwegian; Norwegian Bokm\u00e5l",
+        "iso639_2b": "nob",
+        "iso639_1": "nb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nog",
-        "alpha3-t": null,
-        "name": "Nogai"
+        "name": "Nogai",
+        "iso639_2b": "nog"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "non",
-        "alpha3-t": null,
-        "name": "Norse, Old"
+        "name": "Norse, Old",
+        "iso639_2b": "non"
     },
     {
-        "alpha2": "no",
-        "alpha3-b": "nor",
-        "alpha3-t": null,
-        "name": "Norwegian"
+        "name": "Norwegian",
+        "iso639_2b": "nor",
+        "iso639_1": "no"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nqo",
-        "alpha3-t": null,
-        "name": "N'Ko"
+        "name": "N'Ko",
+        "iso639_2b": "nqo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nso",
-        "alpha3-t": null,
-        "name": "Pedi; Sepedi; Northern Sotho"
+        "name": "Pedi; Sepedi; Northern Sotho",
+        "iso639_2b": "nso"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nub",
-        "alpha3-t": null,
-        "name": "Nubian languages"
+        "name": "Nubian languages",
+        "iso639_2b": "nub"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nwc",
-        "alpha3-t": null,
-        "name": "Classical Newari; Old Newari; Classical Nepal Bhasa"
+        "name": "Classical Newari; Old Newari; Classical Nepal Bhasa",
+        "iso639_2b": "nwc"
     },
     {
-        "alpha2": "ny",
-        "alpha3-b": "nya",
-        "alpha3-t": null,
-        "name": "Chichewa; Chewa; Nyanja"
+        "name": "Chichewa; Chewa; Nyanja",
+        "iso639_2b": "nya",
+        "iso639_1": "ny"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nym",
-        "alpha3-t": null,
-        "name": "Nyamwezi"
+        "name": "Nyamwezi",
+        "iso639_2b": "nym"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nyn",
-        "alpha3-t": null,
-        "name": "Nyankole"
+        "name": "Nyankole",
+        "iso639_2b": "nyn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nyo",
-        "alpha3-t": null,
-        "name": "Nyoro"
+        "name": "Nyoro",
+        "iso639_2b": "nyo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "nzi",
-        "alpha3-t": null,
-        "name": "Nzima"
+        "name": "Nzima",
+        "iso639_2b": "nzi"
     },
     {
-        "alpha2": "oc",
-        "alpha3-b": "oci",
-        "alpha3-t": null,
-        "name": "Occitan (post 1500)"
+        "name": "Occitan (post 1500)",
+        "iso639_2b": "oci",
+        "iso639_1": "oc"
     },
     {
-        "alpha2": "oj",
-        "alpha3-b": "oji",
-        "alpha3-t": null,
-        "name": "Ojibwa"
+        "name": "Ojibwa",
+        "iso639_2b": "oji",
+        "iso639_1": "oj"
     },
     {
-        "alpha2": "or",
-        "alpha3-b": "ori",
-        "alpha3-t": null,
-        "name": "Oriya"
+        "name": "Oriya",
+        "iso639_2b": "ori",
+        "iso639_1": "or"
     },
     {
-        "alpha2": "om",
-        "alpha3-b": "orm",
-        "alpha3-t": null,
-        "name": "Oromo"
+        "name": "Oromo",
+        "iso639_2b": "orm",
+        "iso639_1": "om"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "osa",
-        "alpha3-t": null,
-        "name": "Osage"
+        "name": "Osage",
+        "iso639_2b": "osa"
     },
     {
-        "alpha2": "os",
-        "alpha3-b": "oss",
-        "alpha3-t": null,
-        "name": "Ossetian; Ossetic"
+        "name": "Ossetian; Ossetic",
+        "iso639_2b": "oss",
+        "iso639_1": "os"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ota",
-        "alpha3-t": null,
-        "name": "Turkish, Ottoman (1500-1928)"
+        "name": "Turkish, Ottoman (1500-1928)",
+        "iso639_2b": "ota"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "oto",
-        "alpha3-t": null,
-        "name": "Otomian languages"
+        "name": "Otomian languages",
+        "iso639_2b": "oto"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "paa",
-        "alpha3-t": null,
-        "name": "Papuan languages"
+        "name": "Papuan languages",
+        "iso639_2b": "paa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pag",
-        "alpha3-t": null,
-        "name": "Pangasinan"
+        "name": "Pangasinan",
+        "iso639_2b": "pag"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pal",
-        "alpha3-t": null,
-        "name": "Pahlavi"
+        "name": "Pahlavi",
+        "iso639_2b": "pal"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pam",
-        "alpha3-t": null,
-        "name": "Pampanga; Kapampangan"
+        "name": "Pampanga; Kapampangan",
+        "iso639_2b": "pam"
     },
     {
-        "alpha2": "pa",
-        "alpha3-b": "pan",
-        "alpha3-t": null,
-        "name": "Panjabi; Punjabi"
+        "name": "Panjabi; Punjabi",
+        "iso639_2b": "pan",
+        "iso639_1": "pa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pap",
-        "alpha3-t": null,
-        "name": "Papiamento"
+        "name": "Papiamento",
+        "iso639_2b": "pap"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pau",
-        "alpha3-t": null,
-        "name": "Palauan"
+        "name": "Palauan",
+        "iso639_2b": "pau"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "peo",
-        "alpha3-t": null,
-        "name": "Persian, Old (ca.600-400 B.C.)"
+        "name": "Persian, Old (ca.600-400 B.C.)",
+        "iso639_2b": "peo"
     },
     {
-        "alpha2": "fa",
-        "alpha3-b": "per",
-        "alpha3-t": "fas",
-        "name": "Persian"
+        "name": "Persian",
+        "iso639_2t": "fas",
+        "iso639_2b": "per",
+        "iso639_1": "fa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "phi",
-        "alpha3-t": null,
-        "name": "Philippine languages"
+        "name": "Philippine languages",
+        "iso639_2b": "phi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "phn",
-        "alpha3-t": null,
-        "name": "Phoenician"
+        "name": "Phoenician",
+        "iso639_2b": "phn"
     },
     {
-        "alpha2": "pi",
-        "alpha3-b": "pli",
-        "alpha3-t": null,
-        "name": "Pali"
+        "name": "Pali",
+        "iso639_2b": "pli",
+        "iso639_1": "pi"
     },
     {
-        "alpha2": "pl",
-        "alpha3-b": "pol",
-        "alpha3-t": null,
-        "name": "Polish"
+        "name": "Polish",
+        "iso639_2b": "pol",
+        "iso639_1": "pl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pon",
-        "alpha3-t": null,
-        "name": "Pohnpeian"
+        "name": "Pohnpeian",
+        "iso639_2b": "pon"
     },
     {
-        "alpha2": "pt",
-        "alpha3-b": "por",
-        "alpha3-t": null,
-        "name": "Portuguese"
+        "name": "Portuguese",
+        "iso639_2b": "por",
+        "iso639_1": "pt"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pra",
-        "alpha3-t": null,
-        "name": "Prakrit languages"
+        "name": "Prakrit languages",
+        "iso639_2b": "pra"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "pro",
-        "alpha3-t": null,
-        "name": "Proven\u00e7al, Old (to 1500); Occitan, Old (to 1500)"
+        "name": "Proven\u00e7al, Old (to 1500); Occitan, Old (to 1500)",
+        "iso639_2b": "pro"
     },
     {
-        "alpha2": "ps",
-        "alpha3-b": "pus",
-        "alpha3-t": null,
-        "name": "Pushto; Pashto"
+        "name": "Pushto; Pashto",
+        "iso639_2b": "pus",
+        "iso639_1": "ps"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "qaa-qtz",
-        "alpha3-t": null,
-        "name": "Reserved for local use"
+        "name": "Reserved for local use",
+        "iso639_2b": "qaa-qtz"
     },
     {
-        "alpha2": "qu",
-        "alpha3-b": "que",
-        "alpha3-t": null,
-        "name": "Quechua"
+        "name": "Quechua",
+        "iso639_2b": "que",
+        "iso639_1": "qu"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "raj",
-        "alpha3-t": null,
-        "name": "Rajasthani"
+        "name": "Rajasthani",
+        "iso639_2b": "raj"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "rap",
-        "alpha3-t": null,
-        "name": "Rapanui"
+        "name": "Rapanui",
+        "iso639_2b": "rap"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "rar",
-        "alpha3-t": null,
-        "name": "Rarotongan; Cook Islands Maori"
+        "name": "Rarotongan; Cook Islands Maori",
+        "iso639_2b": "rar"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "roa",
-        "alpha3-t": null,
-        "name": "Romance languages"
+        "name": "Romance languages",
+        "iso639_2b": "roa"
     },
     {
-        "alpha2": "rm",
-        "alpha3-b": "roh",
-        "alpha3-t": null,
-        "name": "Romansh"
+        "name": "Romansh",
+        "iso639_2b": "roh",
+        "iso639_1": "rm"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "rom",
-        "alpha3-t": null,
-        "name": "Romany"
+        "name": "Romany",
+        "iso639_2b": "rom"
     },
     {
-        "alpha2": "ro",
-        "alpha3-b": "rum",
-        "alpha3-t": "ron",
-        "name": "Romanian; Moldavian; Moldovan"
+        "name": "Romanian; Moldavian; Moldovan",
+        "iso639_2t": "ron",
+        "iso639_2b": "rum",
+        "iso639_1": "ro"
     },
     {
-        "alpha2": "rn",
-        "alpha3-b": "run",
-        "alpha3-t": null,
-        "name": "Rundi"
+        "name": "Rundi",
+        "iso639_2b": "run",
+        "iso639_1": "rn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "rup",
-        "alpha3-t": null,
-        "name": "Aromanian; Arumanian; Macedo-Romanian"
+        "name": "Aromanian; Arumanian; Macedo-Romanian",
+        "iso639_2b": "rup"
     },
     {
-        "alpha2": "ru",
-        "alpha3-b": "rus",
-        "alpha3-t": null,
-        "name": "Russian"
+        "name": "Russian",
+        "iso639_2b": "rus",
+        "iso639_1": "ru"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sad",
-        "alpha3-t": null,
-        "name": "Sandawe"
+        "name": "Sandawe",
+        "iso639_2b": "sad"
     },
     {
-        "alpha2": "sg",
-        "alpha3-b": "sag",
-        "alpha3-t": null,
-        "name": "Sango"
+        "name": "Sango",
+        "iso639_2b": "sag",
+        "iso639_1": "sg"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sah",
-        "alpha3-t": null,
-        "name": "Yakut"
+        "name": "Yakut",
+        "iso639_2b": "sah"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sai",
-        "alpha3-t": null,
-        "name": "South American Indian languages"
+        "name": "South American Indian languages",
+        "iso639_2b": "sai"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sal",
-        "alpha3-t": null,
-        "name": "Salishan languages"
+        "name": "Salishan languages",
+        "iso639_2b": "sal"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sam",
-        "alpha3-t": null,
-        "name": "Samaritan Aramaic"
+        "name": "Samaritan Aramaic",
+        "iso639_2b": "sam"
     },
     {
-        "alpha2": "sa",
-        "alpha3-b": "san",
-        "alpha3-t": null,
-        "name": "Sanskrit"
+        "name": "Sanskrit",
+        "iso639_2b": "san",
+        "iso639_1": "sa"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sas",
-        "alpha3-t": null,
-        "name": "Sasak"
+        "name": "Sasak",
+        "iso639_2b": "sas"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sat",
-        "alpha3-t": null,
-        "name": "Santali"
+        "name": "Santali",
+        "iso639_2b": "sat"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "scn",
-        "alpha3-t": null,
-        "name": "Sicilian"
+        "name": "Sicilian",
+        "iso639_2b": "scn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sco",
-        "alpha3-t": null,
-        "name": "Scots"
+        "name": "Scots",
+        "iso639_2b": "sco"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sel",
-        "alpha3-t": null,
-        "name": "Selkup"
+        "name": "Selkup",
+        "iso639_2b": "sel"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sem",
-        "alpha3-t": null,
-        "name": "Semitic languages"
+        "name": "Semitic languages",
+        "iso639_2b": "sem"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sga",
-        "alpha3-t": null,
-        "name": "Irish, Old (to 900)"
+        "name": "Irish, Old (to 900)",
+        "iso639_2b": "sga"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sgn",
-        "alpha3-t": null,
-        "name": "Sign Languages"
+        "name": "Sign Languages",
+        "iso639_2b": "sgn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "shn",
-        "alpha3-t": null,
-        "name": "Shan"
+        "name": "Shan",
+        "iso639_2b": "shn"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sid",
-        "alpha3-t": null,
-        "name": "Sidamo"
+        "name": "Sidamo",
+        "iso639_2b": "sid"
     },
     {
-        "alpha2": "si",
-        "alpha3-b": "sin",
-        "alpha3-t": null,
-        "name": "Sinhala; Sinhalese"
+        "name": "Sinhala; Sinhalese",
+        "iso639_2b": "sin",
+        "iso639_1": "si"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sio",
-        "alpha3-t": null,
-        "name": "Siouan languages"
+        "name": "Siouan languages",
+        "iso639_2b": "sio"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sit",
-        "alpha3-t": null,
-        "name": "Sino-Tibetan languages"
+        "name": "Sino-Tibetan languages",
+        "iso639_2b": "sit"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sla",
-        "alpha3-t": null,
-        "name": "Slavic languages"
+        "name": "Slavic languages",
+        "iso639_2b": "sla"
     },
     {
-        "alpha2": "sk",
-        "alpha3-b": "slo",
-        "alpha3-t": "slk",
-        "name": "Slovak"
+        "name": "Slovak",
+        "iso639_2t": "slk",
+        "iso639_2b": "slo",
+        "iso639_1": "sk"
     },
     {
-        "alpha2": "sl",
-        "alpha3-b": "slv",
-        "alpha3-t": null,
-        "name": "Slovenian"
+        "name": "Slovenian",
+        "iso639_2b": "slv",
+        "iso639_1": "sl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sma",
-        "alpha3-t": null,
-        "name": "Southern Sami"
+        "name": "Southern Sami",
+        "iso639_2b": "sma"
     },
     {
-        "alpha2": "se",
-        "alpha3-b": "sme",
-        "alpha3-t": null,
-        "name": "Northern Sami"
+        "name": "Northern Sami",
+        "iso639_2b": "sme",
+        "iso639_1": "se"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "smi",
-        "alpha3-t": null,
-        "name": "Sami languages"
+        "name": "Sami languages",
+        "iso639_2b": "smi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "smj",
-        "alpha3-t": null,
-        "name": "Lule Sami"
+        "name": "Lule Sami",
+        "iso639_2b": "smj"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "smn",
-        "alpha3-t": null,
-        "name": "Inari Sami"
+        "name": "Inari Sami",
+        "iso639_2b": "smn"
     },
     {
-        "alpha2": "sm",
-        "alpha3-b": "smo",
-        "alpha3-t": null,
-        "name": "Samoan"
+        "name": "Samoan",
+        "iso639_2b": "smo",
+        "iso639_1": "sm"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sms",
-        "alpha3-t": null,
-        "name": "Skolt Sami"
+        "name": "Skolt Sami",
+        "iso639_2b": "sms"
     },
     {
-        "alpha2": "sn",
-        "alpha3-b": "sna",
-        "alpha3-t": null,
-        "name": "Shona"
+        "name": "Shona",
+        "iso639_2b": "sna",
+        "iso639_1": "sn"
     },
     {
-        "alpha2": "sd",
-        "alpha3-b": "snd",
-        "alpha3-t": null,
-        "name": "Sindhi"
+        "name": "Sindhi",
+        "iso639_2b": "snd",
+        "iso639_1": "sd"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "snk",
-        "alpha3-t": null,
-        "name": "Soninke"
+        "name": "Soninke",
+        "iso639_2b": "snk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sog",
-        "alpha3-t": null,
-        "name": "Sogdian"
+        "name": "Sogdian",
+        "iso639_2b": "sog"
     },
     {
-        "alpha2": "so",
-        "alpha3-b": "som",
-        "alpha3-t": null,
-        "name": "Somali"
+        "name": "Somali",
+        "iso639_2b": "som",
+        "iso639_1": "so"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "son",
-        "alpha3-t": null,
-        "name": "Songhai languages"
+        "name": "Songhai languages",
+        "iso639_2b": "son"
     },
     {
-        "alpha2": "st",
-        "alpha3-b": "sot",
-        "alpha3-t": null,
-        "name": "Sotho, Southern"
+        "name": "Sotho, Southern",
+        "iso639_2b": "sot",
+        "iso639_1": "st"
     },
     {
-        "alpha2": "es",
-        "alpha3-b": "spa",
-        "alpha3-t": null,
-        "name": "Spanish; Castilian"
+        "name": "Spanish; Castilian",
+        "iso639_2b": "spa",
+        "iso639_1": "es"
     },
     {
-        "alpha2": "sc",
-        "alpha3-b": "srd",
-        "alpha3-t": null,
-        "name": "Sardinian"
+        "name": "Sardinian",
+        "iso639_2b": "srd",
+        "iso639_1": "sc"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "srn",
-        "alpha3-t": null,
-        "name": "Sranan Tongo"
+        "name": "Sranan Tongo",
+        "iso639_2b": "srn"
     },
     {
-        "alpha2": "sr",
-        "alpha3-b": "srp",
-        "alpha3-t": null,
-        "name": "Serbian"
+        "name": "Serbian",
+        "iso639_2b": "srp",
+        "iso639_1": "sr"
     },
     {
         "bcp47": "sr-Latn",
         "name": "Serbian (Latin)"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "srr",
-        "alpha3-t": null,
-        "name": "Serer"
+        "name": "Serer",
+        "iso639_2b": "srr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ssa",
-        "alpha3-t": null,
-        "name": "Nilo-Saharan languages"
+        "name": "Nilo-Saharan languages",
+        "iso639_2b": "ssa"
     },
     {
-        "alpha2": "ss",
-        "alpha3-b": "ssw",
-        "alpha3-t": null,
-        "name": "Swati"
+        "name": "Swati",
+        "iso639_2b": "ssw",
+        "iso639_1": "ss"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "suk",
-        "alpha3-t": null,
-        "name": "Sukuma"
+        "name": "Sukuma",
+        "iso639_2b": "suk"
     },
     {
-        "alpha2": "su",
-        "alpha3-b": "sun",
-        "alpha3-t": null,
-        "name": "Sundanese"
+        "name": "Sundanese",
+        "iso639_2b": "sun",
+        "iso639_1": "su"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sus",
-        "alpha3-t": null,
-        "name": "Susu"
+        "name": "Susu",
+        "iso639_2b": "sus"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "sux",
-        "alpha3-t": null,
-        "name": "Sumerian"
+        "name": "Sumerian",
+        "iso639_2b": "sux"
     },
     {
-        "alpha2": "sw",
-        "alpha3-b": "swa",
-        "alpha3-t": null,
-        "name": "Swahili"
+        "name": "Swahili",
+        "iso639_2b": "swa",
+        "iso639_1": "sw"
     },
     {
-        "alpha2": "sv",
-        "alpha3-b": "swe",
-        "alpha3-t": null,
-        "name": "Swedish"
+        "name": "Swedish",
+        "iso639_2b": "swe",
+        "iso639_1": "sv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "syc",
-        "alpha3-t": null,
-        "name": "Classical Syriac"
+        "name": "Classical Syriac",
+        "iso639_2b": "syc"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "syr",
-        "alpha3-t": null,
-        "name": "Syriac"
+        "name": "Syriac",
+        "iso639_2b": "syr"
     },
     {
-        "alpha2": "ty",
-        "alpha3-b": "tah",
-        "alpha3-t": null,
-        "name": "Tahitian"
+        "name": "Tahitian",
+        "iso639_2b": "tah",
+        "iso639_1": "ty"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tai",
-        "alpha3-t": null,
-        "name": "Tai languages"
+        "name": "Tai languages",
+        "iso639_2b": "tai"
     },
     {
-        "alpha2": "ta",
-        "alpha3-b": "tam",
-        "alpha3-t": null,
-        "name": "Tamil"
+        "name": "Tamil",
+        "iso639_2b": "tam",
+        "iso639_1": "ta"
     },
     {
-        "alpha2": "tt",
-        "alpha3-b": "tat",
-        "alpha3-t": null,
-        "name": "Tatar"
+        "name": "Tatar",
+        "iso639_2b": "tat",
+        "iso639_1": "tt"
     },
     {
-        "alpha2": "te",
-        "alpha3-b": "tel",
-        "alpha3-t": null,
-        "name": "Telugu"
+        "name": "Telugu",
+        "iso639_2b": "tel",
+        "iso639_1": "te"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tem",
-        "alpha3-t": null,
-        "name": "Timne"
+        "name": "Timne",
+        "iso639_2b": "tem"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ter",
-        "alpha3-t": null,
-        "name": "Tereno"
+        "name": "Tereno",
+        "iso639_2b": "ter"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tet",
-        "alpha3-t": null,
-        "name": "Tetum"
+        "name": "Tetum",
+        "iso639_2b": "tet"
     },
     {
-        "alpha2": "tg",
-        "alpha3-b": "tgk",
-        "alpha3-t": null,
-        "name": "Tajik"
+        "name": "Tajik",
+        "iso639_2b": "tgk",
+        "iso639_1": "tg"
     },
     {
-        "alpha2": "tl",
-        "alpha3-b": "tgl",
-        "alpha3-t": null,
-        "name": "Tagalog"
+        "name": "Tagalog",
+        "iso639_2b": "tgl",
+        "iso639_1": "tl"
     },
     {
-        "alpha2": "th",
-        "alpha3-b": "tha",
-        "alpha3-t": null,
-        "name": "Thai"
+        "name": "Thai",
+        "iso639_2b": "tha",
+        "iso639_1": "th"
     },
     {
-        "alpha2": "bo",
-        "alpha3-b": "tib",
-        "alpha3-t": "bod",
-        "name": "Tibetan"
+        "name": "Tibetan",
+        "iso639_2t": "bod",
+        "iso639_2b": "tib",
+        "iso639_1": "bo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tig",
-        "alpha3-t": null,
-        "name": "Tigre"
+        "name": "Tigre",
+        "iso639_2b": "tig"
     },
     {
-        "alpha2": "ti",
-        "alpha3-b": "tir",
-        "alpha3-t": null,
-        "name": "Tigrinya"
+        "name": "Tigrinya",
+        "iso639_2b": "tir",
+        "iso639_1": "ti"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tiv",
-        "alpha3-t": null,
-        "name": "Tiv"
+        "name": "Tiv",
+        "iso639_2b": "tiv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tkl",
-        "alpha3-t": null,
-        "name": "Tokelau"
+        "name": "Tokelau",
+        "iso639_2b": "tkl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tlh",
-        "alpha3-t": null,
-        "name": "Klingon; tlhIngan-Hol"
+        "name": "Klingon; tlhIngan-Hol",
+        "iso639_2b": "tlh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tli",
-        "alpha3-t": null,
-        "name": "Tlingit"
+        "name": "Tlingit",
+        "iso639_2b": "tli"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tmh",
-        "alpha3-t": null,
-        "name": "Tamashek"
+        "name": "Tamashek",
+        "iso639_2b": "tmh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tog",
-        "alpha3-t": null,
-        "name": "Tonga (Nyasa)"
+        "name": "Tonga (Nyasa)",
+        "iso639_2b": "tog"
     },
     {
-        "alpha2": "to",
-        "alpha3-b": "ton",
-        "alpha3-t": null,
-        "name": "Tonga (Tonga Islands)"
+        "name": "Tonga (Tonga Islands)",
+        "iso639_2b": "ton",
+        "iso639_1": "to"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tpi",
-        "alpha3-t": null,
-        "name": "Tok Pisin"
+        "name": "Tok Pisin",
+        "iso639_2b": "tpi"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tsi",
-        "alpha3-t": null,
-        "name": "Tsimshian"
+        "name": "Tsimshian",
+        "iso639_2b": "tsi"
     },
     {
-        "alpha2": "tn",
-        "alpha3-b": "tsn",
-        "alpha3-t": null,
-        "name": "Tswana"
+        "name": "Tswana",
+        "iso639_2b": "tsn",
+        "iso639_1": "tn"
     },
     {
-        "alpha2": "ts",
-        "alpha3-b": "tso",
-        "alpha3-t": null,
-        "name": "Tsonga"
+        "name": "Tsonga",
+        "iso639_2b": "tso",
+        "iso639_1": "ts"
     },
     {
-        "alpha2": "tk",
-        "alpha3-b": "tuk",
-        "alpha3-t": null,
-        "name": "Turkmen"
+        "name": "Turkmen",
+        "iso639_2b": "tuk",
+        "iso639_1": "tk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tum",
-        "alpha3-t": null,
-        "name": "Tumbuka"
+        "name": "Tumbuka",
+        "iso639_2b": "tum"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tup",
-        "alpha3-t": null,
-        "name": "Tupi languages"
+        "name": "Tupi languages",
+        "iso639_2b": "tup"
     },
     {
-        "alpha2": "tr",
-        "alpha3-b": "tur",
-        "alpha3-t": null,
-        "name": "Turkish"
+        "name": "Turkish",
+        "iso639_2b": "tur",
+        "iso639_1": "tr"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tut",
-        "alpha3-t": null,
-        "name": "Altaic languages"
+        "name": "Altaic languages",
+        "iso639_2b": "tut"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tvl",
-        "alpha3-t": null,
-        "name": "Tuvalu"
+        "name": "Tuvalu",
+        "iso639_2b": "tvl"
     },
     {
-        "alpha2": "tw",
-        "alpha3-b": "twi",
-        "alpha3-t": null,
-        "name": "Twi"
+        "name": "Twi",
+        "iso639_2b": "twi",
+        "iso639_1": "tw"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "tyv",
-        "alpha3-t": null,
-        "name": "Tuvinian"
+        "name": "Tuvinian",
+        "iso639_2b": "tyv"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "udm",
-        "alpha3-t": null,
-        "name": "Udmurt"
+        "name": "Udmurt",
+        "iso639_2b": "udm"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "uga",
-        "alpha3-t": null,
-        "name": "Ugaritic"
+        "name": "Ugaritic",
+        "iso639_2b": "uga"
     },
     {
-        "alpha2": "ug",
-        "alpha3-b": "uig",
-        "alpha3-t": null,
-        "name": "Uighur; Uyghur"
+        "name": "Uighur; Uyghur",
+        "iso639_2b": "uig",
+        "iso639_1": "ug"
     },
     {
-        "alpha2": "uk",
-        "alpha3-b": "ukr",
-        "alpha3-t": null,
-        "name": "Ukrainian"
+        "name": "Ukrainian",
+        "iso639_2b": "ukr",
+        "iso639_1": "uk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "umb",
-        "alpha3-t": null,
-        "name": "Umbundu"
+        "name": "Umbundu",
+        "iso639_2b": "umb"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "und",
-        "alpha3-t": null,
-        "name": "Undetermined"
+        "name": "Undetermined",
+        "iso639_2b": "und"
     },
     {
-        "alpha2": "ur",
-        "alpha3-b": "urd",
-        "alpha3-t": null,
-        "name": "Urdu"
+        "name": "Urdu",
+        "iso639_2b": "urd",
+        "iso639_1": "ur"
     },
     {
-        "alpha2": "uz",
-        "alpha3-b": "uzb",
-        "alpha3-t": null,
-        "name": "Uzbek"
+        "name": "Uzbek",
+        "iso639_2b": "uzb",
+        "iso639_1": "uz"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "vai",
-        "alpha3-t": null,
-        "name": "Vai"
+        "name": "Vai",
+        "iso639_2b": "vai"
     },
     {
-        "alpha2": "ve",
-        "alpha3-b": "ven",
-        "alpha3-t": null,
-        "name": "Venda"
+        "name": "Venda",
+        "iso639_2b": "ven",
+        "iso639_1": "ve"
     },
     {
-        "alpha2": "vi",
-        "alpha3-b": "vie",
-        "alpha3-t": null,
-        "name": "Vietnamese"
+        "name": "Vietnamese",
+        "iso639_2b": "vie",
+        "iso639_1": "vi"
     },
     {
-        "alpha2": "vo",
-        "alpha3-b": "vol",
-        "alpha3-t": null,
-        "name": "Volap\u00fck"
+        "name": "Volap\u00fck",
+        "iso639_2b": "vol",
+        "iso639_1": "vo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "vot",
-        "alpha3-t": null,
-        "name": "Votic"
+        "name": "Votic",
+        "iso639_2b": "vot"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "wak",
-        "alpha3-t": null,
-        "name": "Wakashan languages"
+        "name": "Wakashan languages",
+        "iso639_2b": "wak"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "wal",
-        "alpha3-t": null,
-        "name": "Wolaitta; Wolaytta"
+        "name": "Wolaitta; Wolaytta",
+        "iso639_2b": "wal"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "war",
-        "alpha3-t": null,
-        "name": "Waray"
+        "name": "Waray",
+        "iso639_2b": "war"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "was",
-        "alpha3-t": null,
-        "name": "Washo"
+        "name": "Washo",
+        "iso639_2b": "was"
     },
     {
-        "alpha2": "cy",
-        "alpha3-b": "wel",
-        "alpha3-t": "cym",
-        "name": "Welsh"
+        "name": "Welsh",
+        "iso639_2t": "cym",
+        "iso639_2b": "wel",
+        "iso639_1": "cy"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "wen",
-        "alpha3-t": null,
-        "name": "Sorbian languages"
+        "name": "Sorbian languages",
+        "iso639_2b": "wen"
     },
     {
-        "alpha2": "wa",
-        "alpha3-b": "wln",
-        "alpha3-t": null,
-        "name": "Walloon"
+        "name": "Walloon",
+        "iso639_2b": "wln",
+        "iso639_1": "wa"
     },
     {
-        "alpha2": "wo",
-        "alpha3-b": "wol",
-        "alpha3-t": null,
-        "name": "Wolof"
+        "name": "Wolof",
+        "iso639_2b": "wol",
+        "iso639_1": "wo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "xal",
-        "alpha3-t": null,
-        "name": "Kalmyk; Oirat"
+        "name": "Kalmyk; Oirat",
+        "iso639_2b": "xal"
     },
     {
-        "alpha2": "xh",
-        "alpha3-b": "xho",
-        "alpha3-t": null,
-        "name": "Xhosa"
+        "name": "Xhosa",
+        "iso639_2b": "xho",
+        "iso639_1": "xh"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "yao",
-        "alpha3-t": null,
-        "name": "Yao"
+        "name": "Yao",
+        "iso639_2b": "yao"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "yap",
-        "alpha3-t": null,
-        "name": "Yapese"
+        "name": "Yapese",
+        "iso639_2b": "yap"
     },
     {
-        "alpha2": "yi",
-        "alpha3-b": "yid",
-        "alpha3-t": null,
-        "name": "Yiddish"
+        "name": "Yiddish",
+        "iso639_2b": "yid",
+        "iso639_1": "yi"
     },
     {
-        "alpha2": "yo",
-        "alpha3-b": "yor",
-        "alpha3-t": null,
-        "name": "Yoruba"
+        "name": "Yoruba",
+        "iso639_2b": "yor",
+        "iso639_1": "yo"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "ypk",
-        "alpha3-t": null,
-        "name": "Yupik languages"
+        "name": "Yupik languages",
+        "iso639_2b": "ypk"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zap",
-        "alpha3-t": null,
-        "name": "Zapotec"
+        "name": "Zapotec",
+        "iso639_2b": "zap"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zbl",
-        "alpha3-t": null,
-        "name": "Blissymbols; Blissymbolics; Bliss"
+        "name": "Blissymbols; Blissymbolics; Bliss",
+        "iso639_2b": "zbl"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zen",
-        "alpha3-t": null,
-        "name": "Zenaga"
+        "name": "Zenaga",
+        "iso639_2b": "zen"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zgh",
-        "alpha3-t": null,
-        "name": "Standard Moroccan Tamazight"
+        "name": "Standard Moroccan Tamazight",
+        "iso639_2b": "zgh"
     },
     {
-        "alpha2": "za",
-        "alpha3-b": "zha",
-        "alpha3-t": null,
-        "name": "Zhuang; Chuang"
+        "name": "Zhuang; Chuang",
+        "iso639_2b": "zha",
+        "iso639_1": "za"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "znd",
-        "alpha3-t": null,
-        "name": "Zande languages"
+        "name": "Zande languages",
+        "iso639_2b": "znd"
     },
     {
-        "alpha2": "zu",
-        "alpha3-b": "zul",
-        "alpha3-t": null,
-        "name": "Zulu"
+        "name": "Zulu",
+        "iso639_2b": "zul",
+        "iso639_1": "zu"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zun",
-        "alpha3-t": null,
-        "name": "Zuni"
+        "name": "Zuni",
+        "iso639_2b": "zun"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zxx",
-        "alpha3-t": null,
-        "name": "No linguistic content; Not applicable"
+        "name": "No linguistic content; Not applicable",
+        "iso639_2b": "zxx"
     },
     {
-        "alpha2": null,
-        "alpha3-b": "zza",
-        "alpha3-t": null,
-        "name": "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
+        "name": "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki",
+        "iso639_2b": "zza"
     },
     {
         "name": "Central Kurdish",

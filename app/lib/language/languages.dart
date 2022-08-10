@@ -38,13 +38,13 @@ class Languages {
     try {
       return languageList.firstWhere((l) {
         // from simple to complex
-        if (l.alpha2 == code) {
+        if (l.iso639_1 == code) {
           return true;
         }
-        if (l.alpha3b == code) {
+        if (l.iso639_2b == code) {
           return true;
         }
-        if (l.alpha3t == code) {
+        if (l.iso639_2t == code) {
           return true;
         }
         if (l.iso639_3 == code) {

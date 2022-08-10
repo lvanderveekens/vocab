@@ -4,29 +4,29 @@ import 'package:vocab/language/languages.dart';
 
 class Language {
   final String name;
-  final String? alpha2;
-  final String? alpha3b;
-  final String? alpha3t;
-  final String? bcp47;
+  final String? iso639_1;
+  final String? iso639_2b;
+  final String? iso639_2t;
   final String? iso639_3;
+  final String? bcp47;
 
   Language({
     required this.name,
-    required this.alpha2,
-    required this.alpha3b,
-    required this.alpha3t,
-    required this.bcp47,
+    required this.iso639_1,
+    required this.iso639_2b,
+    required this.iso639_2t,
     required this.iso639_3,
+    required this.bcp47,
   });
 
   factory Language.fromJson(Map<String, dynamic> json) {
     return Language(
       name: json['name'],
-      alpha2: json['alpha2'],
-      alpha3b: json['alpha3-b'],
-      alpha3t: json['alpha3-t'],
-      bcp47: json['bcp47'],
+      iso639_1: json['iso639_1'],
+      iso639_2b: json['iso639_2b'],
+      iso639_2t: json['iso639_2t'],
       iso639_3: json['iso639_3'],
+      bcp47: json['bcp47'],
     );
   }
 

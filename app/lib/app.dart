@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:vocab/language/language.dart';
 
 import 'package:vocab/camera/camera_page.dart';
+import 'package:vocab/text_recognition/text_recognition_languages.dart';
 import 'package:vocab/translation/google_translation_languages.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -23,6 +24,7 @@ class AppState extends State<App> {
   final userPreferencesStorage = UserPreferencesStorage();
 
   List<GoogleTranslationLanguage> _googleTranslationLanguages = [];
+  List<TextRecognitionLanguage> _textRecognitionLanguages = [];
 
   @override
   initState() {
@@ -33,6 +35,11 @@ class AppState extends State<App> {
         _googleTranslationLanguages = value;
       });
     });
+    TextRecognitionLanguages.load().then((value) {
+      setState(() {
+        _textRecognitionLanguages = value;
+      });
+    });
   }
 
   List<Widget> _getPages() {
@@ -41,6 +48,7 @@ class AppState extends State<App> {
         deckStorage: deckStorage,
         userPreferencesStorage: userPreferencesStorage,
         googleTranslationLanguages: _googleTranslationLanguages,
+        textRecognitionLanguages: _textRecognitionLanguages,
       ),
       DeckPage(deckStorage: deckStorage),
     ];
