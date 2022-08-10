@@ -30,6 +30,25 @@ class Language {
     );
   }
 
+  bool hasCode(String code) {
+    if (iso639_1 == code) {
+      return true;
+    }
+    if (iso639_2b == code) {
+      return true;
+    }
+    if (iso639_2t == code) {
+      return true;
+    }
+    if (iso639_3 == code) {
+      return true;
+    }
+    if (bcp47 == code) {
+      return true;
+    }
+    return false;
+  }
+
   // bool operator ==(o) =>
   //     o is Language && name == o.name && isoCode == o.isoCode;
 

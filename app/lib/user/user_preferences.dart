@@ -12,4 +12,11 @@ class UserPreferences {
         sourceLanguageCode: json['sourceLanguageCode'],
         targetLanguageCode: json['targetLanguageCode']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'sourceLanguageCode': sourceLanguageCode,
+      'targetLanguageCode': targetLanguageCode,
+    };
+  }
 }

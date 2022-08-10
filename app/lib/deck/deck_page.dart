@@ -14,6 +14,8 @@ import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/deck/deck_storage.dart';
+import 'package:vocab/language/language.dart';
+import 'package:vocab/language/languages.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
@@ -21,8 +23,13 @@ import 'package:path_provider/path_provider.dart';
 
 class DeckPage extends StatefulWidget {
   final DeckStorage deckStorage;
+  final List<Language> languages;
 
-  const DeckPage({Key? key, required this.deckStorage}) : super(key: key);
+  const DeckPage({
+    Key? key,
+    required this.deckStorage,
+    required this.languages,
+  }) : super(key: key);
 
   @override
   State<DeckPage> createState() => DeckPageState();
@@ -114,7 +121,7 @@ class DeckPageState extends State<DeckPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(card.sourceLanguageCode,
+                    Text(_getLanguageName(card.sourceLanguageCode),
                         style: TextStyle(fontSize: 12.0)),
                     Text(card.sourceWord, style: TextStyle(fontSize: 24.0)),
                   ])),
@@ -124,10 +131,14 @@ class DeckPageState extends State<DeckPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(card.targetLanguageCode,
+                    Text(_getLanguageName(card.targetLanguageCode),
                         style: TextStyle(fontSize: 12.0)),
                     Text(card.targetWord, style: TextStyle(fontSize: 24.0)),
                   ])),
         ]));
+  }
+
+  String _getLanguageName(String code) {
+    return widget.languages.firstWhere((l) => l.hasCode(code)).name;
   }
 }

@@ -9,8 +9,9 @@ class Deck {
 
   factory Deck.fromJson(Map<String, dynamic> json) {
     var cardsJson = json['cards'] as List;
-    List<Flashcard> cards =
-        cardsJson.map((cardJson) => Flashcard.fromJson(cardJson)).toList();
+    List<Flashcard> cards = cardsJson
+        .map((cardJson) => Flashcard.fromJson(jsonDecode(cardJson)))
+        .toList();
 
     return Deck(cards: cards);
   }
@@ -47,5 +48,15 @@ class Flashcard {
       targetLanguageCode: json['targetLanguageCode'],
       targetWord: json['targetWord'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'sourceLanguageCode': sourceLanguageCode,
+      'sourceWord': sourceWord,
+      'targetLanguageCode': targetLanguageCode,
+      'targetWord': targetWord,
+    };
   }
 }

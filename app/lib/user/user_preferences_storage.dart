@@ -17,7 +17,7 @@ class UserPreferencesStorage {
       Map<String, dynamic> json = jsonDecode(await file.readAsString());
 
       var userPreferences = UserPreferences.fromJson(json);
-      log("Existing: ${jsonEncode(userPreferences)}");
+      log("Existing: ${jsonEncode(userPreferences.toJson())}");
       return userPreferences;
     }
 
@@ -25,9 +25,9 @@ class UserPreferencesStorage {
   }
 
   Future<void> save(UserPreferences userPreferences) async {
-    log("Saving user preferences: ${jsonEncode(userPreferences)}");
+    log("Saving user preferences: ${jsonEncode(userPreferences.toJson())}");
     final file = await _getFile();
-    await file.writeAsString(jsonEncode(userPreferences));
+    await file.writeAsString(jsonEncode(userPreferences.toJson()));
   }
 
   Future<File> _getFile() async {

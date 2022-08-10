@@ -9,7 +9,9 @@ class Languages {
 
   static Future<Languages> getInstance() async {
     if (_instance == null) {
-      _instance = Languages(languageList: await loadLanguageList());
+      _instance = Languages(
+        languageList: await loadLanguageList(),
+      );
     }
     return _instance!;
   }

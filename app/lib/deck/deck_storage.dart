@@ -18,7 +18,7 @@ class DeckStorage {
 
   Future<void> save(Deck deck) async {
     final file = await _getFile();
-    await file.writeAsString(jsonEncode(deck));
+    await file.writeAsString(jsonEncode(deck.toJson()));
   }
 
   Future<File> _getFile() async {
