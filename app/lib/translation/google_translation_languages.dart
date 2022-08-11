@@ -19,7 +19,7 @@ class GoogleTranslationLanguages {
         pathToFile, (jsonStr) async {
       var languagesJson = json.decode(jsonStr)['data']['languages'] as List;
 
-      List<GoogleTranslationLanguage> translationLanguages =
+      List<GoogleTranslationLanguage> googleTranslationLanguages =
           languagesJson.map((languageJson) {
         var code = languageJson['language'];
 
@@ -27,7 +27,10 @@ class GoogleTranslationLanguages {
             code: code, language: languages.findByCode(code)!);
       }).toList();
 
-      return translationLanguages;
+      googleTranslationLanguages
+          .sort((a, b) => a.language.name.compareTo(b.language.name));
+
+      return googleTranslationLanguages;
     });
   }
 }

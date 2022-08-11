@@ -12,7 +12,6 @@ class TextRecognitionLanguages {
   TextRecognitionLanguages();
 
   static Future<List<TextRecognitionLanguage>> load() async {
-    // TODO: reads weird
     var languages = await Languages.getInstance();
 
     return rootBundle.loadStructuredData<List<TextRecognitionLanguage>>(
@@ -25,6 +24,9 @@ class TextRecognitionLanguages {
         return TextRecognitionLanguage(
             code: code, language: languages.findByCode(code)!);
       }).toList();
+
+      textRecognitionLanguages
+          .sort((a, b) => a.language.name.compareTo(b.language.name));
 
       return textRecognitionLanguages;
     });
