@@ -177,7 +177,6 @@ class CameraPageState extends State<CameraPage> {
             log("Tapped on: ${element.text}");
 
             final tappedOnWord = element.text;
-
             return showTapDialog(tappedOnWord);
           }
         }
@@ -363,6 +362,10 @@ class CameraPageState extends State<CameraPage> {
   }
 
   void showTapDialog(String? tappedOnWord) {
+    if (tappedOnWord != null) {
+      tappedOnWord = _stripInterpunction(tappedOnWord);
+    }
+
     showDialog(
         context: context,
         builder: (ctx) => TapDialog(
@@ -376,5 +379,9 @@ class CameraPageState extends State<CameraPage> {
               userPreferencesStorage: widget.userPreferencesStorage,
               googleTranslationLanguages: widget.googleTranslationLanguages,
             ));
+  }
+
+  String _stripInterpunction(String s) {
+    return s.replaceAll(RegExp(r'[.,;\?!]'), '');
   }
 }
