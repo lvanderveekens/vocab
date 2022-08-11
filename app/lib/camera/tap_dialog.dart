@@ -146,10 +146,6 @@ class TapDialogState extends State<TapDialog> {
   List<Widget> _buildTranslateDialogPage() {
     log("@>_buildTranslateDialogPage");
 
-    // TODO: if source or target language changed
-    // if (widget.translationEnabled) {
-    //   _translate();
-    // }
     return [
       _buildDialogHeader(
           title: "Translate",
@@ -243,7 +239,7 @@ class TapDialogState extends State<TapDialog> {
             borderRadius: BorderRadius.circular(10.0)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-              margin: EdgeInsets.only(bottom: 16.0),
+              margin: EdgeInsets.only(bottom: 8.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -259,7 +255,7 @@ class TapDialogState extends State<TapDialog> {
             thickness: 1.0,
           ),
           Container(
-              margin: EdgeInsets.only(top: 16.0),
+              margin: EdgeInsets.only(top: 8.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

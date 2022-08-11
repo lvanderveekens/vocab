@@ -121,7 +121,7 @@ class DeckPageState extends State<DeckPage> {
             borderRadius: BorderRadius.circular(10.0)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-              margin: EdgeInsets.only(bottom: 16.0),
+              margin: EdgeInsets.only(bottom: 8.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -131,7 +131,7 @@ class DeckPageState extends State<DeckPage> {
                   ])),
           const Divider(color: Colors.black, height: 1.0, thickness: 1.0),
           Container(
-              margin: EdgeInsets.only(top: 16.0),
+              margin: EdgeInsets.only(top: 8.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
