@@ -60,8 +60,12 @@ class DeckPageState extends State<DeckPage> {
         body: ListView.builder(
       itemCount: cards.length,
       itemBuilder: (context, index) {
+        var margin = index == cards.length - 1
+            ? const EdgeInsets.all(16.0)
+            : const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0);
+
         return Container(
-            margin: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            margin: margin,
             child: Dismissible(
               key: Key(cards[index].id),
               direction: DismissDirection.endToStart,
