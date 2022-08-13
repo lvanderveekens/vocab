@@ -35,12 +35,15 @@ class TapDialog extends StatefulWidget {
 }
 
 class TapDialogState extends State<TapDialog> {
-  ValueNotifier<bool> _showTranslateDialogPage = ValueNotifier(false);
-  bool _showChangeLanguageDialogPage = false;
+  final ValueNotifier<bool> _showTranslatePage = ValueNotifier(false);
+  bool _showChangeLanguagePage = false;
 
-  late GoogleTranslationLanguage _sourceLanguage;
-  late GoogleTranslationLanguage _targetLanguage;
+  late GoogleTranslationLanguage _translatePageSourceLanguage;
+  late GoogleTranslationLanguage _translatePageTargetLanguage;
   String? _translation;
+
+  late GoogleTranslationLanguage _changeLanguagePageSourceLanguage;
+  late GoogleTranslationLanguage _changeLanguagePageTargetLanguage;
 
   UserPreferences? _userPreferences;
 
@@ -48,72 +51,63 @@ class TapDialogState extends State<TapDialog> {
   initState() {
     super.initState();
 
-    _sourceLanguage = getGoogleTranslationLanguageByCode("it");
-    _targetLanguage = getGoogleTranslationLanguageByCode("en");
+    _translatePageSourceLanguage = getGoogleTranslationLanguageByCode("it");
+    _translatePageTargetLanguage = getGoogleTranslationLanguageByCode("en");
 
     log("Loading user preferences...");
     widget.userPreferencesStorage.get().then((value) {
       _userPreferences = value;
 
       if (_userPreferences!.sourceLanguageCode != null) {
-        _sourceLanguage = getGoogleTranslationLanguageByCode(
+        _translatePageSourceLanguage = getGoogleTranslationLanguageByCode(
             _userPreferences!.sourceLanguageCode!);
       }
       if (_userPreferences!.targetLanguageCode != null) {
-        _targetLanguage = getGoogleTranslationLanguageByCode(
+        _translatePageTargetLanguage = getGoogleTranslationLanguageByCode(
             _userPreferences!.targetLanguageCode!);
       }
 
-      _showTranslateDialogPage.addListener(() => _translate());
+      _showTranslatePage.addListener(() => _translate());
     });
   }
 
-  void setSourceLanguage(GoogleTranslationLanguage newSourceLanguage) {
-    log("@>setSourceLanguage");
+  void _setChangeLanguagePageSourceLanguage(
+      GoogleTranslationLanguage sourceLanguage) {
+    log("@>_setChangeLanguagePageSourceLanguage");
 
-    var oldSourceLanguage = _sourceLanguage;
+    var oldSourceLanguage = _changeLanguagePageSourceLanguage;
 
     setState(() {
-      _sourceLanguage = newSourceLanguage;
-      if (_targetLanguage == newSourceLanguage) {
-        _targetLanguage = oldSourceLanguage;
+      _changeLanguagePageSourceLanguage = sourceLanguage;
+      if (_changeLanguagePageTargetLanguage == sourceLanguage) {
+        _changeLanguagePageTargetLanguage = oldSourceLanguage;
       }
     });
 
-    _saveLanguagesInUserPreferences();
-
-    _translate();
+    // TODO: do after apply
+    // TODO: set translate languages
+    // _saveLanguagesInUserPreferences();
+    // _translate();
   }
 
-  void setTargetLanguage(GoogleTranslationLanguage newTargetLanguage) {
-    log("@>setTargetLanguage");
+  void _setChangeLanguagePageTargetLanguage(
+      GoogleTranslationLanguage newTargetLanguage) {
+    log("@>_setChangeLanguagePageTargetLanguage");
 
-    var oldTargetLanguage = _targetLanguage;
+    var oldTargetLanguage = _translatePageTargetLanguage;
 
     setState(() {
-      _targetLanguage = newTargetLanguage;
-      if (_sourceLanguage == newTargetLanguage) {
-        _sourceLanguage = oldTargetLanguage;
+      _changeLanguagePageTargetLanguage = newTargetLanguage;
+      if (_changeLanguagePageSourceLanguage == newTargetLanguage) {
+        _changeLanguagePageSourceLanguage = oldTargetLanguage;
       }
     });
-
-    _saveLanguagesInUserPreferences();
-
-    _translate();
   }
 
   GoogleTranslationLanguage getGoogleTranslationLanguageByCode(String code) {
     return widget.googleTranslationLanguages.firstWhere((gtl) {
       return gtl.language.hasCode(code);
     });
-  }
-
-  void _saveLanguagesInUserPreferences() {
-    if (_userPreferences != null) {
-      _userPreferences!.sourceLanguageCode = _sourceLanguage.code;
-      _userPreferences!.targetLanguageCode = _targetLanguage.code;
-      widget.userPreferencesStorage.save(_userPreferences!);
-    }
   }
 
   @override
@@ -126,24 +120,24 @@ class TapDialogState extends State<TapDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              if (_showTranslateDialogPage.value)
-                if (_showChangeLanguageDialogPage)
-                  ..._buildChangeLanguageDialogPage()
+              if (_showTranslatePage.value)
+                if (_showChangeLanguagePage)
+                  ..._buildChangeLanguagePage()
                 else
-                  ..._buildTranslateDialogPage()
+                  ..._buildTranslatePage()
               else
-                ..._buildTapDialogPage()
+                ..._buildTapPage()
             ])));
   }
 
-  List<Widget> _buildTapDialogPage() {
+  List<Widget> _buildTapPage() {
     return [
       _buildDialogHeader(title: "Tap"),
       _buildDialogContentWrapper(child: _buildTapDialogPageContent())
     ];
   }
 
-  List<Widget> _buildTranslateDialogPage() {
+  List<Widget> _buildTranslatePage() {
     log("@>_buildTranslateDialogPage");
 
     return [
@@ -151,37 +145,44 @@ class TapDialogState extends State<TapDialog> {
           title: "Translate",
           onBack: () {
             setState(() {
-              this._showTranslateDialogPage.value = false;
+              this._showTranslatePage.value = false;
             });
           }),
       _buildDialogContentWrapper(child: _buildTranslateDialogPageContent())
     ];
   }
 
-  List<Widget> _buildChangeLanguageDialogPage() {
+  List<Widget> _buildChangeLanguagePage() {
+    log("@>_buildChangeLanguagePage");
+    var onBack = () => setState(() {
+          _showChangeLanguagePage = false;
+        });
+
     return [
-      _buildDialogHeader(
-          title: "Change language",
-          onBack: () {
-            setState(() {
-              this._showChangeLanguageDialogPage = false;
-            });
-          }),
-      _buildDialogContentWrapper(child: _buildChangeLanguageDialogPageContent())
+      _buildDialogHeader(title: "Change language", onBack: onBack),
+      _buildDialogContentWrapper(
+          child: _buildChangeLanguageDialogPageContent(onBack))
     ];
   }
 
-  Widget _buildChangeLanguageDialogPageContent() {
+  Widget _buildChangeLanguageDialogPageContent(
+    VoidCallback onBack,
+  ) {
+    log("_buildChangeLanguageDialogPageContent");
+    // _changeLanguagePageSourceLanguage = sourceLanguage;
+    // _changeLanguagePageTargetLanguage = targetLanguage;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            margin: EdgeInsets.only(bottom: 16.0),
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16.0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Original"),
+              const Text("Original"),
               DropdownButton(
-                value: _sourceLanguage,
+                isExpanded: true,
+                value: _changeLanguagePageSourceLanguage,
                 icon: const Icon(Icons.keyboard_arrow_down),
                 items: widget.googleTranslationLanguages
                     .map((GoogleTranslationLanguage gtl) {
@@ -191,38 +192,76 @@ class TapDialogState extends State<TapDialog> {
                   );
                 }).toList(),
                 onChanged: (GoogleTranslationLanguage? newValue) {
-                  setSourceLanguage(newValue!);
+                  _setChangeLanguagePageSourceLanguage(newValue!);
                 },
               )
             ])),
         Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(bottom: 16.0),
             child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Translation"),
-            DropdownButton(
-              value: _targetLanguage,
-              icon: const Icon(Icons.keyboard_arrow_down),
-              items: widget.googleTranslationLanguages
-                  .map((GoogleTranslationLanguage gtl) {
-                return DropdownMenuItem(
-                  value: gtl,
-                  child: Text(gtl.language.name),
-                );
-              }).toList(),
-              onChanged: (GoogleTranslationLanguage? newValue) {
-                setTargetLanguage(newValue!);
-              },
-            ),
-          ],
-        ))
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Translation"),
+                DropdownButton(
+                  isExpanded: true,
+                  value: _changeLanguagePageTargetLanguage,
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: widget.googleTranslationLanguages
+                      .map((GoogleTranslationLanguage gtl) {
+                    return DropdownMenuItem(
+                      value: gtl,
+                      child: Text(gtl.language.name),
+                    );
+                  }).toList(),
+                  onChanged: (GoogleTranslationLanguage? newValue) {
+                    _setChangeLanguagePageTargetLanguage(newValue!);
+                  },
+                ),
+              ],
+            )),
+        Container(
+            width: double.infinity,
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text("Apply"),
+              onPressed: _onApply(onBack),
+            ))
       ],
     );
   }
 
+  VoidCallback _onApply(VoidCallback onBack) {
+    return () {
+      log("Pressed on apply");
+      setState(() {
+        _translatePageSourceLanguage = _changeLanguagePageSourceLanguage;
+        _translatePageTargetLanguage = _changeLanguagePageTargetLanguage;
+      });
+      _saveLanguagesInUserPreferences();
+      _translate();
+      onBack();
+    };
+  }
+
+  void _saveLanguagesInUserPreferences() {
+    if (_userPreferences != null) {
+      _userPreferences!.sourceLanguageCode = _translatePageSourceLanguage.code;
+      _userPreferences!.targetLanguageCode = _translatePageTargetLanguage.code;
+      widget.userPreferencesStorage.save(_userPreferences!);
+    }
+  }
+
   Widget _buildDialogContentWrapper({required Widget child}) {
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 16, 16, 32),
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      width: double.infinity,
       child: child,
     );
   }
@@ -244,7 +283,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: not null safe
-                    Text(this._sourceLanguage.language.name,
+                    Text(this._translatePageSourceLanguage.language.name,
                         style: TextStyle(fontSize: 12.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
@@ -260,7 +299,7 @@ class TapDialogState extends State<TapDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // TODO: not null safe
-                    Text(this._targetLanguage.language.name,
+                    Text(this._translatePageTargetLanguage.language.name,
                         style: TextStyle(fontSize: 12.0)),
                     // TODO: translation
                     Text(_translation != null ? _translation! : "",
@@ -294,9 +333,9 @@ class TapDialogState extends State<TapDialog> {
 
                       Flashcard addedCard = Flashcard(
                         id: const Uuid().v4(),
-                        sourceLanguageCode: _sourceLanguage.code,
+                        sourceLanguageCode: _translatePageSourceLanguage.code,
                         sourceWord: widget.tappedOnWord!,
-                        targetLanguageCode: _targetLanguage.code,
+                        targetLanguageCode: _translatePageTargetLanguage.code,
                         targetWord: _translation!,
                       );
                       deck.cards.add(addedCard);
@@ -336,7 +375,9 @@ class TapDialogState extends State<TapDialog> {
         onPressed: () {
           log("Pressed on 'Change language'");
           setState(() {
-            this._showChangeLanguageDialogPage = true;
+            _changeLanguagePageSourceLanguage = _translatePageSourceLanguage;
+            _changeLanguagePageTargetLanguage = _translatePageTargetLanguage;
+            this._showChangeLanguagePage = true;
           });
         },
       )),
@@ -381,7 +422,7 @@ class TapDialogState extends State<TapDialog> {
           onPressed: () {
             log("Pressed on translate");
             setState(() {
-              this._showTranslateDialogPage.value = true;
+              this._showTranslatePage.value = true;
             });
           },
         ),
@@ -423,8 +464,8 @@ class TapDialogState extends State<TapDialog> {
       return;
     }
     log("Translating...");
-    String? translation = await googleTranslate(
-        widget.tappedOnWord!, _sourceLanguage.code, _targetLanguage.code);
+    String? translation = await googleTranslate(widget.tappedOnWord!,
+        _translatePageSourceLanguage.code, _translatePageTargetLanguage.code);
     log("Translation: $translation");
     setState(() {
       _translation = translation;

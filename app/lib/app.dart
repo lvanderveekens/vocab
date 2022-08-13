@@ -73,13 +73,17 @@ class AppState extends State<App> {
     return MaterialApp(
         theme: ThemeData(
           textTheme: ThemeData(
-                  textTheme: TextTheme(
+                  textTheme: const TextTheme(
             bodyText1: TextStyle(fontSize: 16.0),
             bodyText2: TextStyle(fontSize: 16.0),
             button: TextStyle(fontSize: 16.0),
           )).textTheme.apply(
                 bodyColor: Colors.black,
               ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+            primary: Colors.black,
+          )),
           outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
               primary: Colors.black,
