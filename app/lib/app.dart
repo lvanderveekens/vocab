@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:vocab/language/language.dart';
 
 import 'package:vocab/camera/camera_page.dart';
@@ -105,7 +106,11 @@ class AppState extends State<App> {
                 children: [
                   Container(
                       margin: EdgeInsets.only(right: 4.0),
-                      child: Icon(Icons.document_scanner)),
+                      child: SvgPicture.asset('assets/icon.svg',
+                          width: 24.0,
+                          height: 24.0,
+                          color: Colors.black,
+                          semanticsLabel: 'The logo')),
                   const Text('Vocab',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

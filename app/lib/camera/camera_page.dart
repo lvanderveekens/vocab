@@ -295,7 +295,7 @@ class CameraPageState extends State<CameraPage> {
         child: Container(
           child: IconButton(
             padding: EdgeInsets.all(16.0),
-            icon: Icon(Icons.info, color: Colors.black),
+            icon: Icon(Icons.info_outline, color: Colors.white),
             iconSize: 32.0,
             onPressed: () {
               showDialog(
