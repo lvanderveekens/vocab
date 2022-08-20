@@ -257,8 +257,9 @@ class CameraPageState extends State<CameraPage> {
     }
 
     if (!_cameraInitialized) {
-      return _buildCameraPreviewNotAvailable(
-        message: "Camera not initialized.",
+      log("Camera not initialized yet.");
+      return Container(
+        color: Colors.black,
       );
     }
 
