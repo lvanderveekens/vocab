@@ -328,7 +328,7 @@ class TapDialogState extends State<TapDialog> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Add to deck'),
-                      const Icon(Icons.list, size: 24.0),
+                      const Icon(Icons.style, size: 24.0),
                     ],
                   )),
               onPressed: _translation != null
