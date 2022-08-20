@@ -57,51 +57,53 @@ class DeckPageState extends State<DeckPage> {
     }
 
     return Scaffold(
+        backgroundColor: Colors.white,
         body: ListView.builder(
-      itemCount: cards.length,
-      itemBuilder: (context, index) {
-        var margin = index == cards.length - 1
-            ? const EdgeInsets.all(16.0)
-            : const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0);
+          itemCount: cards.length,
+          itemBuilder: (context, index) {
+            var margin = index == cards.length - 1
+                ? const EdgeInsets.all(16.0)
+                : const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0);
 
-        return Container(
-            margin: margin,
-            child: Dismissible(
-              key: Key(cards[index].id),
-              direction: DismissDirection.endToStart,
-              onDismissed: (direction) {
-                setState(() {
-                  Flashcard deletedCard = cards.removeAt(index);
-                  widget.deckStorage.save(_deck!);
+            return Container(
+                margin: margin,
+                child: Dismissible(
+                  key: Key(cards[index].id),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    setState(() {
+                      Flashcard deletedCard = cards.removeAt(index);
+                      widget.deckStorage.save(_deck!);
 
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Card deleted'),
-                      action: SnackBarAction(
-                        label: "Undo",
-                        onPressed: () {
-                          _setStateIfMounted(() {
-                            cards.insert(index, deletedCard);
-                            widget.deckStorage.save(_deck!);
-                          });
-                        },
-                      )));
-                });
-              },
-              background: Container(
-                color: Colors.red,
-                child: Container(
-                    margin: EdgeInsets.only(right: 16.0),
-                    child: Text("Delete",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold))),
-                alignment: Alignment.centerRight,
-              ),
-              child: _buildFlashcard(cards[index]),
-            ));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text('Card deleted'),
+                          action: SnackBarAction(
+                            label: "Undo",
+                            onPressed: () {
+                              _setStateIfMounted(() {
+                                cards.insert(index, deletedCard);
+                                widget.deckStorage.save(_deck!);
+                              });
+                            },
+                          )));
+                    });
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    child: Container(
+                        margin: EdgeInsets.only(right: 16.0),
+                        child: Text("Delete",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold))),
+                    alignment: Alignment.centerRight,
+                  ),
+                  child: _buildFlashcard(cards[index]),
+                ));
 
-        // return ;
-      },
-    ));
+            // return ;
+          },
+        ));
   }
 
   void _setStateIfMounted(VoidCallback fn) {
@@ -126,7 +128,10 @@ class DeckPageState extends State<DeckPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(_getLanguageName(card.sourceLanguageCode),
-                        style: TextStyle(fontSize: 12.0)),
+                        style: TextStyle(
+                            color: Color(0xFF00A3FF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0)),
                     Text(card.sourceWord, style: TextStyle(fontSize: 24.0)),
                   ])),
           const Divider(color: Colors.black, height: 1.0, thickness: 1.0),
@@ -136,7 +141,10 @@ class DeckPageState extends State<DeckPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(_getLanguageName(card.targetLanguageCode),
-                        style: TextStyle(fontSize: 12.0)),
+                        style: TextStyle(
+                            color: Color(0xFF00A3FF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0)),
                     Text(card.targetWord, style: TextStyle(fontSize: 24.0)),
                   ])),
         ]));

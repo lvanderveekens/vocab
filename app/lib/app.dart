@@ -100,6 +100,7 @@ class AppState extends State<App> {
         ),
         home: Scaffold(
           appBar: AppBar(
+            elevation: 0,
             title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,12 +110,13 @@ class AppState extends State<App> {
                       child: SvgPicture.asset('assets/icon.svg',
                           width: 24.0,
                           height: 24.0,
-                          color: Colors.black,
+                          color: const Color(0xFF00A3FF),
                           semanticsLabel: 'The logo')),
                   const Text('Vocab',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24.0,
+                        color: Color(0xFF00A3FF),
                       )),
                 ]),
             foregroundColor: Colors.black,
@@ -137,7 +139,8 @@ class AppState extends State<App> {
             selectedLabelStyle: TextStyle(fontSize: 16.0),
             unselectedLabelStyle: TextStyle(fontSize: 16.0),
             currentIndex: _selectedIndex,
-            selectedItemColor: Colors.black,
+            selectedItemColor: Color(0xFF00A3FF),
+            unselectedItemColor: Colors.black,
             onTap: _onItemTapped,
           ),
         ));

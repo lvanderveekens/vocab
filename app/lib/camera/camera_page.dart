@@ -231,17 +231,34 @@ class CameraPageState extends State<CameraPage> {
 
   final cameraPreviewKey = GlobalKey();
 
+  Widget _buildCameraPreviewNotAvailable({required String message}) {
+    return Container(
+      child: Center(
+          child: Text(
+        message,
+        style: TextStyle(color: Colors.white),
+      )),
+      color: Colors.grey,
+    );
+  }
+
   Widget _buildCameraPreview() {
     if (!_cameraEnabled) {
-      return const Center(child: Text("Camera is disabled."));
+      return _buildCameraPreviewNotAvailable(
+        message: "Camera is disabled.",
+      );
     }
 
     if (!_cameraAvailable) {
-      return const Center(child: Text("Camera not available."));
+      return _buildCameraPreviewNotAvailable(
+        message: "Camera not available.",
+      );
     }
 
     if (!_cameraInitialized) {
-      return const Center(child: Text("Camera not initialized."));
+      return _buildCameraPreviewNotAvailable(
+        message: "Camera not initialized.",
+      );
     }
 
     // somehow the camera sensor orientation is 90 which messes up the aspect ratio field...
@@ -295,7 +312,7 @@ class CameraPageState extends State<CameraPage> {
         child: Container(
           child: IconButton(
             padding: EdgeInsets.all(16.0),
-            icon: Icon(Icons.info_outline, color: Colors.white),
+            icon: Icon(Icons.info, color: Colors.white),
             iconSize: 32.0,
             onPressed: () {
               showDialog(

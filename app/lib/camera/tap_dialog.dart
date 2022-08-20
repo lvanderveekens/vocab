@@ -138,7 +138,7 @@ class TapDialogState extends State<TapDialog> {
   }
 
   List<Widget> _buildTranslatePage() {
-    log("@>_buildTranslateDialogPage");
+    log("@>_buildTranslatePage");
 
     return [
       _buildDialogHeader(
@@ -148,7 +148,7 @@ class TapDialogState extends State<TapDialog> {
               this._showTranslatePage.value = false;
             });
           }),
-      _buildDialogContentWrapper(child: _buildTranslateDialogPageContent())
+      _buildDialogContentWrapper(child: _buildTranslatePageContent())
     ];
   }
 
@@ -160,15 +160,14 @@ class TapDialogState extends State<TapDialog> {
 
     return [
       _buildDialogHeader(title: "Change language", onBack: onBack),
-      _buildDialogContentWrapper(
-          child: _buildChangeLanguageDialogPageContent(onBack))
+      _buildDialogContentWrapper(child: _buildChangeLanguagePageContent(onBack))
     ];
   }
 
-  Widget _buildChangeLanguageDialogPageContent(
+  Widget _buildChangeLanguagePageContent(
     VoidCallback onBack,
   ) {
-    log("_buildChangeLanguageDialogPageContent");
+    log("@>_buildChangeLanguagePageContent");
     // _changeLanguagePageSourceLanguage = sourceLanguage;
     // _changeLanguagePageTargetLanguage = targetLanguage;
     return Column(
@@ -266,7 +265,7 @@ class TapDialogState extends State<TapDialog> {
     );
   }
 
-  Widget _buildTranslateDialogPageContent() {
+  Widget _buildTranslatePageContent() {
     // TODO: right place?
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
@@ -284,7 +283,10 @@ class TapDialogState extends State<TapDialog> {
                   children: [
                     // TODO: not null safe
                     Text(this._translatePageSourceLanguage.language.name,
-                        style: TextStyle(fontSize: 12.0)),
+                        style: TextStyle(
+                            color: Color(0xFF00A3FF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0)),
                     Text('${widget.tappedOnWord}',
                         style: TextStyle(fontSize: 24.0)),
                   ])),
@@ -300,8 +302,10 @@ class TapDialogState extends State<TapDialog> {
                   children: [
                     // TODO: not null safe
                     Text(this._translatePageTargetLanguage.language.name,
-                        style: TextStyle(fontSize: 12.0)),
-                    // TODO: translation
+                        style: TextStyle(
+                            color: Color(0xFF00A3FF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0)),
                     Text(_translation != null ? _translation! : "",
                         style: TextStyle(fontSize: 24.0)),
                   ])),
@@ -443,7 +447,9 @@ class TapDialogState extends State<TapDialog> {
                     : IconButton(
                         icon: Icon(Icons.arrow_back), onPressed: onBack),
               ))),
-      Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      Text(title,
+          style:
+              TextStyle(color: Color(0xFF00A3FF), fontWeight: FontWeight.bold)),
       Expanded(
           child: Align(
               alignment: Alignment.centerRight,
