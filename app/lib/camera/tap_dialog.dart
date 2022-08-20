@@ -224,6 +224,7 @@ class TapDialogState extends State<TapDialog> {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: Color(0xFF00A3FF),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -273,7 +274,7 @@ class TapDialogState extends State<TapDialog> {
         padding: const EdgeInsets.all(16.0),
         margin: const EdgeInsets.only(bottom: 32.0),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 1.0),
+            border: Border.all(color: Colors.black26, width: 1.0),
             borderRadius: BorderRadius.circular(10.0)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -291,7 +292,7 @@ class TapDialogState extends State<TapDialog> {
                         style: TextStyle(fontSize: 24.0)),
                   ])),
           Divider(
-            color: Colors.black,
+            color: Colors.black26,
             height: 1.0,
             thickness: 1.0,
           ),

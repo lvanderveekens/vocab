@@ -90,10 +90,10 @@ class AppState extends State<App> {
               primary: Colors.black,
             ).copyWith(
               side: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.disabled)) {
-                  return BorderSide(color: Colors.grey);
-                }
-                return BorderSide(color: Colors.black);
+                // if (states.contains(MaterialState.disabled)) {
+                //   return BorderSide(color: Colors.grey);
+                // }
+                return BorderSide(color: Colors.black26);
               }),
             ),
           ),

@@ -119,7 +119,7 @@ class DeckPageState extends State<DeckPage> {
     return Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
+            border: Border.all(color: Colors.black26),
             borderRadius: BorderRadius.circular(10.0)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -134,7 +134,7 @@ class DeckPageState extends State<DeckPage> {
                             fontSize: 12.0)),
                     Text(card.sourceWord, style: TextStyle(fontSize: 24.0)),
                   ])),
-          const Divider(color: Colors.black, height: 1.0, thickness: 1.0),
+          const Divider(color: Colors.black26, height: 1.0, thickness: 1.0),
           Container(
               margin: EdgeInsets.only(top: 8.0),
               child: Column(
