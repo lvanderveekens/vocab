@@ -147,6 +147,8 @@ class AppState extends State<App> {
             currentIndex: _selectedIndex,
             selectedItemColor: Color(0xFF00A3FF),
             unselectedItemColor: Colors.black,
+            backgroundColor: Colors.white,
+            elevation: 0,
             onTap: _onItemTapped,
           ),
         ));
