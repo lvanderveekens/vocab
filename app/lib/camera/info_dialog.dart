@@ -42,10 +42,11 @@ class InfoDialogState extends State<InfoDialog> {
   }
 
   Widget _buildDialogContentWrapper({required Widget child}) {
-    return Container(
+    return Flexible(
+        child: Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: child,
-    );
+    ));
   }
 
   Widget _buildDialogPageContent() {
