@@ -111,6 +111,7 @@ class CameraPageState extends State<CameraPage> {
     cameraController = CameraController(camera, ResolutionPreset.high);
 
     await cameraController!.initialize();
+    await cameraController!.lockCaptureOrientation();
 
     setState(() {
       _cameraInitialized = true;
@@ -298,7 +299,7 @@ class CameraPageState extends State<CameraPage> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: const Text(
-            "Aim at a word and tap on it.",
+            "Point the camera at a word and tap it",
             // textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16.0, color: Colors.white),
           ),
@@ -399,6 +400,6 @@ class CameraPageState extends State<CameraPage> {
   }
 
   String _stripInterpunction(String s) {
-    return s.replaceAll(RegExp(r'[.,;\?!]'), '');
+    return s.replaceAll(RegExp(r'[.,:;\?!]'), '');
   }
 }

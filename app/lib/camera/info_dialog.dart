@@ -42,11 +42,10 @@ class InfoDialogState extends State<InfoDialog> {
   }
 
   Widget _buildDialogContentWrapper({required Widget child}) {
-    return Expanded(
-        child: Container(
-      margin: EdgeInsets.fromLTRB(16, 16, 16, 32),
+    return Container(
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: child,
-    ));
+    );
   }
 
   Widget _buildDialogPageContent() {
@@ -71,7 +70,9 @@ class InfoDialogState extends State<InfoDialog> {
                 margin: EdgeInsets.only(top: 4.0, bottom: 4.0),
                 child: Container(),
               ))),
-      Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      Text(title,
+          style:
+              TextStyle(color: Color(0xFF00A3FF), fontWeight: FontWeight.bold)),
       Expanded(
           child: Align(
               alignment: Alignment.centerRight,
