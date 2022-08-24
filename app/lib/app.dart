@@ -105,52 +105,64 @@ class AppState extends State<App> {
           ),
         ),
         home: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(right: 4.0),
-                      child: SvgPicture.asset('assets/icon.svg',
-                          width: 24.0,
-                          height: 24.0,
-                          color: const Color(0xFF00A3FF),
-                          semanticsLabel: 'The logo')),
-                  const Text('Vocab',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
-                        color: Color(0xFF00A3FF),
-                      )),
-                ]),
-            foregroundColor: Colors.black,
-            backgroundColor: Colors.white,
-          ),
-          body: _getPages().elementAt(_selectedIndex),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.camera_alt_outlined),
-                activeIcon: Icon(Icons.camera_alt),
-                label: 'Camera',
+            appBar: PreferredSize(
+                preferredSize: Size.fromHeight(50.0),
+                child: AppBar(
+                  bottom: PreferredSize(
+                      child: Container(
+                        color: Colors.black26,
+                        height: 1.0,
+                      ),
+                      preferredSize: Size.fromHeight(1.0)),
+                  elevation: 0,
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(right: 4.0),
+                            child: SvgPicture.asset('assets/icon.svg',
+                                width: 24.0,
+                                height: 24.0,
+                                color: const Color(0xFF00A3FF),
+                                semanticsLabel: 'The logo')),
+                        const Text('Vocab',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24.0,
+                              color: Color(0xFF00A3FF),
+                            )),
+                      ]),
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white,
+                )),
+            body: _getPages().elementAt(_selectedIndex),
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(color: Colors.black26, width: 1.0))),
+              child: BottomNavigationBar(
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.camera_alt_outlined),
+                    activeIcon: Icon(Icons.camera_alt),
+                    label: 'Camera',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.style_outlined),
+                    activeIcon: Icon(Icons.style),
+                    label: 'Deck',
+                  ),
+                ],
+                selectedLabelStyle: TextStyle(fontSize: 16.0),
+                unselectedLabelStyle: TextStyle(fontSize: 16.0),
+                currentIndex: _selectedIndex,
+                selectedItemColor: Color(0xFF00A3FF),
+                unselectedItemColor: Colors.black,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                onTap: _onItemTapped,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.style_outlined),
-                activeIcon: Icon(Icons.style),
-                label: 'Deck',
-              ),
-            ],
-            selectedLabelStyle: TextStyle(fontSize: 16.0),
-            unselectedLabelStyle: TextStyle(fontSize: 16.0),
-            currentIndex: _selectedIndex,
-            selectedItemColor: Color(0xFF00A3FF),
-            unselectedItemColor: Colors.black,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            onTap: _onItemTapped,
-          ),
-        ));
+            )));
   }
 }
