@@ -2,6 +2,12 @@
 
 A new Flutter project.
 
+## Release
+
+Release build: 
+
+    $ flutter build ipa --obfuscate --split-debug-info=build/app/outputs/symbols
+
 ## Languages
 
 ### Formats
