@@ -27,11 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>My camera usage description</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>My microphone usage description</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>My photo library usage description</string>
+	<string>The app uses the camera so you can tap on words in the physical world.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

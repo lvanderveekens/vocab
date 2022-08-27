@@ -108,7 +108,8 @@ class CameraPageState extends State<CameraPage> {
     }
 
     final camera = cameras![0]; // TODO: try other cameras?
-    cameraController = CameraController(camera, ResolutionPreset.high);
+    cameraController =
+        CameraController(camera, ResolutionPreset.high, enableAudio: false);
 
     await cameraController!.initialize();
     await cameraController!.lockCaptureOrientation();
