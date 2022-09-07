@@ -1,11 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class TextDetectorPainter extends CustomPainter {
-  TextDetectorPainter(this.imageSize, this.recognizedText);
-
   final Size imageSize;
   final RecognizedText recognizedText;
+  final List<Rect> selectedRects;
+
+  TextDetectorPainter(this.imageSize, this.recognizedText, this.selectedRects);
 
   @override
   void paint(Canvas canvas, Size canvasSize) {
@@ -40,20 +43,34 @@ class TextDetectorPainter extends CustomPainter {
       ..color = Colors.yellow
       ..strokeWidth = 2.0;
 
-    for (TextBlock block in recognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        for (TextElement element in line.elements) {
-          // print("draw rectangle for element: " + element.text);
-          final elementBoundingBox = element.boundingBox;
-          final scaledRect = scaleRect(elementBoundingBox);
+    // for (TextBlock block in recognizedText.blocks) {
+    //   for (TextLine line in block.lines) {
+    //     for (TextElement element in line.elements) {
+    //       // print("draw rectangle for element: " + element.text);
+    //       final elementBoundingBox = element.boundingBox;
+    //       final scaledRect = scaleRect(elementBoundingBox);
 
-          canvas.drawRect(scaledRect, redPaint);
-        }
+    //       canvas.drawRect(scaledRect, redPaint);
 
-        canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
-      }
+    //       // TextPainter textPainter = TextPainter(
+    //       //   text: TextSpan(text: element.text),
+    //       //   textAlign: TextAlign.left,
+    //       //   textDirection: TextDirection.ltr,
+    //       // );
 
-      canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
+    //       // textPainter.layout();
+    //       // textPainter.paint(canvas, scaledRect.topLeft);
+    //     }
+
+    //     // canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
+    //   }
+
+    //   // canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
+    // }
+
+    for (Rect selectedRect in selectedRects) {
+      final scaledRect = scaleRect(selectedRect);
+      canvas.drawRect(scaledRect, bluePaint);
     }
 
     canvas.drawRect(
@@ -69,6 +86,7 @@ class TextDetectorPainter extends CustomPainter {
   @override
   bool shouldRepaint(TextDetectorPainter oldDelegate) {
     return oldDelegate.imageSize != imageSize ||
-        oldDelegate.recognizedText != recognizedText;
+        oldDelegate.recognizedText != recognizedText ||
+        oldDelegate.selectedRects != selectedRects;
   }
 }

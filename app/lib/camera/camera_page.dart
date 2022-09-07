@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'dart:math' as math;
 import 'dart:typed_data';
 
@@ -61,6 +62,7 @@ class CameraPageState extends State<CameraPage> {
   TapUpDetails? _tapUpDetails;
   bool _processNextCameraImage = false;
 
+  CameraImage? _cameraImage;
   Size? _cameraImageSize;
 
   bool _showTapDialog = false;
@@ -131,6 +133,8 @@ class CameraPageState extends State<CameraPage> {
 
       log("Started processsing camera image (${cameraImage.width}, ${cameraImage.height})");
 
+      _cameraImage = cameraImage;
+
       _cameraImageSize =
           Size(cameraImage.width.toDouble(), cameraImage.height.toDouble());
 
@@ -153,6 +157,8 @@ class CameraPageState extends State<CameraPage> {
     });
   }
 
+  void _processCameraImage() {}
+
   Future<void> checkTapLocation(TapUpDetails tapUpDetails,
       RecognizedText recognizedText, Size cameraImageSize) async {
     final cameraPreviewSize = cameraPreviewKey.currentContext!.size!;
@@ -165,9 +171,6 @@ class CameraPageState extends State<CameraPage> {
     // // NOTE: scaling only works if the aspect ratios match
     // final double scaleX = cameraPreviewSize.width / cameraImageSize.width;
     // final double scaleY = cameraPreviewSize.height / cameraImageSize.height;
-
-    var x = tapUpDetails.localPosition.dx;
-    var y = tapUpDetails.localPosition.dy;
 
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
@@ -227,7 +230,11 @@ class CameraPageState extends State<CameraPage> {
       return Container();
     }
 
-    final painter = TextDetectorPainter(_cameraImageSize!, _recognizedText!);
+    final painter = TextDetectorPainter(
+      _cameraImageSize!,
+      _recognizedText!,
+      [],
+    );
     return CustomPaint(painter: painter);
   }
 
@@ -278,15 +285,39 @@ class CameraPageState extends State<CameraPage> {
         height: MediaQuery.of(context).size.height,
         child: FittedBox(
             fit: BoxFit.cover,
-            child: GestureDetector(
-                onTapUp: handleCameraWidgetTapUp(),
-                child: SizedBox(
-                    width: cameraPreviewWidth,
-                    height: cameraPreviewHeight,
-                    child: Stack(fit: StackFit.expand, children: <Widget>[
-                      CameraPreview(cameraController!, key: cameraPreviewKey),
-                      _buildRealTimeScannerIfNeeded()
-                    ])))));
+            child: _cameraImage != null
+                ? _buildFrozenImage(_cameraImage!)
+                : GestureDetector(
+                    onTapUp: handleCameraWidgetTapUp(),
+                    child: SizedBox(
+                        width: cameraPreviewWidth,
+                        height: cameraPreviewHeight,
+                        child: Stack(fit: StackFit.expand, children: <Widget>[
+                          CameraPreview(cameraController!,
+                              key: cameraPreviewKey),
+                          _buildRealTimeScannerIfNeeded()
+                        ])))));
+  }
+
+  Widget _buildFrozenImage(CameraImage cameraImage) {
+    return SizedBox(
+      width: cameraImage.width.toDouble(),
+      height: cameraImage.height.toDouble(),
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Image.memory(Uint8List.fromList(convertToPng(_cameraImage!))),
+          _buildTextDetectionOverlay(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextDetectionOverlay() {
+    return TextDetectionOverlay(
+      cameraImageSize: _cameraImageSize!,
+      recognizedText: _recognizedText!,
+    );
   }
 
   Widget _buildUsageTip() {
@@ -404,4 +435,153 @@ class CameraPageState extends State<CameraPage> {
   String _stripInterpunction(String s) {
     return s.replaceAll(RegExp(r'[.,:;\?!]'), '');
   }
+
+  /// imgLib -> Image package from https://pub.dartlang.org/packages/image
+  static List<int> convertToPng(CameraImage image) {
+    try {
+      img.Image? img2;
+      if (image.format.group == ImageFormatGroup.yuv420) {
+        // ANDROID
+        img2 = _fromYUV420(image);
+      } else if (image.format.group == ImageFormatGroup.bgra8888) {
+        // IOS
+        img2 = _fromBGRA8888(image);
+      }
+      img.PngEncoder pngEncoder = new img.PngEncoder();
+
+      // Convert to png
+      return pngEncoder.encodeImage(img2!);
+    } catch (e) {
+      print(">>>>>>>>>>>> ERROR:" + e.toString());
+    }
+    return [];
+  }
+
+  /// CameraImage BGRA8888 -> PNG
+  /// Color
+  static img.Image _fromBGRA8888(CameraImage image) {
+    return img.Image.fromBytes(
+      (image.planes[0].bytesPerRow / 4).round(),
+      image.height,
+      image.planes[0].bytes,
+      format: img.Format.bgra,
+    );
+  }
+
+  /// CameraImage YUV420_888 -> PNG -> Image (compresion:0, filter: none)
+  /// Black
+  static img.Image _fromYUV420(CameraImage image) {
+    var img2 = img.Image(image.width, image.height); // Create Image buffer
+
+    Plane plane = image.planes[0];
+    const int shift = (0xFF << 24);
+
+    // Fill image buffer with plane[0] from YUV420_888
+    for (int x = 0; x < image.width; x++) {
+      for (int planeOffset = 0;
+          planeOffset < image.height * image.width;
+          planeOffset += image.width) {
+        final pixelColor = plane.bytes[planeOffset + x];
+        // color: 0x FF  FF  FF  FF
+        //           A   B   G   R
+        // Calculate pixel color
+        var newVal =
+            shift | (pixelColor << 16) | (pixelColor << 8) | pixelColor;
+
+        img2.data[planeOffset + x] = newVal;
+      }
+    }
+
+    return img2;
+  }
+}
+
+class TextDetectionOverlay extends StatefulWidget {
+  final Size cameraImageSize;
+  final RecognizedText recognizedText;
+
+  const TextDetectionOverlay(
+      {required this.cameraImageSize, required this.recognizedText});
+
+  @override
+  State<TextDetectionOverlay> createState() => TextDetectionOverlayState();
+}
+
+class TextDetectionOverlayState extends State<TextDetectionOverlay> {
+  List<SelectedTextElement> _selectedTextElements = [];
+
+  @override
+  Widget build(BuildContext context) {
+    log("selected text: ${_getSelectedText()}");
+
+    return GestureDetector(
+      onPanStart: (DragStartDetails details) {
+        log("onPanStart");
+        setState(() {
+          _selectedTextElements = [];
+        });
+        _handleDragPosition(details.localPosition);
+      },
+      onPanUpdate: (DragUpdateDetails details) {
+        _handleDragPosition(details.localPosition);
+      },
+      child: CustomPaint(
+          painter: TextDetectorPainter(
+        widget.cameraImageSize,
+        widget.recognizedText,
+        _selectedTextElements.map((e) => e.textElement.boundingBox).toList(),
+      )),
+    );
+  }
+
+  String _getSelectedText() {
+    _selectedTextElements.sort((a, b) {
+      final compared = a.textLine.boundingBox.topLeft.dy
+          .compareTo(b.textLine.boundingBox.topLeft.dy);
+      if (compared != 0) {
+        return compared;
+      }
+
+      return a.textElement.boundingBox.topLeft.dx
+          .compareTo(b.textElement.boundingBox.topLeft.dx);
+    });
+    return _selectedTextElements.map((ste) => ste.textElement.text).join(" ");
+  }
+
+  void _handleDragPosition(Offset dragPosition) {
+    for (TextBlock textBlock in widget.recognizedText.blocks) {
+      for (TextLine textLine in textBlock.lines) {
+        for (TextElement textElement in textLine.elements) {
+          if (textElement.boundingBox.contains(dragPosition)) {
+            log("Dragging over: ${textElement.text}");
+
+            if (!_selectedTextElements
+                .any((ste) => ste.textElement == textElement)) {
+              setState(() {
+                log("setting state");
+
+                // TODO: add line too
+
+                _selectedTextElements = List.from(_selectedTextElements)
+                  ..add(SelectedTextElement(
+                      textElement: textElement, textLine: textLine));
+              });
+            }
+
+            return;
+          }
+        }
+      }
+    }
+  }
+}
+
+class SelectedTextElement {
+  final TextElement textElement;
+  final TextLine textLine;
+
+  SelectedTextElement({
+    required this.textElement,
+    required this.textLine,
+  });
 }
