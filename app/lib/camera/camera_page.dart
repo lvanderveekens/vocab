@@ -432,10 +432,6 @@ class CameraPageState extends State<CameraPage> {
             ));
   }
 
-  String _stripInterpunction(String s) {
-    return s.replaceAll(RegExp(r'[.,:;\?!]'), '');
-  }
-
   /// imgLib -> Image package from https://pub.dartlang.org/packages/image
   static List<int> convertToPng(CameraImage image) {
     try {
@@ -545,7 +541,9 @@ class TextDetectionOverlayState extends State<TextDetectionOverlay> {
       return a.textElement.boundingBox.topLeft.dx
           .compareTo(b.textElement.boundingBox.topLeft.dx);
     });
-    return _selectedTextElements.map((ste) => ste.textElement.text).join(" ");
+    return _selectedTextElements
+        .map((ste) => _stripInterpunction(ste.textElement.text))
+        .join(" ");
   }
 
   void _handleDragPosition(Offset dragPosition) {
@@ -553,15 +551,9 @@ class TextDetectionOverlayState extends State<TextDetectionOverlay> {
       for (TextLine textLine in textBlock.lines) {
         for (TextElement textElement in textLine.elements) {
           if (textElement.boundingBox.contains(dragPosition)) {
-            log("Dragging over: ${textElement.text}");
-
             if (!_selectedTextElements
                 .any((ste) => ste.textElement == textElement)) {
               setState(() {
-                log("setting state");
-
-                // TODO: add line too
-
                 _selectedTextElements = List.from(_selectedTextElements)
                   ..add(SelectedTextElement(
                       textElement: textElement, textLine: textLine));
@@ -584,4 +576,8 @@ class SelectedTextElement {
     required this.textElement,
     required this.textLine,
   });
+}
+
+String _stripInterpunction(String s) {
+  return s.replaceAll(RegExp(r'[.,:;\?!]'), '');
 }

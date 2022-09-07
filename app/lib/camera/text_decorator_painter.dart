@@ -38,12 +38,23 @@ class TextDetectorPainter extends CustomPainter {
       ..color = Colors.blue
       ..strokeWidth = 2.0;
 
-    final Paint yellowPaint = Paint()
+    final Paint blackStrokePaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.yellow
+      ..color = Colors.black
+      ..strokeWidth = 5.0;
+
+    final Paint yellowTransparentFillPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Color(0x6FFFEB3B)
       ..strokeWidth = 2.0;
 
+    final Paint themeFillPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = Color(0xFF00A3FF)
+      ..strokeWidth = 5.0;
+
     // for (TextBlock block in recognizedText.blocks) {
+
     //   for (TextLine line in block.lines) {
     //     for (TextElement element in line.elements) {
     //       // print("draw rectangle for element: " + element.text);
@@ -70,7 +81,9 @@ class TextDetectorPainter extends CustomPainter {
 
     for (Rect selectedRect in selectedRects) {
       final scaledRect = scaleRect(selectedRect);
-      canvas.drawRect(scaledRect, bluePaint);
+      canvas.drawLine(
+          scaledRect.bottomLeft, scaledRect.bottomRight, themeFillPaint);
+      // canvas.drawRect(scaledRect, yellowStrokePaint);
     }
 
     canvas.drawRect(
