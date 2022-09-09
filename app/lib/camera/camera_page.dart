@@ -230,11 +230,8 @@ class CameraPageState extends State<CameraPage> {
       return Container();
     }
 
-    final painter = TextDetectorPainter(
-      _cameraImageSize!,
-      _recognizedText!,
-      [],
-    );
+    final painter =
+        TextDetectorPainter(_cameraImageSize!, _recognizedText!, [], null);
     return CustomPaint(painter: painter);
   }
 
@@ -504,28 +501,48 @@ class TextDetectionOverlay extends StatefulWidget {
 }
 
 class TextDetectionOverlayState extends State<TextDetectionOverlay> {
+  List<Rect> _selectedRects = [];
   List<SelectedTextElement> _selectedTextElements = [];
+  Offset? _dragStartPosition;
+  Rect? _selectionRect;
 
   @override
   Widget build(BuildContext context) {
-    log("selected text: ${_getSelectedText()}");
+    // log("selected text: ${_getSelectedText()}");
+    log("@>build");
+    log("@>build _selectionRect=" + _selectionRect.toString());
 
     return GestureDetector(
       onPanStart: (DragStartDetails details) {
         log("onPanStart");
+
         setState(() {
+          // WIP
+          _selectionRect = null;
+          _selectedRects = [];
+
           _selectedTextElements = [];
+          _dragStartPosition = details.localPosition;
         });
-        _handleDragPosition(details.localPosition);
+        // _handleDragPosition_OLD(details.localPosition);
       },
       onPanUpdate: (DragUpdateDetails details) {
-        _handleDragPosition(details.localPosition);
+        log("onPanUpdate");
+        log("update start position: " + _dragStartPosition.toString());
+        log("update position: " + details.localPosition.toString());
+        _handleDragUpdatePosition(details.localPosition);
+      },
+      onPanEnd: (DragEndDetails details) {
+        log("onPanEnd");
+        _dragStartPosition = null;
       },
       child: CustomPaint(
           painter: TextDetectorPainter(
         widget.cameraImageSize,
         widget.recognizedText,
-        _selectedTextElements.map((e) => e.textElement.boundingBox).toList(),
+        _selectedRects,
+        // _selectedTextElements.map((e) => e.textElement.boundingBox).toList(),
+        _selectionRect,
       )),
     );
   }
@@ -546,13 +563,100 @@ class TextDetectionOverlayState extends State<TextDetectionOverlay> {
         .join(" ");
   }
 
-  void _handleDragPosition(Offset dragPosition) {
+  void _handleDragUpdatePosition(Offset dragUpdatePosition) {
+    if (_dragStartPosition == null) {
+      return;
+    }
+
+    setState(() {
+      _selectionRect = Rect.fromPoints(_dragStartPosition!, dragUpdatePosition);
+      _selectedRects = [];
+    });
+
+    // TODO: check which lines intersect with the selection rectangle
+    // TODO: start and end position (or current update position) determine where to begin or stop on a line in terms of selecting words
+    // TODO: works when dragging down but not up (need some reverse trick)
+    // TODO: start and end position do not necessarily touch a word
+    // TODO: maybe use the selection rect and use the first word that intersects the rectangle
+    // TODO: check all lines that intersect the selection rect
+
+    // assuming the recognized text already sorts blocks, lines and elements from top to bottom and left to right.
+
+    for (TextBlock textBlock in widget.recognizedText.blocks) {
+      // TODO: select text blocks that match selection
+      final intersection = textBlock.boundingBox.intersect(_selectionRect!);
+      final selectionIntersectsBlock =
+          intersection.width >= 0 && intersection.height >= 0;
+      if (selectionIntersectsBlock) {
+        final alreadySelected = _selectedRects.contains(textBlock.boundingBox);
+        if (!alreadySelected) {
+          log("SETTING STATE");
+          setState(() {
+            _selectedRects = List.from(_selectedRects)
+              ..add(textBlock.boundingBox);
+          });
+        }
+      }
+
+      for (TextLine textLine in textBlock.lines) {
+        final intersection = textLine.boundingBox.intersect(_selectionRect!);
+        final rectanglesOverlap =
+            intersection.width >= 0 && intersection.height >= 0;
+        if (!rectanglesOverlap) {
+          continue;
+        }
+        log("overlap found with text line: " + textLine.text);
+
+        // selection rect:
+        // - start point should decide on which block and word to start
+        // - latest update point should decide on which block and word to end
+        // - everything in between should be selected
+
+        // TODO: if first text line that overlaps?
+        final isFirstLineThatOverlaps = _selectedTextElements.isEmpty;
+
+        // either left or right bottom of selection rect intersects with line or
+
+        // final isLastLineThatOverlaps = _selectedTextElements.isEmpty;
+        // final lineOverlapsWithBottomOfSelectionRect =
+
+        for (TextElement textElement in textLine.elements) {
+          // log("processing text element: ${textElement.text}");
+
+          // if (textElement.boundingBox.contains(_dragStartPosition!)) {
+          //   log("start word: " + textElement.text);
+          // }
+
+          // if (textElement.boundingBox.contains(dragUpdatePosition)) {
+          //   log("end word: " + textElement.text);
+          // }
+
+          // if (selectionRect.contains(textElement.boundingBox)) {
+          //   final alreadySelected = _selectedTextElements
+          //       .any((ste)kk
+          //   if (!alreadySelected) {
+          //     setState(() {
+          //       _selectedTextElements = List.from(_selectedTextElements)
+          //         ..add(SelectedTextElement(
+          //             textElement: textElement, textLine: textLine));
+          //     });
+          //   }
+
+          //   return;
+          // }
+        }
+      }
+    }
+  }
+
+  void _handleDragPosition_OLD(Offset dragPosition) {
     for (TextBlock textBlock in widget.recognizedText.blocks) {
       for (TextLine textLine in textBlock.lines) {
         for (TextElement textElement in textLine.elements) {
           if (textElement.boundingBox.contains(dragPosition)) {
-            if (!_selectedTextElements
-                .any((ste) => ste.textElement == textElement)) {
+            final alreadySelected = _selectedTextElements
+                .any((ste) => ste.textElement == textElement);
+            if (!alreadySelected) {
               setState(() {
                 _selectedTextElements = List.from(_selectedTextElements)
                   ..add(SelectedTextElement(

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,11 +8,14 @@ class TextDetectorPainter extends CustomPainter {
   final Size imageSize;
   final RecognizedText recognizedText;
   final List<Rect> selectedRects;
+  final Rect? selectionRect;
 
-  TextDetectorPainter(this.imageSize, this.recognizedText, this.selectedRects);
+  TextDetectorPainter(this.imageSize, this.recognizedText, this.selectedRects,
+      this.selectionRect);
 
   @override
   void paint(Canvas canvas, Size canvasSize) {
+    log("@>paint");
     // only works if aspect ratios match
 
     // TODO: aspect ratios do not match...
@@ -33,6 +37,11 @@ class TextDetectorPainter extends CustomPainter {
       ..color = Colors.red
       ..strokeWidth = 2.0;
 
+    final Paint yellowPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = Colors.yellow
+      ..strokeWidth = 2.0;
+
     final Paint bluePaint = Paint()
       ..style = PaintingStyle.stroke
       ..color = Colors.blue
@@ -41,7 +50,7 @@ class TextDetectorPainter extends CustomPainter {
     final Paint blackStrokePaint = Paint()
       ..style = PaintingStyle.stroke
       ..color = Colors.black
-      ..strokeWidth = 5.0;
+      ..strokeWidth = 2.0;
 
     final Paint yellowTransparentFillPaint = Paint()
       ..style = PaintingStyle.fill
@@ -54,7 +63,6 @@ class TextDetectorPainter extends CustomPainter {
       ..strokeWidth = 5.0;
 
     // for (TextBlock block in recognizedText.blocks) {
-
     //   for (TextLine line in block.lines) {
     //     for (TextElement element in line.elements) {
     //       // print("draw rectangle for element: " + element.text);
@@ -62,28 +70,23 @@ class TextDetectorPainter extends CustomPainter {
     //       final scaledRect = scaleRect(elementBoundingBox);
 
     //       canvas.drawRect(scaledRect, redPaint);
-
-    //       // TextPainter textPainter = TextPainter(
-    //       //   text: TextSpan(text: element.text),
-    //       //   textAlign: TextAlign.left,
-    //       //   textDirection: TextDirection.ltr,
-    //       // );
-
-    //       // textPainter.layout();
-    //       // textPainter.paint(canvas, scaledRect.topLeft);
     //     }
 
-    //     // canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
+    //     canvas.drawRect(scaleRect(line.boundingBox), yellowPaint);
     //   }
 
-    //   // canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
+    //   canvas.drawRect(scaleRect(block.boundingBox), bluePaint);
     // }
+
+    log("@@@@@@: " + selectionRect.toString());
+    if (selectionRect != null) {
+      final scaledRect = scaleRect(selectionRect!);
+      canvas.drawRect(scaledRect, blackStrokePaint);
+    }
 
     for (Rect selectedRect in selectedRects) {
       final scaledRect = scaleRect(selectedRect);
-      canvas.drawLine(
-          scaledRect.bottomLeft, scaledRect.bottomRight, themeFillPaint);
-      // canvas.drawRect(scaledRect, yellowStrokePaint);
+      canvas.drawRect(scaledRect, themeFillPaint);
     }
 
     canvas.drawRect(
@@ -100,6 +103,7 @@ class TextDetectorPainter extends CustomPainter {
   bool shouldRepaint(TextDetectorPainter oldDelegate) {
     return oldDelegate.imageSize != imageSize ||
         oldDelegate.recognizedText != recognizedText ||
-        oldDelegate.selectedRects != selectedRects;
+        oldDelegate.selectedRects != selectedRects ||
+        oldDelegate.selectionRect != selectionRect;
   }
 }
