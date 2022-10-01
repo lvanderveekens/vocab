@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import 'package:vocab/deck/deck_storage.dart';
@@ -402,11 +405,31 @@ class TapDialogState extends State<TapDialog> {
         ),
         Container(
             margin: EdgeInsets.only(top: 32.0, bottom: 32.0),
-            child: Center(
-                child: Text(widget.tappedOnWord!,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 4.0),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.volume_up),
+                    iconSize: 24.0,
+                    onPressed: () async {
+                      log("Pressed on icon");
+                      final player = AudioPlayer();
+
+                      // Cannot use BytesSource. It only works on Android...
+                      await player.play(AssetSource("test.mp3"));
+                    },
+                  ),
+                ),
+                Text(widget.tappedOnWord!,
                     style: TextStyle(
                       fontSize: 24.0,
-                    )))),
+                    ))
+              ],
+            )),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             padding: EdgeInsets.all(16.0),
