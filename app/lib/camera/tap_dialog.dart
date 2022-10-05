@@ -123,21 +123,8 @@ class TapDialogState extends State<TapDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              if (_showTranslatePage.value)
-                if (_showChangeLanguagePage)
-                  ..._buildChangeLanguagePage()
-                else
-                  ..._buildTranslatePage()
-              else
-                ..._buildTapPage()
+              _buildTapDialogPageContent(),
             ])));
-  }
-
-  List<Widget> _buildTapPage() {
-    return [
-      _buildDialogHeader(title: "Tap"),
-      _buildDialogContentWrapper(child: _buildTapDialogPageContent())
-    ];
   }
 
   List<Widget> _buildTranslatePage() {
@@ -398,38 +385,43 @@ class TapDialogState extends State<TapDialog> {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          "Tapped on word:",
-        ),
-        Container(
-            margin: EdgeInsets.only(top: 32.0, bottom: 32.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 4.0),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.volume_up),
-                    iconSize: 24.0,
-                    onPressed: () async {
-                      log("Pressed on icon");
-                      final player = AudioPlayer();
+        Column(children: [
+          Container(
+              margin: EdgeInsets.only(right: 24 + 4),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.volume_up),
+                  iconSize: 24.0,
+                  onPressed: () async {
+                    log("Pressed on icon");
+                    final player = AudioPlayer();
 
-                      // Cannot use BytesSource. It only works on Android...
-                      await player.play(AssetSource("test.mp3"));
-                    },
-                  ),
+                    // Cannot use BytesSource. It only works on Android...
+                    await player.play(AssetSource("test.mp3"));
+                  },
                 ),
-                Text(widget.tappedOnWord!,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                    ))
-              ],
-            )),
+                SizedBox(width: 4.0),
+                Container(
+                    // padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                    child: Text(
+                  widget.tappedOnWord!,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                  ),
+                )),
+              ])),
+          SizedBox(height: 16.0),
+          Text(
+            widget.tappedOnWord!,
+            style: TextStyle(
+              fontSize: 16.0,
+            ),
+          )
+        ]),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             padding: EdgeInsets.all(16.0),
