@@ -25,5 +25,7 @@ Obtained file from: https://datahub.io/core/language-codes
 
 Text recognition: https://developers.google.com/ml-kit/vision/text-recognition/languages
 
-Translation API: https://translation.googleapis.com/language/translate/v2/languages
+Translation: https://translation.googleapis.com/language/translate/v2/languages
+
+Text-to-Speech: GET https://texttospeech.googleapis.com/v1/voices
 
