@@ -387,14 +387,19 @@ class TapDialogState extends State<TapDialog> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Column(children: [
-          Container(
-              margin: EdgeInsets.only(right: 24 + 4),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
+        Container(
+            padding: EdgeInsets.only(top: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "Dutch",
+                  style: TextStyle(color: const Color(0xFF00A3FF)),
+                ),
                 IconButton(
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
-                  icon: Icon(Icons.volume_up),
+                  icon: Icon(Icons.swap_horiz),
                   iconSize: 24.0,
                   onPressed: () async {
                     log("Pressed on icon");
@@ -404,46 +409,73 @@ class TapDialogState extends State<TapDialog> {
                     await player.play(AssetSource("test.mp3"));
                   },
                 ),
-                SizedBox(width: 4.0),
-                Container(
-                    // padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                    child: Text(
-                  widget.tappedOnWord!,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                  ),
-                )),
-              ])),
-          SizedBox(height: 16.0),
-          Text(
-            widget.tappedOnWord!,
-            style: TextStyle(
-              fontSize: 16.0,
-            ),
-          )
-        ]),
+                Text(
+                  "English",
+                  style: TextStyle(color: const Color(0xFF00A3FF)),
+                ),
+              ],
+            )),
+        Container(
+            padding: EdgeInsets.only(top: 32.0, bottom: 32.0),
+            child: Column(children: [
+              Container(
+                  margin: EdgeInsets.only(right: 24 + 4),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
+                      icon: Icon(Icons.volume_up),
+                      iconSize: 24.0,
+                      onPressed: () async {
+                        log("Pressed on icon");
+                        final player = AudioPlayer();
+
+                        // Cannot use BytesSource. It only works on Android...
+                        await player.play(AssetSource("test.mp3"));
+                      },
+                    ),
+                    SizedBox(width: 4.0),
+                    Container(
+                        // padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                        child: Text(
+                      widget.tappedOnWord!,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                      ),
+                    )),
+                  ])),
+              SizedBox(height: 16.0),
+              Text(
+                "monkey",
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              )
+            ])),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             padding: EdgeInsets.all(16.0),
+            side: BorderSide.none,
+            backgroundColor: const Color(0xFF00A3FF),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10.0),
+                bottomRight: Radius.circular(10.0),
+              ),
             ),
           ),
           child: Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Translate'),
-                  const Icon(Icons.translate, size: 24.0),
-                ],
-              )),
+            width: double.infinity,
+            child: Center(
+                child: Text('Add to deck',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold))),
+          ),
           onPressed: () {
-            log("Pressed on translate");
-            setState(() {
-              this._showTranslatePage.value = true;
-            });
+            log("Pressed on 'Add to deck'");
+            // setState(() {
+            //   // this._showTranslatePage.value = true;
+            // });
           },
         ),
       ],

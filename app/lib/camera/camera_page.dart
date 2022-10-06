@@ -352,7 +352,7 @@ class CameraPageState extends State<CameraPage> {
       children: <Widget>[
         FloatingActionButton.extended(
             onPressed: () {
-              showTapDialog("ape");
+              showTapDialog("aap");
             },
             backgroundColor: Colors.blue,
             icon: const Icon(Icons.document_scanner),

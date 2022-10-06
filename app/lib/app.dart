@@ -79,31 +79,14 @@ class AppState extends State<App> {
 
     return MaterialApp(
         theme: ThemeData(
-          textTheme: ThemeData(
-                  textTheme: const TextTheme(
-            bodyText1: TextStyle(fontSize: 16.0),
-            bodyText2: TextStyle(fontSize: 16.0),
-            button: TextStyle(fontSize: 16.0),
-          )).textTheme.apply(
-                bodyColor: Colors.black,
-              ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-            primary: Colors.black,
-          )),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-            style: OutlinedButton.styleFrom(
-              primary: Colors.black,
-            ).copyWith(
-              side: MaterialStateProperty.resolveWith((states) {
-                // if (states.contains(MaterialState.disabled)) {
-                //   return BorderSide(color: Colors.grey);
-                // }
-                return BorderSide(color: Colors.black26);
-              }),
-            ),
-          ),
-        ),
+            textTheme: ThemeData(
+                    textTheme: const TextTheme(
+          bodyText1: TextStyle(fontSize: 16.0),
+          bodyText2: TextStyle(fontSize: 16.0),
+          button: TextStyle(fontSize: 16.0),
+        )).textTheme.apply(
+                  bodyColor: Colors.black,
+                )),
         home: Scaffold(
             appBar: PreferredSize(
                 preferredSize: Size.fromHeight(50.0),
