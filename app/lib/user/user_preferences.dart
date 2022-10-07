@@ -1,10 +1,10 @@
 class UserPreferences {
-  String? sourceLanguageCode;
-  String? targetLanguageCode;
+  String sourceLanguageCode;
+  String targetLanguageCode;
 
   UserPreferences({
-    this.sourceLanguageCode,
-    this.targetLanguageCode,
+    required this.sourceLanguageCode,
+    required this.targetLanguageCode,
   });
 
   factory UserPreferences.fromJson(Map<String, dynamic> json) {

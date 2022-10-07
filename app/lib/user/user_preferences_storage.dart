@@ -21,7 +21,10 @@ class UserPreferencesStorage {
       return userPreferences;
     }
 
-    return UserPreferences();
+    return UserPreferences(
+      sourceLanguageCode: 'it',
+      targetLanguageCode: 'en',
+    );
   }
 
   Future<void> save(UserPreferences userPreferences) async {
