@@ -222,23 +222,17 @@ class TapDialogState extends State<TapDialog> {
   // VoidCallback _onApply(VoidCallback onBack) {
   //   return () {
   //     log("Pressed on apply");
-  //     setState(() {
-  //       _translatePageSourceLanguage = _changeLanguagePageSourceLanguage;
-  //       _translatePageTargetLanguage = _changeLanguagePageTargetLanguage;
-  //     });
-  //     _saveLanguagesInUserPreferences();
-  //     _translate();
   //     onBack();
   //   };
   // }
 
-  // void _saveLanguagesInUserPreferences() {
-  //   if (_userPreferences != null) {
-  //     _userPreferences!.sourceLanguageCode = _translatePageSourceLanguage.code;
-  //     _userPreferences!.targetLanguageCode = _translatePageTargetLanguage.code;
-  //     widget.userPreferencesStorage.save(_userPreferences!);
-  //   }
-  // }
+  void _saveLanguagesInUserPreferences() {
+    if (_userPreferences != null) {
+      _userPreferences!.sourceLanguageCode = _translatePageSourceLanguage!.code;
+      _userPreferences!.targetLanguageCode = _translatePageTargetLanguage!.code;
+      widget.userPreferencesStorage.save(_userPreferences!);
+    }
+  }
 
   Widget _buildDialogContentWrapper({required Widget child}) {
     return Container(
@@ -396,11 +390,17 @@ class TapDialogState extends State<TapDialog> {
                   icon: Icon(Icons.swap_horiz),
                   iconSize: 24.0,
                   onPressed: () async {
-                    log("Pressed on icon");
-                    final player = AudioPlayer();
+                    setState(() {
+                      var oldTranslatePageSourceLanguage =
+                          _translatePageSourceLanguage;
 
-                    // Cannot use BytesSource. It only works on Android...
-                    await player.play(AssetSource("test.mp3"));
+                      _translatePageSourceLanguage =
+                          _translatePageTargetLanguage;
+                      _translatePageTargetLanguage =
+                          oldTranslatePageSourceLanguage;
+                    });
+                    _saveLanguagesInUserPreferences();
+                    _translate();
                   },
                 ),
                 Expanded(
