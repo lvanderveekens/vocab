@@ -10,8 +10,8 @@ import 'package:uuid/uuid.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/secret/secrets.dart';
-import 'package:vocab/translation/google_translation_languages.dart';
-import 'package:vocab/translation/google_translation_response.dart';
+import 'package:vocab/translation/google_cloud_translation_languages.dart';
+import 'package:vocab/translation/google_cloud_translation_response.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -21,7 +21,7 @@ class TapDialog extends StatefulWidget {
   final bool translationEnabled;
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
-  final List<GoogleTranslationLanguage> googleTranslationLanguages;
+  final List<GoogleCloudTranslationLanguage> googleTranslationLanguages;
   final UserPreferences? userPreferences;
 
   const TapDialog({
@@ -40,8 +40,8 @@ class TapDialog extends StatefulWidget {
 }
 
 class TapDialogState extends State<TapDialog> {
-  GoogleTranslationLanguage? _translatePageSourceLanguage;
-  GoogleTranslationLanguage? _translatePageTargetLanguage;
+  GoogleCloudTranslationLanguage? _translatePageSourceLanguage;
+  GoogleCloudTranslationLanguage? _translatePageTargetLanguage;
   String? _translation;
 
   @override
@@ -72,7 +72,7 @@ class TapDialogState extends State<TapDialog> {
   }
 
   void _setTranslatePageSourceLanguage(
-      GoogleTranslationLanguage newSourceLanguage) {
+      GoogleCloudTranslationLanguage newSourceLanguage) {
     log("@>_setChangeLanguagePageSourceLanguage");
 
     var oldSourceLanguage = _translatePageSourceLanguage;
@@ -87,7 +87,7 @@ class TapDialogState extends State<TapDialog> {
   }
 
   void _setTranslatePageTargetLanguage(
-      GoogleTranslationLanguage newTargetLanguage) {
+      GoogleCloudTranslationLanguage newTargetLanguage) {
     log("@>_setTranslatePageTargetLanguage");
 
     var oldTargetLanguage = _translatePageTargetLanguage;
@@ -102,7 +102,8 @@ class TapDialogState extends State<TapDialog> {
     _saveLanguagesInUserPreferences();
   }
 
-  GoogleTranslationLanguage getGoogleTranslationLanguageByCode(String code) {
+  GoogleCloudTranslationLanguage getGoogleTranslationLanguageByCode(
+      String code) {
     return widget.googleTranslationLanguages.firstWhere((gtl) {
       return gtl.language.hasCode(code);
     });
@@ -148,7 +149,7 @@ class TapDialogState extends State<TapDialog> {
                               isExpanded: true,
                               value: _translatePageSourceLanguage,
                               items: widget.googleTranslationLanguages
-                                  .map((GoogleTranslationLanguage gtl) {
+                                  .map((GoogleCloudTranslationLanguage gtl) {
                                 return DropdownMenuItem(
                                   value: gtl,
                                   child: Text(
@@ -161,7 +162,8 @@ class TapDialogState extends State<TapDialog> {
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (GoogleTranslationLanguage? newValue) {
+                              onChanged:
+                                  (GoogleCloudTranslationLanguage? newValue) {
                                 _setTranslatePageSourceLanguage(newValue!);
                               },
                               selectedItemBuilder: (con) {
@@ -205,7 +207,7 @@ class TapDialogState extends State<TapDialog> {
                               isExpanded: true,
                               value: _translatePageTargetLanguage,
                               items: widget.googleTranslationLanguages
-                                  .map((GoogleTranslationLanguage gtl) {
+                                  .map((GoogleCloudTranslationLanguage gtl) {
                                 return DropdownMenuItem(
                                   value: gtl,
                                   child: Text(
@@ -218,7 +220,8 @@ class TapDialogState extends State<TapDialog> {
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (GoogleTranslationLanguage? newValue) {
+                              onChanged:
+                                  (GoogleCloudTranslationLanguage? newValue) {
                                 _setTranslatePageTargetLanguage(newValue!);
                               },
                               selectedItemBuilder: (con) {
@@ -367,7 +370,7 @@ class TapDialogState extends State<TapDialog> {
     }
 
     final googleTranslationResponse =
-        GoogleTranslationResponse.fromJson(jsonDecode(response.body));
+        GoogleCloudTranslationResponse.fromJson(jsonDecode(response.body));
 
     return googleTranslationResponse.data.translations[0].translatedText;
   }

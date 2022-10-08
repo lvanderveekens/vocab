@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vocab/text_recognition/text_recognition_languages.dart';
+import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
 import 'package:vocab/widgets/bullet_text.dart';
 
 class InfoDialog extends StatefulWidget {
   final VoidCallback onClose;
-  final List<TextRecognitionLanguage> textRecognitionLanguages;
+  final List<MLKitTextRecognitionLanguage> textRecognitionLanguages;
 
   const InfoDialog({
     Key? key,

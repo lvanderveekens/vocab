@@ -75,8 +75,9 @@ flutter:
   assets:
     - assets/secrets.json
     - assets/languages.json
-    - assets/google_translation_languages.json
-    - assets/text_recognition_languages.json
+    - assets/google_cloud_translation_languages.json
+    - assets/google_cloud_text_to_speech_get_voices_response.json
+    - assets/ml_kit_text_recognition_languages.json
     - assets/app-icon.png
     - assets/icon.svg
     - assets/test.mp3

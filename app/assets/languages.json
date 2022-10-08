@@ -540,7 +540,8 @@
     {
         "name": "English",
         "iso639_2b": "eng",
-        "iso639_1": "en"
+        "iso639_1": "en",
+        "bcp47": "en-US"
     },
     {
         "name": "English, Middle (1100-1500)",

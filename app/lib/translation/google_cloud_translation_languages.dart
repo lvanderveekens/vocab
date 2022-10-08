@@ -6,25 +6,26 @@ import 'package:vocab/language/languages.dart';
 
 // https://cloud.google.com/translate/docs/languages
 
-class GoogleTranslationLanguages {
-  static const String pathToFile = "assets/google_translation_languages.json";
+class GoogleCloudTranslationLanguages {
+  static const String pathToFile =
+      "assets/google_cloud_translation_languages.json";
 
-  GoogleTranslationLanguages();
+  GoogleCloudTranslationLanguages();
 
-  static Future<List<GoogleTranslationLanguage>> load() async {
+  static Future<List<GoogleCloudTranslationLanguage>> load() async {
     // TODO: reads weird
     var languages = await Languages.getInstance();
 
-    return rootBundle.loadStructuredData<List<GoogleTranslationLanguage>>(
+    return rootBundle.loadStructuredData<List<GoogleCloudTranslationLanguage>>(
         pathToFile, (jsonStr) async {
       var languagesJson = json.decode(jsonStr)['data']['languages'] as List;
 
-      List<GoogleTranslationLanguage> googleTranslationLanguages =
+      List<GoogleCloudTranslationLanguage> googleTranslationLanguages =
           languagesJson.map((languageJson) {
         var code = languageJson['language'];
 
-        return GoogleTranslationLanguage(
-            code: code, language: languages.findByCode(code)!);
+        return GoogleCloudTranslationLanguage(
+            code: code, language: languages.findByCode(code));
       }).toList();
 
       googleTranslationLanguages
@@ -35,11 +36,11 @@ class GoogleTranslationLanguages {
   }
 }
 
-class GoogleTranslationLanguage {
+class GoogleCloudTranslationLanguage {
   final String code;
   final Language language;
 
-  const GoogleTranslationLanguage({
+  const GoogleCloudTranslationLanguage({
     required this.code,
     required this.language,
   });

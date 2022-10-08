@@ -36,9 +36,9 @@ class Languages {
 
   Languages({required this.languageList});
 
-  Language? findByCode(String code) {
-    try {
-      return languageList.firstWhere((l) {
+  Language findByCode(String code) {
+    return languageList.firstWhere(
+      (l) {
         // from simple to complex
         if (l.iso639_1 == code) {
           return true;
@@ -56,10 +56,10 @@ class Languages {
           return true;
         }
         return false;
-      });
-    } on StateError catch (e) {
-      log("State error for code: " + code);
-      log(e.toString());
-    }
+      },
+      orElse: () {
+        throw ArgumentError("Language not found", code);
+      },
+    );
   }
 }

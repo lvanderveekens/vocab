@@ -17,8 +17,8 @@ import 'package:vocab/language/language.dart';
 import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
-import 'package:vocab/text_recognition/text_recognition_languages.dart';
-import 'package:vocab/translation/google_translation_languages.dart';
+import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
+import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 import 'package:vocab/widgets/bullet_text.dart';
@@ -28,8 +28,8 @@ import '../deck/deck_storage.dart';
 class CameraPage extends StatefulWidget {
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
-  final List<GoogleTranslationLanguage> googleTranslationLanguages;
-  final List<TextRecognitionLanguage> textRecognitionLanguages;
+  final List<GoogleCloudTranslationLanguage> googleTranslationLanguages;
+  final List<MLKitTextRecognitionLanguage> textRecognitionLanguages;
   final UserPreferences? userPreferences;
 
   const CameraPage({

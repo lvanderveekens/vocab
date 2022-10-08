@@ -7,8 +7,9 @@ import 'package:vocab/language/language.dart';
 
 import 'package:vocab/camera/camera_page.dart';
 import 'package:vocab/language/languages.dart';
-import 'package:vocab/text_recognition/text_recognition_languages.dart';
-import 'package:vocab/translation/google_translation_languages.dart';
+import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
+import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
+import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -28,8 +29,9 @@ class AppState extends State<App> {
   final userPreferencesStorage = UserPreferencesStorage();
 
   List<Language> _languages = [];
-  List<GoogleTranslationLanguage> _googleTranslationLanguages = [];
-  List<TextRecognitionLanguage> _textRecognitionLanguages = [];
+  List<GoogleCloudTranslationLanguage> _translationLanguages = [];
+  List<GoogleCloudTextToSpeechLanguage> _textToSpeechTranslationLanguages = [];
+  List<MLKitTextRecognitionLanguage> _textRecognitionLanguages = [];
 
   UserPreferences? _userPreferences;
 
@@ -41,14 +43,20 @@ class AppState extends State<App> {
     Languages.getInstance().then((value) {
       _languages = value.languageList;
     });
-    log("Loading Google Translation languages");
-    GoogleTranslationLanguages.load().then((value) {
+    log("Loading Google Cloud Translation languages");
+    GoogleCloudTranslationLanguages.load().then((value) {
       setState(() {
-        _googleTranslationLanguages = value;
+        _translationLanguages = value;
       });
     });
-    log("Loading text recognition languages");
-    TextRecognitionLanguages.load().then((value) {
+    log("Loading Google Cloud Text-to-speech languages");
+    GoogleCloudTextToSpeechLanguages.load().then((value) {
+      setState(() {
+        _textToSpeechTranslationLanguages = value;
+      });
+    });
+    log("Loading ML Kit Text Recognition languages");
+    MLKitTextRecognitionLanguages.load().then((value) {
       setState(() {
         _textRecognitionLanguages = value;
       });
@@ -67,7 +75,7 @@ class AppState extends State<App> {
       CameraPage(
         deckStorage: deckStorage,
         userPreferencesStorage: userPreferencesStorage,
-        googleTranslationLanguages: _googleTranslationLanguages,
+        googleTranslationLanguages: _translationLanguages,
         textRecognitionLanguages: _textRecognitionLanguages,
         userPreferences: _userPreferences,
       ),

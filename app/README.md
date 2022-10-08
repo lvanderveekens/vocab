@@ -23,9 +23,9 @@ Obtained file from: https://datahub.io/core/language-codes
 
 ### Supported languages
 
-Text recognition: https://developers.google.com/ml-kit/vision/text-recognition/languages
+ML Kit text recognition: https://developers.google.com/ml-kit/vision/text-recognition/languages
 
-Translation: https://translation.googleapis.com/language/translate/v2/languages
+Google Cloud Translation: https://translation.googleapis.com/language/translate/v2/languages
 
-Text-to-Speech: GET https://texttospeech.googleapis.com/v1/voices
+Google Cloud Text-to-Speech: GET https://texttospeech.googleapis.com/v1/voices
 
