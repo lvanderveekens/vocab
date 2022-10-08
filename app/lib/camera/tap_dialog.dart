@@ -38,15 +38,15 @@ class TapDialog extends StatefulWidget {
 }
 
 class TapDialogState extends State<TapDialog> {
-  final ValueNotifier<bool> _showTranslatePage = ValueNotifier(false);
-  bool _showChangeLanguagePage = false;
+  // final ValueNotifier<bool> _showTranslatePage = ValueNotifier(false);
+  // bool _showChangeLanguagePage = false;
 
   GoogleTranslationLanguage? _translatePageSourceLanguage;
   GoogleTranslationLanguage? _translatePageTargetLanguage;
   String? _translation;
 
-  late GoogleTranslationLanguage _changeLanguagePageSourceLanguage;
-  late GoogleTranslationLanguage _changeLanguagePageTargetLanguage;
+  // late GoogleTranslationLanguage _changeLanguagePageSourceLanguage;
+  // late GoogleTranslationLanguage _changeLanguagePageTargetLanguage;
 
   UserPreferences? _userPreferences;
 
@@ -67,37 +67,39 @@ class TapDialogState extends State<TapDialog> {
     });
   }
 
-  void _setChangeLanguagePageSourceLanguage(
-      GoogleTranslationLanguage sourceLanguage) {
+  void _setTranslatePageSourceLanguage(
+      GoogleTranslationLanguage newSourceLanguage) {
     log("@>_setChangeLanguagePageSourceLanguage");
 
-    var oldSourceLanguage = _changeLanguagePageSourceLanguage;
+    var oldSourceLanguage = _translatePageSourceLanguage;
 
     setState(() {
-      _changeLanguagePageSourceLanguage = sourceLanguage;
-      if (_changeLanguagePageTargetLanguage == sourceLanguage) {
-        _changeLanguagePageTargetLanguage = oldSourceLanguage;
+      _translatePageSourceLanguage = newSourceLanguage;
+      if (_translatePageTargetLanguage == newSourceLanguage) {
+        _translatePageTargetLanguage = oldSourceLanguage;
       }
     });
 
-    // TODO: do after apply
-    // TODO: set translate languages
-    // _saveLanguagesInUserPreferences();
-    // _translate();
+    _saveLanguagesInUserPreferences();
+    _translate();
   }
-// void _setChangeLanguagePageTargetLanguage(
-//       GoogleTranslationLanguage newTargetLanguage) {
-//     log("@>_setChangeLanguagePageTargetLanguage");
 
-//     var oldTargetLanguage = _translatePageTargetLanguage;
+  void _setTranslatePageTargetLanguage(
+      GoogleTranslationLanguage newTargetLanguage) {
+    log("@>_setTranslatePageTargetLanguage");
 
-//     setState(() {
-//       _changeLanguagePageTargetLanguage = newTargetLanguage;
-//       if (_changeLanguagePageSourceLanguage == newTargetLanguage) {
-//         _changeLanguagePageSourceLanguage = oldTargetLanguage;
-//       }
-//     });
-//   }
+    var oldTargetLanguage = _translatePageTargetLanguage;
+
+    setState(() {
+      _translatePageTargetLanguage = newTargetLanguage;
+      if (_translatePageSourceLanguage == newTargetLanguage) {
+        _translatePageSourceLanguage = oldTargetLanguage;
+      }
+    });
+
+    _saveLanguagesInUserPreferences();
+    _translate();
+  }
 
   GoogleTranslationLanguage getGoogleTranslationLanguageByCode(String code) {
     return widget.googleTranslationLanguages.firstWhere((gtl) {
@@ -376,14 +378,46 @@ class TapDialogState extends State<TapDialog> {
         Container(
             padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                    child: Center(
-                        child: Text(
-                  _translatePageSourceLanguage?.language.name ?? '',
-                  style: TextStyle(color: Color(0xFF00A3FF)),
-                ))),
+                  child: Center(
+                      child: _translatePageSourceLanguage != null
+                          ? DropdownButton(
+                              underline: Container(),
+                              iconSize: 0.0,
+                              isDense: true,
+                              isExpanded: true,
+                              value: _translatePageSourceLanguage,
+                              items: widget.googleTranslationLanguages
+                                  .map((GoogleTranslationLanguage gtl) {
+                                return DropdownMenuItem(
+                                  value: gtl,
+                                  child: Text(
+                                    gtl.language.name,
+                                    style: TextStyle(
+                                        color:
+                                            gtl == _translatePageSourceLanguage
+                                                ? Color(0xFF00A3FF)
+                                                : null),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (GoogleTranslationLanguage? newValue) {
+                                _setTranslatePageSourceLanguage(newValue!);
+                              },
+                              selectedItemBuilder: (con) {
+                                return widget.googleTranslationLanguages
+                                    .map((gtl) {
+                                  return Center(
+                                      child: Text(
+                                    gtl.language.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Color(0xFF00A3FF)),
+                                  ));
+                                }).toList();
+                              })
+                          : null),
+                ),
                 IconButton(
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
@@ -404,11 +438,44 @@ class TapDialogState extends State<TapDialog> {
                   },
                 ),
                 Expanded(
-                    child: Center(
-                        child: Text(
-                  _translatePageTargetLanguage?.language.name ?? '',
-                  style: TextStyle(color: const Color(0xFF00A3FF)),
-                ))),
+                  child: Center(
+                      child: _translatePageTargetLanguage != null
+                          ? DropdownButton(
+                              underline: Container(),
+                              iconSize: 0.0,
+                              isDense: true,
+                              isExpanded: true,
+                              value: _translatePageTargetLanguage,
+                              items: widget.googleTranslationLanguages
+                                  .map((GoogleTranslationLanguage gtl) {
+                                return DropdownMenuItem(
+                                  value: gtl,
+                                  child: Text(
+                                    gtl.language.name,
+                                    style: TextStyle(
+                                        color:
+                                            gtl == _translatePageTargetLanguage
+                                                ? Color(0xFF00A3FF)
+                                                : null),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (GoogleTranslationLanguage? newValue) {
+                                _setTranslatePageTargetLanguage(newValue!);
+                              },
+                              selectedItemBuilder: (con) {
+                                return widget.googleTranslationLanguages
+                                    .map((gtl) {
+                                  return Center(
+                                      child: Text(
+                                    gtl.language.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Color(0xFF00A3FF)),
+                                  ));
+                                }).toList();
+                              })
+                          : null),
+                ),
               ],
             )),
         Container(
@@ -435,9 +502,7 @@ class TapDialogState extends State<TapDialog> {
                         },
                       )),
                 ),
-                // SizedBox(width: 4.0),
                 Container(
-                    // padding: EdgeInsets.only(left: 30.0, right: 30.0),
                     child: Text(
                   widget.tappedOnWord!,
                   style: TextStyle(
