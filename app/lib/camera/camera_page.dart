@@ -19,6 +19,7 @@ import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:vocab/text_recognition/text_recognition_languages.dart';
 import 'package:vocab/translation/google_translation_languages.dart';
+import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 import 'package:vocab/widgets/bullet_text.dart';
 
@@ -29,6 +30,7 @@ class CameraPage extends StatefulWidget {
   final UserPreferencesStorage userPreferencesStorage;
   final List<GoogleTranslationLanguage> googleTranslationLanguages;
   final List<TextRecognitionLanguage> textRecognitionLanguages;
+  final UserPreferences? userPreferences;
 
   const CameraPage({
     Key? key,
@@ -36,6 +38,7 @@ class CameraPage extends StatefulWidget {
     required this.userPreferencesStorage,
     required this.googleTranslationLanguages,
     required this.textRecognitionLanguages,
+    required this.userPreferences,
   }) : super(key: key);
 
   @override
@@ -52,7 +55,7 @@ class CameraPageState extends State<CameraPage> {
   bool _cameraAvailable = true;
   bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = true;
+  bool _translationEnabled = false;
 
   bool _processingCameraImage = false;
 
@@ -398,6 +401,7 @@ class CameraPageState extends State<CameraPage> {
               translationEnabled: _translationEnabled,
               userPreferencesStorage: widget.userPreferencesStorage,
               googleTranslationLanguages: widget.googleTranslationLanguages,
+              userPreferences: widget.userPreferences,
             ));
   }
 

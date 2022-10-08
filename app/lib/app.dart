@@ -9,6 +9,7 @@ import 'package:vocab/camera/camera_page.dart';
 import 'package:vocab/language/languages.dart';
 import 'package:vocab/text_recognition/text_recognition_languages.dart';
 import 'package:vocab/translation/google_translation_languages.dart';
+import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
 import 'deck/deck_page.dart';
@@ -30,21 +31,33 @@ class AppState extends State<App> {
   List<GoogleTranslationLanguage> _googleTranslationLanguages = [];
   List<TextRecognitionLanguage> _textRecognitionLanguages = [];
 
+  UserPreferences? _userPreferences;
+
   @override
   initState() {
     super.initState();
 
+    log("Loading languages");
     Languages.getInstance().then((value) {
       _languages = value.languageList;
     });
+    log("Loading Google Translation languages");
     GoogleTranslationLanguages.load().then((value) {
       setState(() {
         _googleTranslationLanguages = value;
       });
     });
+    log("Loading text recognition languages");
     TextRecognitionLanguages.load().then((value) {
       setState(() {
         _textRecognitionLanguages = value;
+      });
+    });
+
+    log("Loading user preferences...");
+    userPreferencesStorage.get().then((value) {
+      setState(() {
+        _userPreferences = value;
       });
     });
   }
@@ -56,6 +69,7 @@ class AppState extends State<App> {
         userPreferencesStorage: userPreferencesStorage,
         googleTranslationLanguages: _googleTranslationLanguages,
         textRecognitionLanguages: _textRecognitionLanguages,
+        userPreferences: _userPreferences,
       ),
       DeckPage(
         deckStorage: deckStorage,

@@ -22,6 +22,7 @@ class TapDialog extends StatefulWidget {
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
   final List<GoogleTranslationLanguage> googleTranslationLanguages;
+  final UserPreferences? userPreferences;
 
   const TapDialog({
     Key? key,
@@ -31,6 +32,7 @@ class TapDialog extends StatefulWidget {
     required this.deckStorage,
     required this.userPreferencesStorage,
     required this.googleTranslationLanguages,
+    required this.userPreferences,
   }) : super(key: key);
 
   @override
@@ -38,33 +40,35 @@ class TapDialog extends StatefulWidget {
 }
 
 class TapDialogState extends State<TapDialog> {
-  // final ValueNotifier<bool> _showTranslatePage = ValueNotifier(false);
-  // bool _showChangeLanguagePage = false;
-
   GoogleTranslationLanguage? _translatePageSourceLanguage;
   GoogleTranslationLanguage? _translatePageTargetLanguage;
   String? _translation;
 
-  // late GoogleTranslationLanguage _changeLanguagePageSourceLanguage;
-  // late GoogleTranslationLanguage _changeLanguagePageTargetLanguage;
-
-  UserPreferences? _userPreferences;
-
   @override
-  initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    log("@>TapDialogState#build (widget.userPreferences=${widget.userPreferences})");
 
-    log("Loading user preferences...");
-    widget.userPreferencesStorage.get().then((value) {
-      _userPreferences = value;
-
-      _translatePageSourceLanguage = getGoogleTranslationLanguageByCode(
-          _userPreferences!.sourceLanguageCode);
-      _translatePageTargetLanguage = getGoogleTranslationLanguageByCode(
-          _userPreferences!.targetLanguageCode);
-
+    if (widget.userPreferences != null) {
+      log("setting source and target languages");
+      setState(() {
+        _translatePageSourceLanguage = getGoogleTranslationLanguageByCode(
+            widget.userPreferences!.sourceLanguageCode);
+        _translatePageTargetLanguage = getGoogleTranslationLanguageByCode(
+            widget.userPreferences!.targetLanguageCode);
+      });
       _translate();
-    });
+    }
+
+    return Dialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Container(
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+              _buildTapDialogPageContent(),
+            ])));
   }
 
   void _setTranslatePageSourceLanguage(
@@ -79,9 +83,7 @@ class TapDialogState extends State<TapDialog> {
         _translatePageTargetLanguage = oldSourceLanguage;
       }
     });
-
     _saveLanguagesInUserPreferences();
-    _translate();
   }
 
   void _setTranslatePageTargetLanguage(
@@ -98,7 +100,6 @@ class TapDialogState extends State<TapDialog> {
     });
 
     _saveLanguagesInUserPreferences();
-    _translate();
   }
 
   GoogleTranslationLanguage getGoogleTranslationLanguageByCode(String code) {
@@ -107,132 +108,13 @@ class TapDialogState extends State<TapDialog> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              _buildTapDialogPageContent(),
-            ])));
-  }
-
-  // List<Widget> _buildTranslatePage() {
-  //   log("@>_buildTranslatePage");
-
-  //   return [
-  //     _buildDialogHeader(
-  //         title: "Translate",
-  //         onBack: () {
-  //           setState(() {
-  //             this._showTranslatePage.value = false;
-  //           });
-  //         }),
-  //     _buildDialogContentWrapper(child: _buildTranslatePageContent())
-  //   ];
-  // }
-
-  // List<Widget> _buildChangeLanguagePage() {
-  //   log("@>_buildChangeLanguagePage");
-  //   var onBack = () => setState(() {
-  //         _showChangeLanguagePage = false;
-  //       });
-
-  //   return [
-  //     _buildDialogHeader(title: "Change language", onBack: onBack),
-  //     _buildDialogContentWrapper(child: _buildChangeLanguagePageContent(onBack))
-  //   ];
-  // }
-
-  // Widget _buildChangeLanguagePageContent(
-  //   VoidCallback onBack,
-  // ) {
-  //   log("@>_buildChangeLanguagePageContent");
-  //   // _changeLanguagePageSourceLanguage = sourceLanguage;
-  //   // _changeLanguagePageTargetLanguage = targetLanguage;
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Container(
-  //           width: double.infinity,
-  //           margin: const EdgeInsets.only(bottom: 16.0),
-  //           child:
-  //               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //             const Text("Original"),
-  //             DropdownButton(
-  //               isExpanded: true,
-  //               value: _changeLanguagePageSourceLanguage,
-  //               icon: const Icon(Icons.keyboard_arrow_down),
-  //               items: widget.googleTranslationLanguages
-  //                   .map((GoogleTranslationLanguage gtl) {
-  //                 return DropdownMenuItem(
-  //                   value: gtl,
-  //                   child: Text(gtl.language.name),
-  //                 );
-  //               }).toList(),
-  //               onChanged: (GoogleTranslationLanguage? newValue) {
-  //                 _setChangeLanguagePageSourceLanguage(newValue!);
-  //               },
-  //             )
-  //           ])),
-  //       Container(
-  //           width: double.infinity,
-  //           margin: EdgeInsets.only(bottom: 16.0),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               const Text("Translation"),
-  //               DropdownButton(
-  //                 isExpanded: true,
-  //                 value: _changeLanguagePageTargetLanguage,
-  //                 icon: const Icon(Icons.keyboard_arrow_down),
-  //                 items: widget.googleTranslationLanguages
-  //                     .map((GoogleTranslationLanguage gtl) {
-  //                   return DropdownMenuItem(
-  //                     value: gtl,
-  //                     child: Text(gtl.language.name),
-  //                   );
-  //                 }).toList(),
-  //                 onChanged: (GoogleTranslationLanguage? newValue) {
-  //                   _setChangeLanguagePageTargetLanguage(newValue!);
-  //                 },
-  //               ),
-  //             ],
-  //           )),
-  //       Container(
-  //           width: double.infinity,
-  //           alignment: Alignment.centerRight,
-  //           child: ElevatedButton(
-  //             style: ElevatedButton.styleFrom(
-  //               primary: Color(0xFF00A3FF),
-  //               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(10.0),
-  //               ),
-  //             ),
-  //             child: Text("Apply"),
-  //             onPressed: _onApply(onBack),
-  //           ))
-  //     ],
-  //   );
-  // }
-
-  // VoidCallback _onApply(VoidCallback onBack) {
-  //   return () {
-  //     log("Pressed on apply");
-  //     onBack();
-  //   };
-  // }
-
   void _saveLanguagesInUserPreferences() {
-    if (_userPreferences != null) {
-      _userPreferences!.sourceLanguageCode = _translatePageSourceLanguage!.code;
-      _userPreferences!.targetLanguageCode = _translatePageTargetLanguage!.code;
-      widget.userPreferencesStorage.save(_userPreferences!);
+    if (widget.userPreferences != null) {
+      widget.userPreferences!.sourceLanguageCode =
+          _translatePageSourceLanguage!.code;
+      widget.userPreferences!.targetLanguageCode =
+          _translatePageTargetLanguage!.code;
+      widget.userPreferencesStorage.save(widget.userPreferences!);
     }
   }
 
@@ -243,129 +125,6 @@ class TapDialogState extends State<TapDialog> {
       child: child,
     );
   }
-
-  // Widget _buildTranslatePageContent() {
-  //   // TODO: right place?
-  //   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //     Container(
-  //       width: double.infinity,
-  //       padding: const EdgeInsets.all(16.0),
-  //       margin: const EdgeInsets.only(bottom: 32.0),
-  //       decoration: BoxDecoration(
-  //           border: Border.all(color: Colors.black26, width: 1.0),
-  //           borderRadius: BorderRadius.circular(10.0)),
-  //       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //         Container(
-  //             margin: EdgeInsets.only(bottom: 8.0),
-  //             child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   // TODO: not null safe
-  //                   Text(this._translatePageSourceLanguage.language.name,
-  //                       style: TextStyle(
-  //                           color: Color(0xFF00A3FF),
-  //                           fontWeight: FontWeight.bold,
-  //                           fontSize: 12.0)),
-  //                   Text('${widget.tappedOnWord}',
-  //                       style: TextStyle(fontSize: 24.0)),
-  //                 ])),
-  //         Divider(
-  //           color: Colors.black26,
-  //           height: 1.0,
-  //           thickness: 1.0,
-  //         ),
-  //         Container(
-  //             margin: EdgeInsets.only(top: 8.0),
-  //             child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   // TODO: not null safe
-  //                   Text(this._translatePageTargetLanguage.language.name,
-  //                       style: TextStyle(
-  //                           color: Color(0xFF00A3FF),
-  //                           fontWeight: FontWeight.bold,
-  //                           fontSize: 12.0)),
-  //                   Text(_translation != null ? _translation! : "",
-  //                       style: TextStyle(fontSize: 24.0)),
-  //                 ])),
-  //       ]),
-  //     ),
-  //     Container(
-  //         margin: EdgeInsets.only(bottom: 8.0),
-  //         child: OutlinedButton(
-  //             style: OutlinedButton.styleFrom(
-  //               padding: EdgeInsets.all(16.0),
-  //               // side: BorderSide(color: Colors.black),
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(10.0),
-  //               ),
-  //             ),
-  //             child: Container(
-  //                 width: double.infinity,
-  //                 child: Row(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     const Text('Add to deck'),
-  //                     const Icon(Icons.style, size: 24.0),
-  //                   ],
-  //                 )),
-  //             onPressed: _translation != null
-  //                 ? () async {
-  //                     Deck deck = await widget.deckStorage.get();
-
-  //                     Flashcard addedCard = Flashcard(
-  //                       id: const Uuid().v4(),
-  //                       sourceLanguageCode: _translatePageSourceLanguage.code,
-  //                       sourceWord: widget.tappedOnWord!,
-  //                       targetLanguageCode: _translatePageTargetLanguage.code,
-  //                       targetWord: _translation!,
-  //                     );
-  //                     deck.cards.add(addedCard);
-  //                     widget.deckStorage.save(deck);
-
-  //                     widget.onClose();
-
-  //                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //                         content: const Text('Added to deck'),
-  //                         action: SnackBarAction(
-  //                           label: "Undo",
-  //                           onPressed: () {
-  //                             deck.cards.remove(addedCard);
-  //                             widget.deckStorage.save(deck);
-  //                           },
-  //                         )));
-  //                   }
-  //                 : null)),
-  //     Container(
-  //         child: OutlinedButton(
-  //       style: OutlinedButton.styleFrom(
-  //         padding: EdgeInsets.all(16.0),
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(10.0),
-  //         ),
-  //       ),
-  //       child: Container(
-  //           width: double.infinity,
-  //           child: Row(
-  //             mainAxisSize: MainAxisSize.min,
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               const Text('Change language'),
-  //               const Icon(Icons.language, size: 24.0),
-  //             ],
-  //           )),
-  //       onPressed: () {
-  //         log("Pressed on 'Change language'");
-  //         setState(() {
-  //           // _changeLanguagePageSourceLanguage = _translatePageSourceLanguage;
-  //           // _changeLanguagePageTargetLanguage = _translatePageTargetLanguage;
-  //           this._showChangeLanguagePage = true;
-  //         });
-  //       },
-  //     )),
-  //   ]);
-  // }
 
   Widget _buildTapDialogPageContent() {
     if (widget.tappedOnWord == null) {
@@ -434,7 +193,6 @@ class TapDialogState extends State<TapDialog> {
                           oldTranslatePageSourceLanguage;
                     });
                     _saveLanguagesInUserPreferences();
-                    _translate();
                   },
                 ),
                 Expanded(
@@ -570,43 +328,19 @@ class TapDialogState extends State<TapDialog> {
     );
   }
 
-  // TODO: convert to separate widget with properties
-  Widget _buildDialogHeader({required String title, VoidCallback? onBack}) {
-    return Row(children: [
-      Expanded(
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: EdgeInsets.only(top: 4.0, bottom: 4.0),
-                child: onBack == null
-                    ? Container()
-                    : IconButton(
-                        icon: Icon(Icons.arrow_back), onPressed: onBack),
-              ))),
-      Text(title,
-          style:
-              TextStyle(color: Color(0xFF00A3FF), fontWeight: FontWeight.bold)),
-      Expanded(
-          child: Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                  margin: EdgeInsets.only(top: 4.0, bottom: 4.0),
-                  child: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        if (widget.onClose != null) {
-                          widget.onClose();
-                        }
-                      }))))
-    ]);
-  }
-
   void _translate() async {
-    if (!widget.translationEnabled ||
-        _translatePageSourceLanguage == null ||
+    log("@>translate()");
+    if (!widget.translationEnabled) {
+      setState(() {
+        _translation = "<translation disabled>";
+      });
+      return;
+    }
+    if (_translatePageSourceLanguage == null ||
         _translatePageTargetLanguage == null) {
       return;
     }
+
     log("Translating...");
     String? translation = await googleTranslate(widget.tappedOnWord!,
         _translatePageSourceLanguage!.code, _translatePageTargetLanguage!.code);
