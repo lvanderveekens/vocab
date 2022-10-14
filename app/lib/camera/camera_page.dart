@@ -13,22 +13,23 @@ import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:vocab/camera/info_dialog.dart';
+import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/language/language.dart';
 import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
+import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 import 'package:vocab/widgets/bullet_text.dart';
 
-import '../deck/deck_storage.dart';
-
 class CameraPage extends StatefulWidget {
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
-  final List<GoogleCloudTranslationLanguage> googleTranslationLanguages;
+  final List<GoogleCloudTranslationLanguage> translationLanguages;
+  final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
   final List<MLKitTextRecognitionLanguage> textRecognitionLanguages;
   final UserPreferences? userPreferences;
 
@@ -36,8 +37,9 @@ class CameraPage extends StatefulWidget {
     Key? key,
     required this.deckStorage,
     required this.userPreferencesStorage,
-    required this.googleTranslationLanguages,
+    required this.translationLanguages,
     required this.textRecognitionLanguages,
+    required this.textToSpeechLanguages,
     required this.userPreferences,
   }) : super(key: key);
 
@@ -400,7 +402,8 @@ class CameraPageState extends State<CameraPage> {
               deckStorage: widget.deckStorage,
               translationEnabled: _translationEnabled,
               userPreferencesStorage: widget.userPreferencesStorage,
-              googleTranslationLanguages: widget.googleTranslationLanguages,
+              translationLanguages: widget.translationLanguages,
+              textToSpeechLanguages: widget.textToSpeechLanguages,
               userPreferences: widget.userPreferences,
             ));
   }

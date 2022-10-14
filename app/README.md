@@ -28,5 +28,5 @@ ML Kit text recognition: https://developers.google.com/ml-kit/vision/text-recogn
 
 Google Cloud Translation: https://translation.googleapis.com/language/translate/v2/languages
 
-Google Cloud Text-to-Speech: GET https://texttospeech.googleapis.com/v1/voices
+Google Cloud Text-to-Speech: https://cloud.google.com/text-to-speech/docs/voices
 

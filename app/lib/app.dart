@@ -30,7 +30,7 @@ class AppState extends State<App> {
 
   List<Language> _languages = [];
   List<GoogleCloudTranslationLanguage> _translationLanguages = [];
-  List<GoogleCloudTextToSpeechLanguage> _textToSpeechTranslationLanguages = [];
+  List<GoogleCloudTextToSpeechLanguage> _textToSpeechLanguages = [];
   List<MLKitTextRecognitionLanguage> _textRecognitionLanguages = [];
 
   UserPreferences? _userPreferences;
@@ -52,7 +52,7 @@ class AppState extends State<App> {
     log("Loading Google Cloud Text-to-speech languages");
     GoogleCloudTextToSpeechLanguages.load().then((value) {
       setState(() {
-        _textToSpeechTranslationLanguages = value;
+        _textToSpeechLanguages = value;
       });
     });
     log("Loading ML Kit Text Recognition languages");
@@ -75,7 +75,8 @@ class AppState extends State<App> {
       CameraPage(
         deckStorage: deckStorage,
         userPreferencesStorage: userPreferencesStorage,
-        googleTranslationLanguages: _translationLanguages,
+        translationLanguages: _translationLanguages,
+        textToSpeechLanguages: _textToSpeechLanguages,
         textRecognitionLanguages: _textRecognitionLanguages,
         userPreferences: _userPreferences,
       ),

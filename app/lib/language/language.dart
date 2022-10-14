@@ -51,8 +51,9 @@ class Language {
     return false;
   }
 
-  // bool operator ==(o) =>
-  //     o is Language && name == o.name && isoCode == o.isoCode;
+  // @override
+  // bool operator ==(o) => o is Language && name == o.name;
 
+  // @override
   // int get hashCode => super.hashCode;
 }
