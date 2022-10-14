@@ -52,7 +52,7 @@ class Languages {
         if (l.iso639_3 == code) {
           return true;
         }
-        if (l.bcp47 == code) {
+        if (l.languageTags != null && l.languageTags!.contains(code)) {
           return true;
         }
         return false;

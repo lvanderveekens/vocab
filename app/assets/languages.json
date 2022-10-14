@@ -36,7 +36,10 @@
     {
         "name": "Afrikaans",
         "iso639_2b": "afr",
-        "iso639_1": "af"
+        "iso639_1": "af",
+        "languageTags": [
+            "af-ZA"
+        ]
     },
     {
         "name": "Ainu",
@@ -89,7 +92,10 @@
     {
         "name": "Arabic",
         "iso639_2b": "ara",
-        "iso639_1": "ar"
+        "iso639_1": "ar",
+        "languageTags": [
+            "ar-XA"
+        ]
     },
     {
         "name": "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)",
@@ -219,7 +225,10 @@
     {
         "name": "Bengali",
         "iso639_2b": "ben",
-        "iso639_1": "bn"
+        "iso639_1": "bn",
+        "languageTags": [
+            "bn-IN"
+        ]
     },
     {
         "name": "Berber languages",
@@ -284,7 +293,10 @@
     {
         "name": "Bulgarian",
         "iso639_2b": "bul",
-        "iso639_1": "bg"
+        "iso639_1": "bg",
+        "languageTags": [
+            "bg-BG"
+        ]
     },
     {
         "name": "Burmese",
@@ -309,9 +321,12 @@
         "iso639_2b": "car"
     },
     {
-        "name": "Catalan; Valencian",
+        "name": "Catalan",
         "iso639_2b": "cat",
-        "iso639_1": "ca"
+        "iso639_1": "ca",
+        "languageTags": [
+            "ca-ES"
+        ]
     },
     {
         "name": "Caucasian languages",
@@ -347,7 +362,25 @@
         "name": "Chinese",
         "iso639_2t": "zho",
         "iso639_2b": "chi",
-        "iso639_1": "zh"
+        "iso639_1": "zh",
+        "iso639_3": "cmn",
+        "languageTags": [
+            "zh-CN",
+            "cmn-CN"
+        ]
+    },
+    {
+        "name": "Chinese (Taiwan)",
+        "languageTags": [
+            "zh-TW",
+            "cmn-TW"
+        ]
+    },
+    {
+        "name": "Cantonese",
+        "languageTags": [
+            "yue-HK"
+        ]
     },
     {
         "name": "Chuukese",
@@ -446,7 +479,10 @@
         "name": "Czech",
         "iso639_2t": "ces",
         "iso639_2b": "cze",
-        "iso639_1": "cs"
+        "iso639_1": "cs",
+        "languageTags": [
+            "cs-CZ"
+        ]
     },
     {
         "name": "Dakota",
@@ -455,7 +491,10 @@
     {
         "name": "Danish",
         "iso639_2b": "dan",
-        "iso639_1": "da"
+        "iso639_1": "da",
+        "languageTags": [
+            "da-DK"
+        ]
     },
     {
         "name": "Dargwa",
@@ -510,7 +549,16 @@
         "name": "Dutch",
         "iso639_2t": "nld",
         "iso639_2b": "dut",
-        "iso639_1": "nl"
+        "iso639_1": "nl",
+        "languageTags": [
+            "nl-NL"
+        ]
+    },
+    {
+        "name": "Flemish Dutch",
+        "languageTags": [
+            "nl-BE"
+        ]
     },
     {
         "name": "Dyula",
@@ -541,7 +589,33 @@
         "name": "English",
         "iso639_2b": "eng",
         "iso639_1": "en",
-        "bcp47": "en-US"
+        "languageTags": [
+            "en-US"
+        ]
+    },
+    {
+        "name": "Indian English",
+        "languageTags": [
+            "en-IN"
+        ]
+    },
+    {
+        "name": "British English",
+        "languageTags": [
+            "en-GB"
+        ]
+    },
+    {
+        "name": "Australian English",
+        "languageTags": [
+            "en-AU"
+        ]
+    },
+    {
+        "name": "American Spanish",
+        "languageTags": [
+            "es-US"
+        ]
     },
     {
         "name": "English, Middle (1100-1500)",
@@ -585,13 +659,19 @@
         "iso639_1": "fj"
     },
     {
-        "name": "Filipino; Pilipino",
-        "iso639_2b": "fil"
+        "name": "Filipino",
+        "iso639_2b": "fil",
+        "languageTags": [
+            "fil-PH"
+        ]
     },
     {
         "name": "Finnish",
         "iso639_2b": "fin",
-        "iso639_1": "fi"
+        "iso639_1": "fi",
+        "languageTags": [
+            "fi-FI"
+        ]
     },
     {
         "name": "Finno-Ugrian languages",
@@ -605,7 +685,16 @@
         "name": "French",
         "iso639_2t": "fra",
         "iso639_2b": "fre",
-        "iso639_1": "fr"
+        "iso639_1": "fr",
+        "languageTags": [
+            "fr-FR"
+        ]
+    },
+    {
+        "name": "Canadian France",
+        "languageTags": [
+            "fr-CA"
+        ]
     },
     {
         "name": "French, Middle (ca.1400-1600)",
@@ -663,7 +752,10 @@
         "name": "German",
         "iso639_2t": "deu",
         "iso639_2b": "ger",
-        "iso639_1": "de"
+        "iso639_1": "de",
+        "languageTags": [
+            "de-DE"
+        ]
     },
     {
         "name": "Geez",
@@ -718,14 +810,17 @@
         "iso639_2b": "grb"
     },
     {
-        "name": "Greek, Ancient (to 1453)",
+        "name": "Ancient Greek",
         "iso639_2b": "grc"
     },
     {
-        "name": "Greek, Modern (1453-)",
+        "name": "Modern Greek",
         "iso639_2t": "ell",
         "iso639_2b": "gre",
-        "iso639_1": "el"
+        "iso639_1": "el",
+        "languageTags": [
+            "el-GR"
+        ]
     },
     {
         "name": "Guarani",
@@ -739,7 +834,10 @@
     {
         "name": "Gujarati",
         "iso639_2b": "guj",
-        "iso639_1": "gu"
+        "iso639_1": "gu",
+        "languageTags": [
+            "gu-IN"
+        ]
     },
     {
         "name": "Gwich'in",
@@ -788,7 +886,10 @@
     {
         "name": "Hindi",
         "iso639_2b": "hin",
-        "iso639_1": "hi"
+        "iso639_1": "hi",
+        "languageTags": [
+            "hi-IN"
+        ]
     },
     {
         "name": "Hittite",
@@ -815,7 +916,10 @@
     {
         "name": "Hungarian",
         "iso639_2b": "hun",
-        "iso639_1": "hu"
+        "iso639_1": "hu",
+        "languageTags": [
+            "hu-HU"
+        ]
     },
     {
         "name": "Hupa",
@@ -834,7 +938,10 @@
         "name": "Icelandic",
         "iso639_2t": "isl",
         "iso639_2b": "ice",
-        "iso639_1": "is"
+        "iso639_1": "is",
+        "languageTags": [
+            "is-IS"
+        ]
     },
     {
         "name": "Ido",
@@ -876,7 +983,10 @@
     {
         "name": "Indonesian",
         "iso639_2b": "ind",
-        "iso639_1": "id"
+        "iso639_1": "id",
+        "languageTags": [
+            "id-ID"
+        ]
     },
     {
         "name": "Indo-European languages",
@@ -902,7 +1012,10 @@
     {
         "name": "Italian",
         "iso639_2b": "ita",
-        "iso639_1": "it"
+        "iso639_1": "it",
+        "languageTags": [
+            "it-IT"
+        ]
     },
     {
         "name": "Javanese",
@@ -920,7 +1033,10 @@
     {
         "name": "Japanese",
         "iso639_2b": "jpn",
-        "iso639_1": "ja"
+        "iso639_1": "ja",
+        "languageTags": [
+            "ja-JP"
+        ]
     },
     {
         "name": "Judeo-Persian",
@@ -954,7 +1070,10 @@
     {
         "name": "Kannada",
         "iso639_2b": "kan",
-        "iso639_1": "kn"
+        "iso639_1": "kn",
+        "languageTags": [
+            "kn-IN"
+        ]
     },
     {
         "name": "Karen languages",
@@ -1036,7 +1155,10 @@
     {
         "name": "Korean",
         "iso639_2b": "kor",
-        "iso639_1": "ko"
+        "iso639_1": "ko",
+        "languageTags": [
+            "ko-KR"
+        ]
     },
     {
         "name": "Kosraean",
@@ -1105,7 +1227,10 @@
     {
         "name": "Latvian",
         "iso639_2b": "lav",
-        "iso639_1": "lv"
+        "iso639_1": "lv",
+        "languageTags": [
+            "lv-LV"
+        ]
     },
     {
         "name": "Lezghian",
@@ -1199,7 +1324,10 @@
     {
         "name": "Malayalam",
         "iso639_2b": "mal",
-        "iso639_1": "ml"
+        "iso639_1": "ml",
+        "languageTags": [
+            "ml-IN"
+        ]
     },
     {
         "name": "Mandingo",
@@ -1218,7 +1346,10 @@
     {
         "name": "Marathi",
         "iso639_2b": "mar",
-        "iso639_1": "mr"
+        "iso639_1": "mr",
+        "languageTags": [
+            "mr-IN"
+        ]
     },
     {
         "name": "Masai",
@@ -1228,7 +1359,10 @@
         "name": "Malay",
         "iso639_2t": "msa",
         "iso639_2b": "may",
-        "iso639_1": "ms"
+        "iso639_1": "ms",
+        "languageTags": [
+            "ms-MY"
+        ]
     },
     {
         "name": "Moksha",
@@ -1393,9 +1527,12 @@
         "iso639_1": "nn"
     },
     {
-        "name": "Bokm\u00e5l, Norwegian; Norwegian Bokm\u00e5l",
+        "name": "Norwegian Bokmål",
         "iso639_2b": "nob",
-        "iso639_1": "nb"
+        "iso639_1": "nb",
+        "languageTags": [
+            "nb-NO"
+        ]
     },
     {
         "name": "Nogai",
@@ -1503,7 +1640,10 @@
     {
         "name": "Panjabi; Punjabi",
         "iso639_2b": "pan",
-        "iso639_1": "pa"
+        "iso639_1": "pa",
+        "languageTags": [
+            "pa-IN"
+        ]
     },
     {
         "name": "Papiamento",
@@ -1539,7 +1679,10 @@
     {
         "name": "Polish",
         "iso639_2b": "pol",
-        "iso639_1": "pl"
+        "iso639_1": "pl",
+        "languageTags": [
+            "pl-PL"
+        ]
     },
     {
         "name": "Pohnpeian",
@@ -1548,7 +1691,16 @@
     {
         "name": "Portuguese",
         "iso639_2b": "por",
-        "iso639_1": "pt"
+        "iso639_1": "pt",
+        "languageTags": [
+            "pt-PT"
+        ]
+    },
+    {
+        "name": "Brazilian Portuguese",
+        "languageTags": [
+            "pt-BR"
+        ]
     },
     {
         "name": "Prakrit languages",
@@ -1601,7 +1753,10 @@
         "name": "Romanian; Moldavian; Moldovan",
         "iso639_2t": "ron",
         "iso639_2b": "rum",
-        "iso639_1": "ro"
+        "iso639_1": "ro",
+        "languageTags": [
+            "ro-RO"
+        ]
     },
     {
         "name": "Rundi",
@@ -1615,7 +1770,10 @@
     {
         "name": "Russian",
         "iso639_2b": "rus",
-        "iso639_1": "ru"
+        "iso639_1": "ru",
+        "languageTags": [
+            "ru-RU"
+        ]
     },
     {
         "name": "Sandawe",
@@ -1708,7 +1866,10 @@
         "name": "Slovak",
         "iso639_2t": "slk",
         "iso639_2b": "slo",
-        "iso639_1": "sk"
+        "iso639_1": "sk",
+        "languageTags": [
+            "sk-SK"
+        ]
     },
     {
         "name": "Slovenian",
@@ -1778,9 +1939,12 @@
         "iso639_1": "st"
     },
     {
-        "name": "Spanish; Castilian",
+        "name": "Spanish",
         "iso639_2b": "spa",
-        "iso639_1": "es"
+        "iso639_1": "es",
+        "languageTags": [
+            "es-ES"
+        ]
     },
     {
         "name": "Sardinian",
@@ -1794,11 +1958,16 @@
     {
         "name": "Serbian",
         "iso639_2b": "srp",
-        "iso639_1": "sr"
+        "iso639_1": "sr",
+        "languageTags": [
+            "sr-RS"
+        ]
     },
     {
-        "bcp47": "sr-Latn",
-        "name": "Serbian (Latin)"
+        "name": "Serbian (Latin)",
+        "languageTags": [
+            "sr-Latn"
+        ]
     },
     {
         "name": "Serer",
@@ -1838,7 +2007,10 @@
     {
         "name": "Swedish",
         "iso639_2b": "swe",
-        "iso639_1": "sv"
+        "iso639_1": "sv",
+        "languageTags": [
+            "sv-SE"
+        ]
     },
     {
         "name": "Classical Syriac",
@@ -1860,7 +2032,10 @@
     {
         "name": "Tamil",
         "iso639_2b": "tam",
-        "iso639_1": "ta"
+        "iso639_1": "ta",
+        "languageTags": [
+            "ta-IN"
+        ]
     },
     {
         "name": "Tatar",
@@ -1870,7 +2045,10 @@
     {
         "name": "Telugu",
         "iso639_2b": "tel",
-        "iso639_1": "te"
+        "iso639_1": "te",
+        "languageTags": [
+            "te-IN"
+        ]
     },
     {
         "name": "Timne",
@@ -1897,7 +2075,10 @@
     {
         "name": "Thai",
         "iso639_2b": "tha",
-        "iso639_1": "th"
+        "iso639_1": "th",
+        "languageTags": [
+            "th-TH"
+        ]
     },
     {
         "name": "Tibetan",
@@ -1977,7 +2158,10 @@
     {
         "name": "Turkish",
         "iso639_2b": "tur",
-        "iso639_1": "tr"
+        "iso639_1": "tr",
+        "languageTags": [
+            "tr-TR"
+        ]
     },
     {
         "name": "Altaic languages",
@@ -2012,7 +2196,10 @@
     {
         "name": "Ukrainian",
         "iso639_2b": "ukr",
-        "iso639_1": "uk"
+        "iso639_1": "uk",
+        "languageTags": [
+            "uk-UA"
+        ]
     },
     {
         "name": "Umbundu",
@@ -2044,7 +2231,10 @@
     {
         "name": "Vietnamese",
         "iso639_2b": "vie",
-        "iso639_1": "vi"
+        "iso639_1": "vi",
+        "languageTags": [
+            "vi-VN"
+        ]
     },
     {
         "name": "Volap\u00fck",
@@ -2178,14 +2368,8 @@
     },
     {
         "name": "Meitei",
-        "bcp47": "mni-Mtei"
-    },
-    {
-        "name": "Chinese (PRC)",
-        "bcp47": "zh-CN"
-    },
-    {
-        "name": "Chinese (Taiwan)",
-        "bcp47": "zh-TW"
+        "languageTags": [
+            "mni-Mtei"
+        ]
     }
 ]

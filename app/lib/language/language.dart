@@ -8,7 +8,7 @@ class Language {
   final String? iso639_2b;
   final String? iso639_2t;
   final String? iso639_3;
-  final String? bcp47;
+  final List<String>? languageTags;
 
   Language({
     required this.name,
@@ -16,7 +16,7 @@ class Language {
     required this.iso639_2b,
     required this.iso639_2t,
     required this.iso639_3,
-    required this.bcp47,
+    required this.languageTags,
   });
 
   factory Language.fromJson(Map<String, dynamic> json) {
@@ -26,7 +26,9 @@ class Language {
       iso639_2b: json['iso639_2b'],
       iso639_2t: json['iso639_2t'],
       iso639_3: json['iso639_3'],
-      bcp47: json['bcp47'],
+      languageTags: (json['languageTags'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList(),
     );
   }
 
@@ -43,7 +45,7 @@ class Language {
     if (iso639_3 == code) {
       return true;
     }
-    if (bcp47 == code) {
+    if (languageTags != null && languageTags!.contains(code)) {
       return true;
     }
     return false;

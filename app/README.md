@@ -12,10 +12,11 @@ Release build:
 
 ### Formats
 
-ISO-639-1 (alpha2): "nl"
-ISO-639-2 (alpha3-b): "dut"
-ISO-639-2 (alpha3-t): "nld"
-BCP-47 (language tag): "nl-NL" or "sr-Latn"
+ISO-639-1 (alpha2)   : "nl"
+ISO-639-2 (alpha3-b) : "dut"
+ISO-639-2 (alpha3-t) : "nld"
+ISO-639-3            : "cmn"
+Language tag (BCP-47): "nl-NL" or "sr-Latn"
 
 ### List of language codes
 
