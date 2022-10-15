@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:collection/collection.dart';
 
@@ -9,12 +10,14 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import 'package:vocab/deck/deck_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/secret/secrets.dart';
+import 'package:vocab/text_to_speech/google_cloud_text_to_speech_client.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
 import 'package:vocab/translation/google_cloud_translation_client.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
-import 'package:vocab/translation/google_cloud_translation_requests.dart';
+import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -28,6 +31,7 @@ class TapDialog extends StatefulWidget {
   final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
   final UserPreferences? userPreferences;
   final GoogleCloudTranslationClient googleCloudTranslationClient;
+  final GoogleCloudTextToSpeechClient googleCloudTextToSpeechClient;
 
   const TapDialog({
     Key? key,
@@ -40,6 +44,7 @@ class TapDialog extends StatefulWidget {
     required this.textToSpeechLanguages,
     required this.userPreferences,
     required this.googleCloudTranslationClient,
+    required this.googleCloudTextToSpeechClient,
   }) : super(key: key);
 
   @override
@@ -268,13 +273,39 @@ class TapDialogState extends State<TapDialog> {
                                           .language.name);
 
                           if (textToSpeechLanguage != null) {
-                            log(textToSpeechLanguage.language.name);
+                            widget.googleCloudTextToSpeechClient
+                                .synthesize(
+                              widget.tappedOnWord!,
+                              textToSpeechLanguage.code,
+                            )
+                                .then((base64String) {
+                              log("base64 encoded" + base64String);
+
+                              // TODO: clean up after playing
+
+                              getTemporaryDirectory().then((dir) {
+                                var filePath =
+                                    '${dir.path}/${widget.tappedOnWord}_${textToSpeechLanguage.code}.mp3';
+                                var file = File(filePath);
+
+                                var decoded = base64.decode(base64String);
+                                log("Decoded: " + decoded.toString());
+
+                                file.writeAsBytes(decoded).then((value) {
+                                  log("written to file: $filePath");
+                                  final player = AudioPlayer();
+
+                                  // Cannot use BytesSource. It only works on Android...
+                                  player
+                                      .play(DeviceFileSource(filePath))
+                                      .whenComplete(() {
+                                    log("Deleting temp file again");
+                                    file.deleteSync();
+                                  });
+                                });
+                              });
+                            });
                           }
-
-                          // final player = AudioPlayer();
-
-                          // // Cannot use BytesSource. It only works on Android...
-                          // await player.play(AssetSource("test.mp3"));
                         },
                       )),
                 ),

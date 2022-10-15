@@ -83,7 +83,6 @@ class AppState extends State<App> {
         textToSpeechLanguages: _textToSpeechLanguages,
         textRecognitionLanguages: _textRecognitionLanguages,
         userPreferences: _userPreferences,
-        googleCloudTranslationClient: GetIt.I<GoogleCloudTranslationClient>(),
       ),
       DeckPage(
         deckStorage: deckStorage,

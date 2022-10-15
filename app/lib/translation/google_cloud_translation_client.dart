@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:vocab/translation/google_cloud_translation_requests.dart';
+import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 
 class GoogleCloudTranslationClient {
   final String apiKey;

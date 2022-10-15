@@ -1,21 +1,29 @@
-class GoogleCloudTextToSpeechTextSynthesizeRequest {
+class GoogleCloudTextToSpeechSynthesizeRequest {
   final SynthesisInput input;
   final VoiceSelectionParams voice;
   final AudioConfig audioConfig;
 
-  const GoogleCloudTextToSpeechTextSynthesizeRequest({
+  const GoogleCloudTextToSpeechSynthesizeRequest({
     required this.input,
     required this.voice,
     required this.audioConfig,
   });
 
-  factory GoogleCloudTextToSpeechTextSynthesizeRequest.fromJson(
+  factory GoogleCloudTextToSpeechSynthesizeRequest.fromJson(
       Map<String, dynamic> json) {
-    return GoogleCloudTextToSpeechTextSynthesizeRequest(
+    return GoogleCloudTextToSpeechSynthesizeRequest(
       input: SynthesisInput.fromJson(json['input']),
       voice: json['voice'],
       audioConfig: json['audioConfig'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "input": input.toJson(),
+      "voice": voice.toJson(),
+      "audioConfig": audioConfig.toJson(),
+    };
   }
 }
 
@@ -28,6 +36,12 @@ class SynthesisInput {
     return SynthesisInput(
       text: json['text'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "text": text,
+    };
   }
 }
 
@@ -45,6 +59,13 @@ class VoiceSelectionParams {
       languageCode: json['languageCode'],
       ssmlGender: json['ssmlGender'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "languageCode": languageCode,
+      "ssmlGender": ssmlGender.name,
+    };
   }
 }
 
@@ -64,6 +85,12 @@ class AudioConfig {
       audioEncoding: json['audioEncoding'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "audioEncoding": audioEncoding.name,
+    };
+  }
 }
 
 enum AudioEncoding {
@@ -75,16 +102,16 @@ enum AudioEncoding {
   ALAW
 }
 
-class GoogleCloudTextToSpeechTextSynthesizeResponse {
+class GoogleCloudTextToSpeechSynthesizeResponse {
   final String audioContent;
 
-  const GoogleCloudTextToSpeechTextSynthesizeResponse({
+  const GoogleCloudTextToSpeechSynthesizeResponse({
     required this.audioContent,
   });
 
-  factory GoogleCloudTextToSpeechTextSynthesizeResponse.fromJson(
+  factory GoogleCloudTextToSpeechSynthesizeResponse.fromJson(
       Map<String, dynamic> json) {
-    return GoogleCloudTextToSpeechTextSynthesizeResponse(
+    return GoogleCloudTextToSpeechSynthesizeResponse(
       audioContent: json['audioContent'],
     );
   }
