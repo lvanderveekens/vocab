@@ -12,8 +12,9 @@ import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
+import 'package:vocab/translation/google_cloud_translation_client.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
-import 'package:vocab/translation/google_cloud_translation_response.dart';
+import 'package:vocab/translation/google_cloud_translation_requests.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -46,13 +47,16 @@ class TapDialog extends StatefulWidget {
 class TapDialogState extends State<TapDialog> {
   GoogleCloudTranslationLanguage? _translationSourceLanguage;
   GoogleCloudTranslationLanguage? _translationTargetLanguage;
+
   String? _translation;
 
   @override
   Widget build(BuildContext context) {
     log("@>TapDialogState#build (widget.userPreferences=${widget.userPreferences})");
 
-    if (widget.userPreferences != null) {
+    if (widget.userPreferences != null &&
+        _translationSourceLanguage == null &&
+        _translationTargetLanguage == null) {
       log("setting source and target languages");
       setState(() {
         _translationSourceLanguage = getGoogleTranslationLanguageByCode(
@@ -60,6 +64,8 @@ class TapDialogState extends State<TapDialog> {
         _translationTargetLanguage = getGoogleTranslationLanguageByCode(
             widget.userPreferences!.targetLanguageCode);
       });
+
+      // TODO: this translate will set _translation and trigger a new build() resulting in a cycle.
       _translate();
     }
 
@@ -88,6 +94,7 @@ class TapDialogState extends State<TapDialog> {
       }
     });
     _saveLanguagesInUserPreferences();
+    _translate();
   }
 
   void _setTranslatePageTargetLanguage(
@@ -104,6 +111,7 @@ class TapDialogState extends State<TapDialog> {
     });
 
     _saveLanguagesInUserPreferences();
+    _translate();
   }
 
   GoogleCloudTranslationLanguage getGoogleTranslationLanguageByCode(
@@ -188,6 +196,7 @@ class TapDialogState extends State<TapDialog> {
                           oldTranslatePageSourceLanguage;
                     });
                     _saveLanguagesInUserPreferences();
+                    _translate();
                   },
                 ),
                 Expanded(
@@ -338,6 +347,8 @@ class TapDialogState extends State<TapDialog> {
   void _translate() async {
     log("@>translate()");
     if (!widget.translationEnabled) {
+      await Future.delayed(const Duration(milliseconds: 2000));
+
       setState(() {
         _translation = "<translation disabled>";
       });
@@ -349,33 +360,20 @@ class TapDialogState extends State<TapDialog> {
     }
 
     log("Translating...");
-    String? translation = await googleTranslate(widget.tappedOnWord!,
-        _translationSourceLanguage!.code, _translationTargetLanguage!.code);
+
+    // TODO: reuse?
+    var googleCloudTranslationClient = GoogleCloudTranslationClient(
+      apiKey: (await SecretsLoader().load()).apiKey,
+    );
+
+    String? translation = await googleCloudTranslationClient.translate(
+      widget.tappedOnWord!,
+      _translationSourceLanguage!.code,
+      _translationTargetLanguage!.code,
+    );
     log("Translation: $translation");
     setState(() {
       _translation = translation;
     });
-  }
-
-  Future<String> googleTranslate(
-      String text, String sourceCode, String targetCode) async {
-    final response = await http.get(
-        Uri.parse('https://translation.googleapis.com/language/translate/v2')
-            .replace(queryParameters: {
-      'q': text,
-      'source': sourceCode,
-      'target': targetCode,
-      'key': (await SecretsLoader().load()).apiKey,
-    }));
-
-    if (response.statusCode != 200) {
-      throw Exception(
-          'Failed to call Google Cloud Translation API: ${response.body}');
-    }
-
-    final googleTranslationResponse =
-        GoogleCloudTranslationResponse.fromJson(jsonDecode(response.body));
-
-    return googleTranslationResponse.data.translations[0].translatedText;
   }
 }

@@ -1,14 +1,13 @@
-import 'dart:convert';
-
-class GoogleCloudTranslationResponse {
+class GoogleCloudTranslationTranslateResponse {
   final Data data;
 
-  const GoogleCloudTranslationResponse({
+  const GoogleCloudTranslationTranslateResponse({
     required this.data,
   });
 
-  factory GoogleCloudTranslationResponse.fromJson(Map<String, dynamic> json) {
-    return GoogleCloudTranslationResponse(
+  factory GoogleCloudTranslationTranslateResponse.fromJson(
+      Map<String, dynamic> json) {
+    return GoogleCloudTranslationTranslateResponse(
       data: Data.fromJson(json['data']),
     );
   }
