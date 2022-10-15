@@ -27,6 +27,7 @@ class TapDialog extends StatefulWidget {
   final List<GoogleCloudTranslationLanguage> translationLanguages;
   final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
   final UserPreferences? userPreferences;
+  final GoogleCloudTranslationClient googleCloudTranslationClient;
 
   const TapDialog({
     Key? key,
@@ -38,6 +39,7 @@ class TapDialog extends StatefulWidget {
     required this.translationLanguages,
     required this.textToSpeechLanguages,
     required this.userPreferences,
+    required this.googleCloudTranslationClient,
   }) : super(key: key);
 
   @override
@@ -347,8 +349,6 @@ class TapDialogState extends State<TapDialog> {
   void _translate() async {
     log("@>translate()");
     if (!widget.translationEnabled) {
-      await Future.delayed(const Duration(milliseconds: 2000));
-
       setState(() {
         _translation = "<translation disabled>";
       });
@@ -361,12 +361,7 @@ class TapDialogState extends State<TapDialog> {
 
     log("Translating...");
 
-    // TODO: reuse?
-    var googleCloudTranslationClient = GoogleCloudTranslationClient(
-      apiKey: (await SecretsLoader().load()).apiKey,
-    );
-
-    String? translation = await googleCloudTranslationClient.translate(
+    String? translation = await widget.googleCloudTranslationClient.translate(
       widget.tappedOnWord!,
       _translationSourceLanguage!.code,
       _translationTargetLanguage!.code,

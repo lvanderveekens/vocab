@@ -20,6 +20,7 @@ import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
+import 'package:vocab/translation/google_cloud_translation_client.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
@@ -32,6 +33,7 @@ class CameraPage extends StatefulWidget {
   final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
   final List<MLKitTextRecognitionLanguage> textRecognitionLanguages;
   final UserPreferences? userPreferences;
+  final GoogleCloudTranslationClient googleCloudTranslationClient;
 
   const CameraPage({
     Key? key,
@@ -41,6 +43,7 @@ class CameraPage extends StatefulWidget {
     required this.textRecognitionLanguages,
     required this.textToSpeechLanguages,
     required this.userPreferences,
+    required this.googleCloudTranslationClient,
   }) : super(key: key);
 
   @override
@@ -405,6 +408,7 @@ class CameraPageState extends State<CameraPage> {
               translationLanguages: widget.translationLanguages,
               textToSpeechLanguages: widget.textToSpeechLanguages,
               userPreferences: widget.userPreferences,
+              googleCloudTranslationClient: widget.googleCloudTranslationClient,
             ));
   }
 

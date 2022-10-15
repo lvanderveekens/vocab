@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:vocab/language/language.dart';
 
 import 'package:vocab/camera/camera_page.dart';
 import 'package:vocab/language/languages.dart';
+import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
+import 'package:vocab/translation/google_cloud_translation_client.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
@@ -71,6 +74,7 @@ class AppState extends State<App> {
   }
 
   List<Widget> _getPages() {
+    log("@>getPages()");
     return [
       CameraPage(
         deckStorage: deckStorage,
@@ -79,6 +83,7 @@ class AppState extends State<App> {
         textToSpeechLanguages: _textToSpeechLanguages,
         textRecognitionLanguages: _textRecognitionLanguages,
         userPreferences: _userPreferences,
+        googleCloudTranslationClient: GetIt.I<GoogleCloudTranslationClient>(),
       ),
       DeckPage(
         deckStorage: deckStorage,
@@ -142,7 +147,16 @@ class AppState extends State<App> {
                   foregroundColor: Colors.black,
                   backgroundColor: Colors.white,
                 )),
-            body: _getPages().elementAt(_selectedIndex),
+            body: FutureBuilder(
+              future: GetIt.I.allReady(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _getPages().elementAt(_selectedIndex);
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
+            ),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                   border: Border(
