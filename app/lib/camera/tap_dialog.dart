@@ -283,7 +283,7 @@ class TapDialogState extends State<TapDialog> {
                                 _textToSpeechLanguage!.code,
                               )
                                   .then((base64String) {
-                                log("base64 encoded" + base64String);
+                                // log("base64 encoded" + base64String);
 
                                 getTemporaryDirectory().then((dir) {
                                   var filePath =
@@ -291,11 +291,12 @@ class TapDialogState extends State<TapDialog> {
                                   var file = File(filePath);
 
                                   var decoded = base64.decode(base64String);
-                                  log("Decoded: " + decoded.toString());
+                                  // log("Decoded: " + decoded.toString());
 
                                   file.writeAsBytes(decoded).then((value) {
                                     log("written to file: $filePath");
                                     final player = AudioPlayer();
+                                    // player.setAudioContext(audioContext);
 
                                     // Cannot use BytesSource. It only works on Android...
                                     player
