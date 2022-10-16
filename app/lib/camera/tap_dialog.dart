@@ -23,7 +23,7 @@ import 'package:vocab/user/user_preferences_storage.dart';
 
 class TapDialog extends StatefulWidget {
   final VoidCallback onClose;
-  final String? tappedOnWord;
+  final String tappedOnWord;
   final bool translationEnabled;
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
@@ -151,10 +151,6 @@ class TapDialogState extends State<TapDialog> {
   }
 
   Widget _buildTapDialogPageContent() {
-    if (widget.tappedOnWord == null) {
-      return Text("No word found.");
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -279,7 +275,7 @@ class TapDialogState extends State<TapDialog> {
                               log("Pressed on speaker icon");
                               widget.googleCloudTextToSpeechClient
                                   .synthesize(
-                                widget.tappedOnWord!,
+                                widget.tappedOnWord,
                                 _textToSpeechLanguage!.code,
                               )
                                   .then((base64String) {
@@ -314,7 +310,7 @@ class TapDialogState extends State<TapDialog> {
                 ),
                 Container(
                     child: Text(
-                  widget.tappedOnWord!,
+                  widget.tappedOnWord,
                   style: TextStyle(
                     fontSize: 24.0,
                   ),
@@ -355,7 +351,7 @@ class TapDialogState extends State<TapDialog> {
                   Flashcard addedCard = Flashcard(
                     id: const Uuid().v4(),
                     sourceLanguageCode: _translationSourceLanguage!.code,
-                    sourceWord: widget.tappedOnWord!,
+                    sourceWord: widget.tappedOnWord,
                     targetLanguageCode: _translationTargetLanguage!.code,
                     targetWord: _translation!,
                   );
@@ -396,7 +392,7 @@ class TapDialogState extends State<TapDialog> {
     log("Translating...");
 
     String? translation = await widget.googleCloudTranslationClient.translate(
-      widget.tappedOnWord!,
+      widget.tappedOnWord,
       _translationSourceLanguage!.code,
       _translationTargetLanguage!.code,
     );

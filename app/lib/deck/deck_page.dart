@@ -51,10 +51,11 @@ class DeckPageState extends State<DeckPage> {
   @override
   Widget build(BuildContext context) {
     var cards = _deck?.cards ?? [];
-
     if (cards.isEmpty) {
       return Center(child: Text("Your deck is empty."));
     }
+
+    cards = cards.reversed.toList();
 
     return Scaffold(
         backgroundColor: Colors.white,

@@ -193,7 +193,6 @@ class CameraPageState extends State<CameraPage> {
       }
     }
     log("User did not tap on a word.");
-    return showTapDialog(null);
   }
 
   Future<RecognizedText> recognizeText(CameraImage cameraImage) async {
@@ -389,11 +388,7 @@ class CameraPageState extends State<CameraPage> {
     );
   }
 
-  void showTapDialog(String? tappedOnWord) {
-    if (tappedOnWord != null) {
-      tappedOnWord = _stripInterpunction(tappedOnWord);
-    }
-
+  void showTapDialog(String tappedOnWord) {
     showDialog(
         context: context,
         builder: (ctx) => TapDialog(
@@ -401,7 +396,7 @@ class CameraPageState extends State<CameraPage> {
                 log("dialog onClose called");
                 Navigator.pop(context);
               },
-              tappedOnWord: tappedOnWord,
+              tappedOnWord: _stripInterpunction(tappedOnWord),
               deckStorage: widget.deckStorage,
               translationEnabled: _translationEnabled,
               userPreferencesStorage: widget.userPreferencesStorage,
