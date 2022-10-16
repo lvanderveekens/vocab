@@ -55,6 +55,8 @@ class TapDialogState extends State<TapDialog> {
   GoogleCloudTranslationLanguage? _translationSourceLanguage;
   GoogleCloudTranslationLanguage? _translationTargetLanguage;
 
+  GoogleCloudTextToSpeechLanguage? _textToSpeechLanguage;
+
   String? _translation;
 
   @override
@@ -72,7 +74,7 @@ class TapDialogState extends State<TapDialog> {
             widget.userPreferences!.targetLanguageCode);
       });
 
-      // TODO: this translate will set _translation and trigger a new build() resulting in a cycle.
+      _setTextToSpeechLanguage();
       _translate();
     }
 
@@ -88,9 +90,9 @@ class TapDialogState extends State<TapDialog> {
             ])));
   }
 
-  void _setTranslatePageSourceLanguage(
+  void _setTranslateSourceLanguage(
       GoogleCloudTranslationLanguage newSourceLanguage) {
-    log("@>_setChangeLanguagePageSourceLanguage");
+    log("@>_setTranslateSourceLanguage");
 
     var oldSourceLanguage = _translationSourceLanguage;
 
@@ -100,13 +102,23 @@ class TapDialogState extends State<TapDialog> {
         _translationTargetLanguage = oldSourceLanguage;
       }
     });
+
+    _setTextToSpeechLanguage();
     _saveLanguagesInUserPreferences();
     _translate();
   }
 
-  void _setTranslatePageTargetLanguage(
+  void _setTextToSpeechLanguage() {
+    setState(() {
+      _textToSpeechLanguage = widget.textToSpeechLanguages.firstWhereOrNull(
+          (ttsl) =>
+              ttsl.language.name == _translationSourceLanguage!.language.name);
+    });
+  }
+
+  void _setTranslateTargetLanguage(
       GoogleCloudTranslationLanguage newTargetLanguage) {
-    log("@>_setTranslatePageTargetLanguage");
+    log("@>_setTranslateTargetLanguage");
 
     var oldTargetLanguage = _translationTargetLanguage;
 
@@ -174,7 +186,7 @@ class TapDialogState extends State<TapDialog> {
                               }).toList(),
                               onChanged:
                                   (GoogleCloudTranslationLanguage? newValue) {
-                                _setTranslatePageSourceLanguage(newValue!);
+                                _setTranslateSourceLanguage(newValue!);
                               },
                               selectedItemBuilder: (con) {
                                 return widget.translationLanguages.map((gtl) {
@@ -202,6 +214,7 @@ class TapDialogState extends State<TapDialog> {
                       _translationTargetLanguage =
                           oldTranslatePageSourceLanguage;
                     });
+                    _setTextToSpeechLanguage();
                     _saveLanguagesInUserPreferences();
                     _translate();
                   },
@@ -230,7 +243,7 @@ class TapDialogState extends State<TapDialog> {
                               }).toList(),
                               onChanged:
                                   (GoogleCloudTranslationLanguage? newValue) {
-                                _setTranslatePageTargetLanguage(newValue!);
+                                _setTranslateTargetLanguage(newValue!);
                               },
                               selectedItemBuilder: (con) {
                                 return widget.translationLanguages.map((gtl) {
@@ -253,61 +266,50 @@ class TapDialogState extends State<TapDialog> {
                   // margin: EdgeInsets.only(right: 24 + 4),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                 Expanded(
-                  child: Container(
-                      alignment: Alignment.centerRight,
-                      margin: const EdgeInsets.only(right: 4.0),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: const Icon(Icons.volume_up),
-                        iconSize: 24.0,
-                        onPressed: () async {
-                          log("Pressed on speaker icon");
+                  child: _textToSpeechLanguage != null
+                      ? Container(
+                          alignment: Alignment.centerRight,
+                          margin: const EdgeInsets.only(right: 4.0),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: const Icon(Icons.volume_up),
+                            iconSize: 24.0,
+                            onPressed: () async {
+                              log("Pressed on speaker icon");
+                              widget.googleCloudTextToSpeechClient
+                                  .synthesize(
+                                widget.tappedOnWord!,
+                                _textToSpeechLanguage!.code,
+                              )
+                                  .then((base64String) {
+                                log("base64 encoded" + base64String);
 
-                          GoogleCloudTextToSpeechLanguage?
-                              textToSpeechLanguage = widget
-                                  .textToSpeechLanguages
-                                  .firstWhereOrNull((ttsl) =>
-                                      ttsl.language.name ==
-                                      _translationSourceLanguage!
-                                          .language.name);
+                                getTemporaryDirectory().then((dir) {
+                                  var filePath =
+                                      '${dir.path}/${widget.tappedOnWord}_${_textToSpeechLanguage!.code}.mp3';
+                                  var file = File(filePath);
 
-                          if (textToSpeechLanguage != null) {
-                            widget.googleCloudTextToSpeechClient
-                                .synthesize(
-                              widget.tappedOnWord!,
-                              textToSpeechLanguage.code,
-                            )
-                                .then((base64String) {
-                              log("base64 encoded" + base64String);
+                                  var decoded = base64.decode(base64String);
+                                  log("Decoded: " + decoded.toString());
 
-                              // TODO: clean up after playing
+                                  file.writeAsBytes(decoded).then((value) {
+                                    log("written to file: $filePath");
+                                    final player = AudioPlayer();
 
-                              getTemporaryDirectory().then((dir) {
-                                var filePath =
-                                    '${dir.path}/${widget.tappedOnWord}_${textToSpeechLanguage.code}.mp3';
-                                var file = File(filePath);
-
-                                var decoded = base64.decode(base64String);
-                                log("Decoded: " + decoded.toString());
-
-                                file.writeAsBytes(decoded).then((value) {
-                                  log("written to file: $filePath");
-                                  final player = AudioPlayer();
-
-                                  // Cannot use BytesSource. It only works on Android...
-                                  player
-                                      .play(DeviceFileSource(filePath))
-                                      .whenComplete(() {
-                                    log("Deleting temp file again");
-                                    file.deleteSync();
+                                    // Cannot use BytesSource. It only works on Android...
+                                    player
+                                        .play(DeviceFileSource(filePath))
+                                        .whenComplete(() {
+                                      log("Deleting temp file again");
+                                      file.deleteSync();
+                                    });
                                   });
                                 });
                               });
-                            });
-                          }
-                        },
-                      )),
+                            },
+                          ))
+                      : Container(),
                 ),
                 Container(
                     child: Text(
