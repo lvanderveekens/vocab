@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:vocab/camera/camera_image_converter.dart';
 import 'package:vocab/camera/info_dialog.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/language/language.dart';
@@ -60,16 +61,15 @@ class CameraPageState extends State<CameraPage> {
   bool _cameraAvailable = true;
   bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = true;
+  bool _translationEnabled = !kDebugMode;
 
+  bool _processNextCameraImage = false;
   bool _processingCameraImage = false;
+  CameraImage? _tappedCameraImage;
+  Size? _cameraImageSize;
+  TapUpDetails? _tapUpDetails;
 
   RecognizedText? _recognizedText;
-
-  TapUpDetails? _tapUpDetails;
-  bool _processNextCameraImage = false;
-
-  Size? _cameraImageSize;
 
   bool _showTapDialog = false;
   String? _tappedOnWord;
@@ -134,7 +134,10 @@ class CameraPageState extends State<CameraPage> {
         return;
       }
 
+      // set guard
       _processingCameraImage = true;
+
+      // reset
       _processNextCameraImage = false;
 
       log("Started processsing camera image (${cameraImage.width}, ${cameraImage.height})");
@@ -150,18 +153,25 @@ class CameraPageState extends State<CameraPage> {
 
         if (_tapUpDetails != null) {
           log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
-          await checkTapLocation(
+          var tappedWord = await checkTapLocation(
                   _tapUpDetails!, recognizedText, _cameraImageSize!)
               .whenComplete(() => _tapUpDetails = null);
+
+          if (tappedWord != null) {
+            setState(() {
+              _tappedCameraImage = cameraImage;
+            });
+            showTapDialog(tappedWord);
+          }
         }
       }).whenComplete(() {
-        log("Done processing");
+        log("Done processing camera image");
         _processingCameraImage = false;
       });
     });
   }
 
-  Future<void> checkTapLocation(TapUpDetails tapUpDetails,
+  Future<String?> checkTapLocation(TapUpDetails tapUpDetails,
       RecognizedText recognizedText, Size cameraImageSize) async {
     final cameraPreviewSize = cameraPreviewKey.currentContext!.size!;
 
@@ -185,9 +195,7 @@ class CameraPageState extends State<CameraPage> {
 
           if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
-
-            final tappedOnWord = element.text;
-            return showTapDialog(tappedOnWord);
+            return element.text;
           }
         }
       }
@@ -240,7 +248,7 @@ class CameraPageState extends State<CameraPage> {
 
   final cameraPreviewKey = GlobalKey();
 
-  Widget _buildCameraPreviewNotAvailable({required String message}) {
+  Widget _buildCameraNotAvailable({required String message}) {
     return Container(
       child: Center(
           child: Text(
@@ -251,24 +259,18 @@ class CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget _buildCameraPreview() {
+  Widget _buildCameraWidget() {
     if (!_cameraEnabled) {
-      return _buildCameraPreviewNotAvailable(
-        message: "Camera is disabled.",
-      );
+      return _buildCameraNotAvailable(message: "Camera is disabled.");
     }
 
     if (!_cameraAvailable) {
-      return _buildCameraPreviewNotAvailable(
-        message: "Camera not available.",
-      );
+      return _buildCameraNotAvailable(message: "Camera not available.");
     }
 
     if (!_cameraInitialized) {
       log("Camera not initialized yet.");
-      return Container(
-        color: Colors.black,
-      );
+      return Container(color: Colors.black);
     }
 
     // somehow the camera sensor orientation is 90 which messes up the aspect ratio field...
@@ -344,12 +346,28 @@ class CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(fit: StackFit.loose, children: <Widget>[
-        _buildCameraPreview(),
+        _tappedCameraImage != null ? _buildCameraImage() : _buildCameraWidget(),
         _buildUsageTip(),
         _buildInfoIcon(),
       ]),
       floatingActionButton: kDebugMode ? _buildDebugActions() : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
+  }
+
+  Widget _buildCameraImage() {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: _tappedCameraImage!.width.toDouble(),
+            height: _tappedCameraImage!.height.toDouble(),
+            child: Image.memory(
+                Uint8List.fromList(convertToPng(_tappedCameraImage!))),
+          ),
+        ));
   }
 
   Widget _buildDebugActions() {
@@ -383,12 +401,11 @@ class CameraPageState extends State<CameraPage> {
             backgroundColor: _translationEnabled ? Colors.green : Colors.red,
             icon: const Icon(Icons.translate),
             label: const Text("Translation")),
-        Container(margin: EdgeInsets.only(bottom: 80))
       ],
     );
   }
 
-  void showTapDialog(String tappedOnWord) {
+  void showTapDialog(String tappedWord) {
     showDialog(
         context: context,
         builder: (ctx) => TapDialog(
@@ -396,7 +413,7 @@ class CameraPageState extends State<CameraPage> {
                 log("dialog onClose called");
                 Navigator.pop(context);
               },
-              tappedOnWord: _stripInterpunction(tappedOnWord),
+              tappedWord: _stripInterpunction(tappedWord),
               deckStorage: widget.deckStorage,
               translationEnabled: _translationEnabled,
               userPreferencesStorage: widget.userPreferencesStorage,
@@ -407,7 +424,11 @@ class CameraPageState extends State<CameraPage> {
                   GetIt.I<GoogleCloudTranslationClient>(),
               googleCloudTextToSpeechClient:
                   GetIt.I<GoogleCloudTextToSpeechClient>(),
-            ));
+            )).whenComplete(() {
+      setState(() {
+        _tappedCameraImage = null;
+      });
+    });
   }
 
   String _stripInterpunction(String s) {
