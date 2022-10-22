@@ -1,13 +1,18 @@
 import 'dart:async' show Future;
 import 'dart:convert' show json;
+import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class Secrets {
-  final String apiKey;
-  Secrets(this.apiKey);
+  final String googleCloudApiKey;
+
+  const Secrets(this.googleCloudApiKey);
 
   factory Secrets.fromJson(Map<String, dynamic> jsonMap) {
-    return Secrets(jsonMap["apiKey"]);
+    return Secrets(
+      jsonMap["googleCloudApiKey"],
+    );
   }
 }
 
@@ -18,7 +23,9 @@ class SecretsLoader {
 
   Future<Secrets> load() {
     return rootBundle.loadStructuredData<Secrets>(pathToFile, (jsonStr) async {
-      return Secrets.fromJson(json.decode(jsonStr));
+      var env = kDebugMode ? 'dev' : 'prd';
+      log("Loading secrets for environment: $env");
+      return Secrets.fromJson(json.decode(jsonStr)[env]);
     });
   }
 }

@@ -9,12 +9,14 @@ void configureDependencies() {
   });
 
   GetIt.I.registerSingletonWithDependencies<GoogleCloudTranslationClient>(
-    () => GoogleCloudTranslationClient(apiKey: (GetIt.I<Secrets>().apiKey)),
+    () => GoogleCloudTranslationClient(
+        apiKey: (GetIt.I<Secrets>().googleCloudApiKey)),
     dependsOn: [Secrets],
   );
 
   GetIt.I.registerSingletonWithDependencies<GoogleCloudTextToSpeechClient>(
-    () => GoogleCloudTextToSpeechClient(apiKey: (GetIt.I<Secrets>().apiKey)),
+    () => GoogleCloudTextToSpeechClient(
+        apiKey: (GetIt.I<Secrets>().googleCloudApiKey)),
     dependsOn: [Secrets],
   );
 }
