@@ -70,6 +70,7 @@ class CameraPageState extends State<CameraPage> {
   TapUpDetails? _tapUpDetails;
 
   RecognizedText? _recognizedText;
+  Rect? selectedRect;
 
   bool _showTapDialog = false;
   String? _tappedOnWord;
@@ -81,6 +82,8 @@ class CameraPageState extends State<CameraPage> {
     if (_cameraEnabled) {
       loadCamera();
     }
+
+    // WidgetsBinding.instance.addPostFrameCallback(_getSizedBoxWidgetInfo);
   }
 
   @override
@@ -152,10 +155,10 @@ class CameraPageState extends State<CameraPage> {
         });
 
         if (_tapUpDetails != null) {
-          log("Processing tap location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
+          log("Processing tap local location: (${_tapUpDetails!.localPosition.dx}, ${_tapUpDetails!.localPosition.dy})");
+          log("Processing tap global location: (${_tapUpDetails!.globalPosition.dx}, ${_tapUpDetails!.globalPosition.dy})");
           var tappedWord = await checkTapLocation(
-                  _tapUpDetails!, recognizedText, _cameraImageSize!)
-              .whenComplete(() => _tapUpDetails = null);
+              _tapUpDetails!, recognizedText, _cameraImageSize!);
 
           if (tappedWord != null) {
             setState(() {
@@ -195,6 +198,7 @@ class CameraPageState extends State<CameraPage> {
 
           if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
+
             return element.text;
           }
         }
@@ -259,6 +263,9 @@ class CameraPageState extends State<CameraPage> {
     );
   }
 
+  final GlobalKey _fittedBoxKey = GlobalKey();
+  final GlobalKey _sizedBoxKey = GlobalKey();
+
   Widget _buildCameraWidget() {
     if (!_cameraEnabled) {
       return _buildCameraNotAvailable(message: "Camera is disabled.");
@@ -286,16 +293,47 @@ class CameraPageState extends State<CameraPage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: FittedBox(
+            key: _fittedBoxKey,
             fit: BoxFit.cover,
             child: GestureDetector(
                 onTapUp: handleCameraWidgetTapUp(),
                 child: SizedBox(
+                    key: _sizedBoxKey,
                     width: cameraPreviewWidth,
                     height: cameraPreviewHeight,
                     child: Stack(fit: StackFit.expand, children: <Widget>[
                       CameraPreview(cameraController!, key: cameraPreviewKey),
                       _buildRealTimeScannerIfNeeded()
                     ])))));
+  }
+
+  double getCorrection() {
+    final RenderBox renderBox =
+        _scaffoldKey.currentContext?.findRenderObject() as RenderBox;
+    final Size size = renderBox.size; // or _widgetKey.currentContext?.size
+    print("scaffold aspect ratio" + size.aspectRatio.toString());
+
+    final cameraImageHeight = _cameraImageSize!.height;
+
+    final renderedCameraImageHeight =
+        _cameraImageSize!.width / size.aspectRatio;
+    print(renderedCameraImageHeight);
+
+    return (cameraImageHeight - renderedCameraImageHeight) / 2;
+  }
+
+  void _getSizedBoxWidgetInfo() {
+    // if (_sizedBoxKey.currentContext == null) {
+    //   return;
+    // }
+
+    // print('Size: ${size.width}, ${size.height}');
+
+    // final Offset offset = renderBox.localToGlobal(Offset.zero);
+
+    // print('global Offset: ${offset.dx}, ${offset.dy}');
+    // print(
+    //     'Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
   }
 
   Widget _buildUsageTip() {
@@ -342,9 +380,12 @@ class CameraPageState extends State<CameraPage> {
         ));
   }
 
+  final GlobalKey _scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Stack(fit: StackFit.loose, children: <Widget>[
         _tappedCameraImage != null ? _buildCameraImage() : _buildCameraWidget(),
         _buildUsageTip(),
@@ -364,8 +405,21 @@ class CameraPageState extends State<CameraPage> {
           child: SizedBox(
             width: _tappedCameraImage!.width.toDouble(),
             height: _tappedCameraImage!.height.toDouble(),
-            child: Image.memory(
-                Uint8List.fromList(convertToPng(_tappedCameraImage!))),
+            child: Stack(fit: StackFit.expand, children: <Widget>[
+              Image.memory(
+                  Uint8List.fromList(convertToPng(_tappedCameraImage!))),
+              // _tappedCameraImage != null
+              Positioned(
+                  top: getCorrection() + 20,
+                  left: 20,
+                  right: 20,
+                  bottom: _tapUpDetails?.localPosition.dy ?? 0 + 20,
+                  child: Container(
+                    width: 100.0,
+                    height: 100.0,
+                    color: Colors.red,
+                  ))
+            ]),
           ),
         ));
   }
@@ -427,6 +481,7 @@ class CameraPageState extends State<CameraPage> {
             )).whenComplete(() {
       setState(() {
         _tappedCameraImage = null;
+        _tapUpDetails = null;
       });
     });
   }
