@@ -21,7 +21,7 @@ import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
-class TapDialog extends StatefulWidget {
+class TapContainer extends StatefulWidget {
   final VoidCallback onClose;
   final String tappedWord;
   final bool translationEnabled;
@@ -32,8 +32,9 @@ class TapDialog extends StatefulWidget {
   final UserPreferences? userPreferences;
   final GoogleCloudTranslationClient googleCloudTranslationClient;
   final GoogleCloudTextToSpeechClient googleCloudTextToSpeechClient;
+  final double scaleFactor;
 
-  const TapDialog({
+  const TapContainer({
     Key? key,
     required this.onClose,
     required this.tappedWord,
@@ -45,13 +46,14 @@ class TapDialog extends StatefulWidget {
     required this.userPreferences,
     required this.googleCloudTranslationClient,
     required this.googleCloudTextToSpeechClient,
+    required this.scaleFactor,
   }) : super(key: key);
 
   @override
-  State<TapDialog> createState() => TapDialogState();
+  State<TapContainer> createState() => TapContainerState();
 }
 
-class TapDialogState extends State<TapDialog> {
+class TapContainerState extends State<TapContainer> {
   GoogleCloudTranslationLanguage? _translationSourceLanguage;
   GoogleCloudTranslationLanguage? _translationTargetLanguage;
 
@@ -78,9 +80,12 @@ class TapDialogState extends State<TapDialog> {
       _translate();
     }
 
-    return Dialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.all(Radius.circular(10.0 * widget.scaleFactor)),
+          color: Colors.white,
+        ),
         child: Container(
             child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -155,7 +160,11 @@ class TapDialogState extends State<TapDialog> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-            padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            padding: EdgeInsets.only(
+              top: 16.0 * widget.scaleFactor,
+              left: 16.0 * widget.scaleFactor,
+              right: 16.0 * widget.scaleFactor,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -164,8 +173,10 @@ class TapDialogState extends State<TapDialog> {
                           ? DropdownButton(
                               underline: Container(),
                               iconSize: 0.0,
-                              isDense: true,
+                              isDense: false,
                               isExpanded: true,
+                              style: TextStyle(
+                                  fontSize: 16.0 * widget.scaleFactor),
                               value: _translationSourceLanguage,
                               items: widget.translationLanguages
                                   .map((GoogleCloudTranslationLanguage gtl) {
@@ -176,7 +187,8 @@ class TapDialogState extends State<TapDialog> {
                                     style: TextStyle(
                                         color: gtl == _translationSourceLanguage
                                             ? Color(0xFF00A3FF)
-                                            : null),
+                                            : Colors.black,
+                                        fontSize: 16.0 /* no scaling needed */),
                                   ),
                                 );
                               }).toList(),
@@ -190,7 +202,9 @@ class TapDialogState extends State<TapDialog> {
                                       child: Text(
                                     gtl.language.name,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Color(0xFF00A3FF)),
+                                    style: TextStyle(
+                                      color: Color(0xFF00A3FF),
+                                    ),
                                   ));
                                 }).toList();
                               })
@@ -200,7 +214,7 @@ class TapDialogState extends State<TapDialog> {
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.swap_horiz),
-                  iconSize: 24.0,
+                  iconSize: 24.0 * widget.scaleFactor,
                   onPressed: () async {
                     setState(() {
                       var oldTranslatePageSourceLanguage =
@@ -221,7 +235,9 @@ class TapDialogState extends State<TapDialog> {
                           ? DropdownButton(
                               underline: Container(),
                               iconSize: 0.0,
-                              isDense: true,
+                              style: TextStyle(
+                                  fontSize: 16.0 * widget.scaleFactor),
+                              isDense: false,
                               isExpanded: true,
                               value: _translationTargetLanguage,
                               items: widget.translationLanguages
@@ -231,9 +247,10 @@ class TapDialogState extends State<TapDialog> {
                                   child: Text(
                                     gtl.language.name,
                                     style: TextStyle(
+                                        fontSize: 16.0 /* no scaling needed */,
                                         color: gtl == _translationTargetLanguage
                                             ? Color(0xFF00A3FF)
-                                            : null),
+                                            : Colors.black),
                                   ),
                                 );
                               }).toList(),
@@ -247,7 +264,10 @@ class TapDialogState extends State<TapDialog> {
                                       child: Text(
                                     gtl.language.name,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Color(0xFF00A3FF)),
+                                    style: TextStyle(
+                                      color: Color(0xFF00A3FF),
+                                      // fontSize: 16.0 /* no scaling needed */,
+                                    ),
                                   ));
                                 }).toList();
                               })
@@ -256,21 +276,24 @@ class TapDialogState extends State<TapDialog> {
               ],
             )),
         Container(
-            padding: EdgeInsets.only(top: 32.0, bottom: 32.0),
+            padding: EdgeInsets.only(
+              top: 32.0 * widget.scaleFactor,
+              bottom: 32.0 * widget.scaleFactor,
+            ),
             child: Column(children: [
               Container(
-                  // margin: EdgeInsets.only(right: 24 + 4),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                 Expanded(
                   child: _textToSpeechLanguage != null
                       ? Container(
                           alignment: Alignment.centerRight,
-                          margin: const EdgeInsets.only(right: 4.0),
+                          margin:
+                              EdgeInsets.only(right: 4.0 * widget.scaleFactor),
                           child: IconButton(
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                             icon: const Icon(Icons.volume_up),
-                            iconSize: 24.0,
+                            iconSize: 24.0 * widget.scaleFactor,
                             onPressed: () async {
                               log("Pressed on speaker icon");
                               widget.googleCloudTextToSpeechClient
@@ -312,28 +335,28 @@ class TapDialogState extends State<TapDialog> {
                     child: Text(
                   widget.tappedWord,
                   style: TextStyle(
-                    fontSize: 24.0,
+                    fontSize: 24.0 * widget.scaleFactor,
                   ),
                 )),
                 Expanded(child: Container())
               ])),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.0 * widget.scaleFactor),
               Text(
                 _translation ?? '',
-                style: const TextStyle(
-                  fontSize: 16.0,
+                style: TextStyle(
+                  fontSize: 16.0 * widget.scaleFactor,
                 ),
               )
             ])),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0 * widget.scaleFactor),
             side: BorderSide.none,
             backgroundColor: const Color(0xFF00A3FF),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0 * widget.scaleFactor),
+                bottomRight: Radius.circular(10.0 * widget.scaleFactor),
               ),
             ),
           ),
@@ -342,7 +365,9 @@ class TapDialogState extends State<TapDialog> {
             child: Center(
                 child: Text('Add to deck',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold))),
+                        fontSize: 16.0 * widget.scaleFactor,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold))),
           ),
           onPressed: _translation != null
               ? () async {

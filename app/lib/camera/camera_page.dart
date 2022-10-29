@@ -15,9 +15,10 @@ import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:vocab/camera/camera_image_converter.dart';
 import 'package:vocab/camera/info_dialog.dart';
+import 'package:vocab/camera/text_underline_painter.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/language/language.dart';
-import 'package:vocab/camera/tap_dialog.dart';
+import 'package:vocab/camera/tap_container.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
@@ -69,8 +70,11 @@ class CameraPageState extends State<CameraPage> {
   Size? _cameraImageSize;
   TapUpDetails? _tapUpDetails;
 
+  bool _showTapContainer = false;
+
   RecognizedText? _recognizedText;
-  Rect? selectedRect;
+  String? _tappedWord;
+  Rect? _tappedWordRect;
 
   bool _showTapDialog = false;
   String? _tappedOnWord;
@@ -163,8 +167,9 @@ class CameraPageState extends State<CameraPage> {
           if (tappedWord != null) {
             setState(() {
               _tappedCameraImage = cameraImage;
+              _tappedWord = tappedWord;
+              _showTapContainer = true;
             });
-            showTapDialog(tappedWord);
           }
         }
       }).whenComplete(() {
@@ -198,7 +203,9 @@ class CameraPageState extends State<CameraPage> {
 
           if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
-
+            setState(() {
+              _tappedWordRect = element.boundingBox;
+            });
             return element.text;
           }
         }
@@ -237,6 +244,11 @@ class CameraPageState extends State<CameraPage> {
       _tapUpDetails = tapUpDetails;
       _processNextCameraImage = true;
     };
+  }
+
+  Widget _buildTextUnderlineCustomPaint(double scaleFactor) {
+    final painter = TextUnderlinePainter(_tappedWordRect!, scaleFactor);
+    return CustomPaint(painter: painter);
   }
 
   Widget _buildRealTimeScannerIfNeeded() {
@@ -390,12 +402,18 @@ class CameraPageState extends State<CameraPage> {
           _buildInfoIcon(),
         ]);
       }),
-      floatingActionButton: kDebugMode ? _buildDebugActions() : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButton: kDebugMode ? _buildDebugActions() : null,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
   Widget _buildCameraImage(BoxConstraints scaffoldConstraints) {
+    final scaleFactor = _getScaleFactor(scaffoldConstraints);
+
+    // TODO: use max height to restrict tap container height
+    final maxHeight = (_tappedWordRect?.top ?? 0) -
+        getOverflowHeightCorrection(scaffoldConstraints);
+
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -407,21 +425,39 @@ class CameraPageState extends State<CameraPage> {
             child: Stack(fit: StackFit.expand, children: <Widget>[
               Image.memory(
                   Uint8List.fromList(convertToPng(_tappedCameraImage!))),
-              // _tappedCameraImage != null
-              Positioned(
-                  top: getOverflowHeightCorrection(scaffoldConstraints),
-                  left: 0,
-                  right: 0,
-                  height: (_tapUpDetails?.localPosition.dy ?? 0) -
-                      getOverflowHeightCorrection(scaffoldConstraints),
-                  child: Container(
-                    width: 100.0,
-                    height: 100.0,
-                    color: Colors.yellow,
-                  ))
+              _buildTextUnderlineCustomPaint(scaleFactor),
+              GestureDetector(
+                onTap: () {
+                  // tapped outside tap container
+                  setState(() {
+                    _showTapContainer = false;
+                    _tappedCameraImage = null;
+                    _tapUpDetails = null;
+                  });
+                },
+              ),
+              _showTapContainer
+                  ? Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: _cameraImageSize!.height - _tappedWordRect!.top,
+                      child: Container(
+                        margin: EdgeInsets.all(16.0 * scaleFactor),
+                        // color: Colors.yellow,
+                        child: buildTapContainer(
+                          _tappedWord!,
+                          scaleFactor,
+                          maxHeight,
+                        ),
+                      ))
+                  : Container(),
             ]),
           ),
         ));
+  }
+
+  double _getScaleFactor(BoxConstraints scaffoldConstraints) {
+    return _cameraImageSize!.width / scaffoldConstraints.maxWidth;
   }
 
   Widget _buildDebugActions() {
@@ -431,7 +467,8 @@ class CameraPageState extends State<CameraPage> {
       children: <Widget>[
         FloatingActionButton.extended(
             onPressed: () {
-              showTapDialog("monkey");
+              // TODO
+              // showTapDialog("monkey");
             },
             backgroundColor: Colors.blue,
             icon: const Icon(Icons.document_scanner),
@@ -459,32 +496,57 @@ class CameraPageState extends State<CameraPage> {
     );
   }
 
-  void showTapDialog(String tappedWord) {
-    showDialog(
-        context: context,
-        builder: (ctx) => TapDialog(
-              onClose: () {
-                log("dialog onClose called");
-                Navigator.pop(context);
-              },
-              tappedWord: _stripInterpunction(tappedWord),
-              deckStorage: widget.deckStorage,
-              translationEnabled: _translationEnabled,
-              userPreferencesStorage: widget.userPreferencesStorage,
-              translationLanguages: widget.translationLanguages,
-              textToSpeechLanguages: widget.textToSpeechLanguages,
-              userPreferences: widget.userPreferences,
-              googleCloudTranslationClient:
-                  GetIt.I<GoogleCloudTranslationClient>(),
-              googleCloudTextToSpeechClient:
-                  GetIt.I<GoogleCloudTextToSpeechClient>(),
-            )).whenComplete(() {
-      setState(() {
-        _tappedCameraImage = null;
-        _tapUpDetails = null;
-      });
-    });
+  Widget buildTapContainer(
+      String tappedWord, double scaleFactor, double maxHeight) {
+    // TODO: use max height
+    return TapContainer(
+      onClose: () {
+        log("dialog onClose called");
+        // TODO
+        //         setState(() {
+        //   _tappedCameraImage = null;
+        //   _tapUpDetails = null;
+        // });
+      },
+      tappedWord: _stripInterpunction(tappedWord),
+      deckStorage: widget.deckStorage,
+      translationEnabled: _translationEnabled,
+      userPreferencesStorage: widget.userPreferencesStorage,
+      translationLanguages: widget.translationLanguages,
+      textToSpeechLanguages: widget.textToSpeechLanguages,
+      userPreferences: widget.userPreferences,
+      googleCloudTranslationClient: GetIt.I<GoogleCloudTranslationClient>(),
+      googleCloudTextToSpeechClient: GetIt.I<GoogleCloudTextToSpeechClient>(),
+      scaleFactor: scaleFactor,
+    );
   }
+
+  // void showTapDialog(String tappedWord) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (ctx) => TapContainer(
+  //             onClose: () {
+  //               log("dialog onClose called");
+  //               Navigator.pop(context);
+  //             },
+  //             tappedWord: _stripInterpunction(tappedWord),
+  //             deckStorage: widget.deckStorage,
+  //             translationEnabled: _translationEnabled,
+  //             userPreferencesStorage: widget.userPreferencesStorage,
+  //             translationLanguages: widget.translationLanguages,
+  //             textToSpeechLanguages: widget.textToSpeechLanguages,
+  //             userPreferences: widget.userPreferences,
+  //             googleCloudTranslationClient:
+  //                 GetIt.I<GoogleCloudTranslationClient>(),
+  //             googleCloudTextToSpeechClient:
+  //                 GetIt.I<GoogleCloudTextToSpeechClient>(),
+  //           )).whenComplete(() {
+  //     setState(() {
+  //       _tappedCameraImage = null;
+  //       _tapUpDetails = null;
+  //     });
+  //   });
+  // }
 
   String _stripInterpunction(String s) {
     return s.replaceAll(RegExp(r'[.,:;\?!]'), '');
