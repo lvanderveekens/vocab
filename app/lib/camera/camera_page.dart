@@ -307,16 +307,14 @@ class CameraPageState extends State<CameraPage> {
                     ])))));
   }
 
-  double getCorrection() {
-    final RenderBox renderBox =
-        _scaffoldKey.currentContext?.findRenderObject() as RenderBox;
-    final Size size = renderBox.size; // or _widgetKey.currentContext?.size
-    print("scaffold aspect ratio" + size.aspectRatio.toString());
+  double getOverflowHeightCorrection(BoxConstraints scaffoldConstraints) {
+    final parentAspectRatio =
+        scaffoldConstraints.maxWidth / scaffoldConstraints.maxHeight;
 
     final cameraImageHeight = _cameraImageSize!.height;
 
     final renderedCameraImageHeight =
-        _cameraImageSize!.width / size.aspectRatio;
+        _cameraImageSize!.width / parentAspectRatio;
     print(renderedCameraImageHeight);
 
     return (cameraImageHeight - renderedCameraImageHeight) / 2;
@@ -380,23 +378,24 @@ class CameraPageState extends State<CameraPage> {
         ));
   }
 
-  final GlobalKey _scaffoldKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      body: Stack(fit: StackFit.loose, children: <Widget>[
-        _tappedCameraImage != null ? _buildCameraImage() : _buildCameraWidget(),
-        _buildUsageTip(),
-        _buildInfoIcon(),
-      ]),
+      body: LayoutBuilder(builder: (ctx, constraints) {
+        return Stack(fit: StackFit.loose, children: <Widget>[
+          _tappedCameraImage != null
+              ? _buildCameraImage(constraints)
+              : _buildCameraWidget(),
+          _buildUsageTip(),
+          _buildInfoIcon(),
+        ]);
+      }),
       floatingActionButton: kDebugMode ? _buildDebugActions() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
-  Widget _buildCameraImage() {
+  Widget _buildCameraImage(BoxConstraints scaffoldConstraints) {
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -410,14 +409,15 @@ class CameraPageState extends State<CameraPage> {
                   Uint8List.fromList(convertToPng(_tappedCameraImage!))),
               // _tappedCameraImage != null
               Positioned(
-                  top: getCorrection() + 20,
-                  left: 20,
-                  right: 20,
-                  bottom: _tapUpDetails?.localPosition.dy ?? 0 + 20,
+                  top: getOverflowHeightCorrection(scaffoldConstraints),
+                  left: 0,
+                  right: 0,
+                  height: (_tapUpDetails?.localPosition.dy ?? 0) -
+                      getOverflowHeightCorrection(scaffoldConstraints),
                   child: Container(
                     width: 100.0,
                     height: 100.0,
-                    color: Colors.red,
+                    color: Colors.yellow,
                   ))
             ]),
           ),
