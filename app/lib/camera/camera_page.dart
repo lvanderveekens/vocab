@@ -319,17 +319,14 @@ class CameraPageState extends State<CameraPage> {
                     ])))));
   }
 
-  double getOverflowHeightCorrection(BoxConstraints scaffoldConstraints) {
+  double _getCameraImageHeightOverflow(BoxConstraints scaffoldConstraints) {
     final parentAspectRatio =
         scaffoldConstraints.maxWidth / scaffoldConstraints.maxHeight;
 
-    final cameraImageHeight = _cameraImageSize!.height;
-
     final renderedCameraImageHeight =
         _cameraImageSize!.width / parentAspectRatio;
-    print(renderedCameraImageHeight);
 
-    return (cameraImageHeight - renderedCameraImageHeight) / 2;
+    return (_cameraImageSize!.height - renderedCameraImageHeight) / 2;
   }
 
   void _getSizedBoxWidgetInfo() {
@@ -400,6 +397,9 @@ class CameraPageState extends State<CameraPage> {
               : _buildCameraWidget(),
           _buildUsageTip(),
           _buildInfoIcon(),
+          _showTapContainer
+              ? _buildTapContainer(_tappedWord!, constraints)
+              : Container(),
         ]);
       }),
       // floatingActionButton: kDebugMode ? _buildDebugActions() : null,
@@ -409,10 +409,6 @@ class CameraPageState extends State<CameraPage> {
 
   Widget _buildCameraImage(BoxConstraints scaffoldConstraints) {
     final scaleFactor = _getScaleFactor(scaffoldConstraints);
-
-    // TODO: use max height to restrict tap container height
-    final maxHeight = (_tappedWordRect?.top ?? 0) -
-        getOverflowHeightCorrection(scaffoldConstraints);
 
     return Container(
         width: MediaQuery.of(context).size.width,
@@ -436,21 +432,6 @@ class CameraPageState extends State<CameraPage> {
                   });
                 },
               ),
-              _showTapContainer
-                  ? Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: _cameraImageSize!.height - _tappedWordRect!.top,
-                      child: Container(
-                        margin: EdgeInsets.all(16.0 * scaleFactor),
-                        // color: Colors.yellow,
-                        child: buildTapContainer(
-                          _tappedWord!,
-                          scaleFactor,
-                          maxHeight,
-                        ),
-                      ))
-                  : Container(),
             ]),
           ),
         ));
@@ -496,29 +477,84 @@ class CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget buildTapContainer(
-      String tappedWord, double scaleFactor, double maxHeight) {
-    // TODO: use max height
-    return TapContainer(
-      onClose: () {
-        log("dialog onClose called");
-        // TODO
-        //         setState(() {
-        //   _tappedCameraImage = null;
-        //   _tapUpDetails = null;
-        // });
-      },
-      tappedWord: _stripInterpunction(tappedWord),
-      deckStorage: widget.deckStorage,
-      translationEnabled: _translationEnabled,
-      userPreferencesStorage: widget.userPreferencesStorage,
-      translationLanguages: widget.translationLanguages,
-      textToSpeechLanguages: widget.textToSpeechLanguages,
-      userPreferences: widget.userPreferences,
-      googleCloudTranslationClient: GetIt.I<GoogleCloudTranslationClient>(),
-      googleCloudTextToSpeechClient: GetIt.I<GoogleCloudTextToSpeechClient>(),
-      scaleFactor: scaleFactor,
-    );
+  Widget _buildTapContainer(
+    String tappedWord,
+    BoxConstraints constraints,
+  ) {
+    // TODO: hoeveel ruimte is er boven het tapped word en hoeveel eronder?
+
+    final parentAspectRatio = constraints.maxWidth / constraints.maxHeight;
+
+    log("cameraImageHeight: " + _cameraImageSize!.height.toString());
+
+    final visibleCameraImageHeight =
+        _cameraImageSize!.width / parentAspectRatio;
+
+    log("visibleCameraImageHeight: " + visibleCameraImageHeight.toString());
+
+    final cameraImageHeightOverflow =
+        _getCameraImageHeightOverflow(constraints);
+
+    log("tappedWordTop: " + _tappedWordRect!.top.toString());
+
+    final tappedWordTopCorrectedForOverflow =
+        _tappedWordRect!.top - cameraImageHeightOverflow;
+
+    log("tappedWordTopCorrectForOverflow: " +
+        tappedWordTopCorrectedForOverflow.toString());
+
+    final double scaleY = constraints.maxHeight / visibleCameraImageHeight;
+
+    log("scaleY: " + scaleY.toString());
+
+    final scaledTappedWordHeight = tappedWordTopCorrectedForOverflow * scaleY;
+
+    // final (_cameraImageSize!.height - renderedCameraImageHeight) / 2;
+
+    // final minCameraImageHeight = cameraImageHeightOverflow;
+    // final maxCameraImageHeight =
+    //     _cameraImageSize!.height - cameraImageHeightOverflow;
+
+    // log("minCameraImageHeight: " + minCameraImageHeight.toString());
+    // log("maxCameraImageHeight: " + maxCameraImageHeight.toString());
+
+    // final availableHeightAboveTappedWord =
+    //     _tappedWordRect!.top - minCameraImageHeight;
+    // final availableHeightBelowTappedWord =
+    //     maxCameraImageHeight - _tappedWordRect!.bottom;
+
+    // log("availableHeightAboveTappedWord: " +
+    //     availableHeightAboveTappedWord.toString());
+    // log("availableHeightBelowTappedWord: " +
+    //     availableHeightBelowTappedWord.toString());
+
+    // TODO: get height of tap dialog
+    // final avaialbleHeightBelowTappedWord =
+    //     maxCameraImageHeight - (_tappedWordRect?.bottom ?? 0);
+
+    return Positioned(
+        left: 0,
+        right: 0,
+        bottom: constraints.maxHeight - scaledTappedWordHeight,
+        child: Container(
+          margin: EdgeInsets.all(16.0),
+          child: TapContainer(
+            onClose: () {
+              log("tap container onClose called");
+            },
+            tappedWord: _stripInterpunction(tappedWord),
+            deckStorage: widget.deckStorage,
+            translationEnabled: _translationEnabled,
+            userPreferencesStorage: widget.userPreferencesStorage,
+            translationLanguages: widget.translationLanguages,
+            textToSpeechLanguages: widget.textToSpeechLanguages,
+            userPreferences: widget.userPreferences,
+            googleCloudTranslationClient:
+                GetIt.I<GoogleCloudTranslationClient>(),
+            googleCloudTextToSpeechClient:
+                GetIt.I<GoogleCloudTextToSpeechClient>(),
+          ),
+        ));
   }
 
   // void showTapDialog(String tappedWord) {

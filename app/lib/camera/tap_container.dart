@@ -32,7 +32,6 @@ class TapContainer extends StatefulWidget {
   final UserPreferences? userPreferences;
   final GoogleCloudTranslationClient googleCloudTranslationClient;
   final GoogleCloudTextToSpeechClient googleCloudTextToSpeechClient;
-  final double scaleFactor;
 
   const TapContainer({
     Key? key,
@@ -46,7 +45,6 @@ class TapContainer extends StatefulWidget {
     required this.userPreferences,
     required this.googleCloudTranslationClient,
     required this.googleCloudTextToSpeechClient,
-    required this.scaleFactor,
   }) : super(key: key);
 
   @override
@@ -82,8 +80,7 @@ class TapContainerState extends State<TapContainer> {
 
     return Container(
         decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(10.0 * widget.scaleFactor)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
           color: Colors.white,
         ),
         child: Container(
@@ -161,9 +158,9 @@ class TapContainerState extends State<TapContainer> {
       children: [
         Container(
             padding: EdgeInsets.only(
-              top: 16.0 * widget.scaleFactor,
-              left: 16.0 * widget.scaleFactor,
-              right: 16.0 * widget.scaleFactor,
+              top: 16.0,
+              left: 16.0,
+              right: 16.0,
             ),
             child: Row(
               children: [
@@ -175,8 +172,7 @@ class TapContainerState extends State<TapContainer> {
                               iconSize: 0.0,
                               isDense: false,
                               isExpanded: true,
-                              style: TextStyle(
-                                  fontSize: 16.0 * widget.scaleFactor),
+                              style: TextStyle(fontSize: 16.0),
                               value: _translationSourceLanguage,
                               items: widget.translationLanguages
                                   .map((GoogleCloudTranslationLanguage gtl) {
@@ -214,7 +210,7 @@ class TapContainerState extends State<TapContainer> {
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.swap_horiz),
-                  iconSize: 24.0 * widget.scaleFactor,
+                  iconSize: 24.0,
                   onPressed: () async {
                     setState(() {
                       var oldTranslatePageSourceLanguage =
@@ -235,8 +231,7 @@ class TapContainerState extends State<TapContainer> {
                           ? DropdownButton(
                               underline: Container(),
                               iconSize: 0.0,
-                              style: TextStyle(
-                                  fontSize: 16.0 * widget.scaleFactor),
+                              style: TextStyle(fontSize: 16.0),
                               isDense: false,
                               isExpanded: true,
                               value: _translationTargetLanguage,
@@ -277,8 +272,8 @@ class TapContainerState extends State<TapContainer> {
             )),
         Container(
             padding: EdgeInsets.only(
-              top: 32.0 * widget.scaleFactor,
-              bottom: 32.0 * widget.scaleFactor,
+              top: 32.0,
+              bottom: 32.0,
             ),
             child: Column(children: [
               Container(
@@ -287,13 +282,12 @@ class TapContainerState extends State<TapContainer> {
                   child: _textToSpeechLanguage != null
                       ? Container(
                           alignment: Alignment.centerRight,
-                          margin:
-                              EdgeInsets.only(right: 4.0 * widget.scaleFactor),
+                          margin: EdgeInsets.only(right: 4.0),
                           child: IconButton(
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                             icon: const Icon(Icons.volume_up),
-                            iconSize: 24.0 * widget.scaleFactor,
+                            iconSize: 24.0,
                             onPressed: () async {
                               log("Pressed on speaker icon");
                               widget.googleCloudTextToSpeechClient
@@ -335,28 +329,28 @@ class TapContainerState extends State<TapContainer> {
                     child: Text(
                   widget.tappedWord,
                   style: TextStyle(
-                    fontSize: 24.0 * widget.scaleFactor,
+                    fontSize: 24.0,
                   ),
                 )),
                 Expanded(child: Container())
               ])),
-              SizedBox(height: 16.0 * widget.scaleFactor),
+              SizedBox(height: 16.0),
               Text(
                 _translation ?? '',
                 style: TextStyle(
-                  fontSize: 16.0 * widget.scaleFactor,
+                  fontSize: 16.0,
                 ),
               )
             ])),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.all(16.0 * widget.scaleFactor),
+            padding: EdgeInsets.all(16.0),
             side: BorderSide.none,
             backgroundColor: const Color(0xFF00A3FF),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10.0 * widget.scaleFactor),
-                bottomRight: Radius.circular(10.0 * widget.scaleFactor),
+                bottomLeft: Radius.circular(10.0),
+                bottomRight: Radius.circular(10.0),
               ),
             ),
           ),
@@ -365,7 +359,7 @@ class TapContainerState extends State<TapContainer> {
             child: Center(
                 child: Text('Add to deck',
                     style: TextStyle(
-                        fontSize: 16.0 * widget.scaleFactor,
+                        fontSize: 16.0,
                         color: Colors.white,
                         fontWeight: FontWeight.bold))),
           ),
