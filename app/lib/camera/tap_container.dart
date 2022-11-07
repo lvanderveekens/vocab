@@ -78,11 +78,8 @@ class TapContainerState extends State<TapContainer> {
       _translate();
     }
 
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          color: Colors.white,
-        ),
+    return Material(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
         child: Container(
             child: Column(
                 mainAxisSize: MainAxisSize.min,
