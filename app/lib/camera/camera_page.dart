@@ -499,6 +499,8 @@ class CameraPageState extends State<CameraPage> {
 
     final tappedWordTopCorrectedForOverflow =
         _tappedWordRect!.top - cameraImageHeightOverflow;
+    final tappedWordBottomCorrectedForOverflow =
+        _tappedWordRect!.bottom - cameraImageHeightOverflow;
 
     log("tappedWordTopCorrectForOverflow: " +
         tappedWordTopCorrectedForOverflow.toString());
@@ -507,7 +509,13 @@ class CameraPageState extends State<CameraPage> {
 
     log("scaleY: " + scaleY.toString());
 
-    final scaledTappedWordHeight = tappedWordTopCorrectedForOverflow * scaleY;
+    final scaledTappedWordTopHeight =
+        tappedWordTopCorrectedForOverflow * scaleY;
+
+    final scaledTappedWordBottomHeight =
+        tappedWordBottomCorrectedForOverflow * scaleY;
+
+    log("scaledTappedWordTopHeight: " + scaledTappedWordTopHeight.toString());
 
     // final (_cameraImageSize!.height - renderedCameraImageHeight) / 2;
 
@@ -532,10 +540,22 @@ class CameraPageState extends State<CameraPage> {
     // final avaialbleHeightBelowTappedWord =
     //     maxCameraImageHeight - (_tappedWordRect?.bottom ?? 0);
 
+    // This is a workaround because I cannot get the height of the tap container
+    // before it's rendered.
+    final tapContainerHeight = 275.0;
+
+    final tapContainerFitsAboveTappedWord =
+        (scaledTappedWordTopHeight) >= tapContainerHeight;
+
     return Positioned(
         left: 0,
         right: 0,
-        bottom: constraints.maxHeight - scaledTappedWordHeight,
+        top: !tapContainerFitsAboveTappedWord
+            ? scaledTappedWordBottomHeight
+            : null,
+        bottom: tapContainerFitsAboveTappedWord
+            ? constraints.maxHeight - scaledTappedWordTopHeight
+            : null,
         child: Container(
           margin: EdgeInsets.all(16.0),
           child: TapContainer(
