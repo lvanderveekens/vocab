@@ -15,10 +15,11 @@ import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:vocab/camera/camera_image_converter.dart';
 import 'package:vocab/camera/info_dialog.dart';
+import 'package:vocab/camera/text_underline_layer.dart';
 import 'package:vocab/camera/text_underline_painter.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/language/language.dart';
-import 'package:vocab/camera/tap_container.dart';
+import 'package:vocab/camera/tap_dialog.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
@@ -62,7 +63,7 @@ class CameraPageState extends State<CameraPage> {
   bool _cameraAvailable = true;
   bool _cameraInitialized = false;
   bool _realTimeScanningEnabled = false;
-  bool _translationEnabled = !kDebugMode;
+  bool _translationEnabled = true;
 
   bool _processNextCameraImage = false;
   bool _processingCameraImage = false;
@@ -70,13 +71,16 @@ class CameraPageState extends State<CameraPage> {
   Size? _cameraImageSize;
   TapUpDetails? _tapUpDetails;
 
-  bool _showTapContainer = false;
+  bool _showTapDialog = false;
 
   RecognizedText? _recognizedText;
   String? _tappedWord;
-  Rect? _tappedWordRect;
+  TextElement? _tappedWordTextElement;
 
-  bool _showTapDialog = false;
+  // TODO: move state elsewhere? Because it rerenders the whole page...
+  List<TextElement> _selectedTextElements = [];
+
+  // bool _showTapDialog = false;
   String? _tappedOnWord;
 
   @override
@@ -168,7 +172,7 @@ class CameraPageState extends State<CameraPage> {
             setState(() {
               _tappedCameraImage = cameraImage;
               _tappedWord = tappedWord;
-              _showTapContainer = true;
+              _showTapDialog = true;
             });
           }
         }
@@ -181,20 +185,6 @@ class CameraPageState extends State<CameraPage> {
 
   Future<String?> checkTapLocation(TapUpDetails tapUpDetails,
       RecognizedText recognizedText, Size cameraImageSize) async {
-    final cameraPreviewSize = cameraPreviewKey.currentContext!.size!;
-
-    log("Camera image (${cameraImageSize.width},${cameraImageSize.height})");
-    log("Camera image aspect ratio ${cameraImageSize.width / cameraImageSize.height}");
-    log("Camera preview (${cameraPreviewSize.width},${cameraPreviewSize.height})");
-    log("Camera preview aspect ratio ${cameraPreviewSize.width / cameraPreviewSize.height}");
-
-    // // NOTE: scaling only works if the aspect ratios match
-    // final double scaleX = cameraPreviewSize.width / cameraImageSize.width;
-    // final double scaleY = cameraPreviewSize.height / cameraImageSize.height;
-
-    var x = tapUpDetails.localPosition.dx;
-    var y = tapUpDetails.localPosition.dy;
-
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
         for (TextElement element in line.elements) {
@@ -204,7 +194,7 @@ class CameraPageState extends State<CameraPage> {
           if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
             setState(() {
-              _tappedWordRect = element.boundingBox;
+              _tappedWordTextElement = element;
             });
             return element.text;
           }
@@ -244,11 +234,6 @@ class CameraPageState extends State<CameraPage> {
       _tapUpDetails = tapUpDetails;
       _processNextCameraImage = true;
     };
-  }
-
-  Widget _buildTextUnderlineCustomPaint(double scaleFactor) {
-    final painter = TextUnderlinePainter(_tappedWordRect!, scaleFactor);
-    return CustomPaint(painter: painter);
   }
 
   Widget _buildRealTimeScannerIfNeeded() {
@@ -397,9 +382,7 @@ class CameraPageState extends State<CameraPage> {
               : _buildCameraWidget(),
           _buildUsageTip(),
           _buildInfoIcon(),
-          _showTapContainer
-              ? _buildTapContainer(_tappedWord!, constraints)
-              : Container(),
+          _showTapDialog ? _buildTapDialog(constraints) : Container(),
         ]);
       }),
       // floatingActionButton: kDebugMode ? _buildDebugActions() : null,
@@ -421,20 +404,33 @@ class CameraPageState extends State<CameraPage> {
             child: Stack(fit: StackFit.expand, children: <Widget>[
               Image.memory(
                   Uint8List.fromList(convertToPng(_tappedCameraImage!))),
-              _buildTextUnderlineCustomPaint(scaleFactor),
+              TextUnderlineLayer(
+                recognizedText: _recognizedText!,
+                tappedWord: _tappedWordTextElement!,
+                scaleFactor: scaleFactor,
+                callback: _updateSelectedTextElements,
+              ),
               GestureDetector(
                 onTap: () {
                   // tapped outside tap container
                   setState(() {
-                    _showTapContainer = false;
+                    _showTapDialog = false;
                     _tappedCameraImage = null;
                     _tapUpDetails = null;
+                    _tappedWord = null;
+                    _selectedTextElements.clear();
                   });
                 },
               ),
             ]),
           ),
         ));
+  }
+
+  void _updateSelectedTextElements(List<TextElement> selectedTextElements) {
+    setState(() {
+      _selectedTextElements = selectedTextElements;
+    });
   }
 
   double _getScaleFactor(BoxConstraints scaffoldConstraints) {
@@ -449,7 +445,7 @@ class CameraPageState extends State<CameraPage> {
         FloatingActionButton.extended(
             onPressed: () {
               // TODO
-              // showTapDialog("monkey");
+              // log("monkey");
             },
             backgroundColor: Colors.blue,
             icon: const Icon(Icons.document_scanner),
@@ -477,12 +473,9 @@ class CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget _buildTapContainer(
-    String tappedWord,
+  Widget _buildTapDialog(
     BoxConstraints constraints,
   ) {
-    // TODO: hoeveel ruimte is er boven het tapped word en hoeveel eronder?
-
     final parentAspectRatio = constraints.maxWidth / constraints.maxHeight;
 
     log("cameraImageHeight: " + _cameraImageSize!.height.toString());
@@ -495,12 +488,12 @@ class CameraPageState extends State<CameraPage> {
     final cameraImageHeightOverflow =
         _getCameraImageHeightOverflow(constraints);
 
-    log("tappedWordTop: " + _tappedWordRect!.top.toString());
+    log("tappedWordTop: " + _tappedWordTextElement!.boundingBox.top.toString());
 
     final tappedWordTopCorrectedForOverflow =
-        _tappedWordRect!.top - cameraImageHeightOverflow;
+        _tappedWordTextElement!.boundingBox.top - cameraImageHeightOverflow;
     final tappedWordBottomCorrectedForOverflow =
-        _tappedWordRect!.bottom - cameraImageHeightOverflow;
+        _tappedWordTextElement!.boundingBox.bottom - cameraImageHeightOverflow;
 
     log("tappedWordTopCorrectForOverflow: " +
         tappedWordTopCorrectedForOverflow.toString());
@@ -547,6 +540,14 @@ class CameraPageState extends State<CameraPage> {
     final tapContainerFitsAboveTappedWord =
         (scaledTappedWordTopHeight) >= tapContainerHeight;
 
+    String originalText;
+    if (_selectedTextElements.isNotEmpty) {
+      originalText = _stripInterpunction(
+          _selectedTextElements.map((e) => e.text).join(" "));
+    } else {
+      originalText = _stripInterpunction(_tappedWord!);
+    }
+
     return Positioned(
         left: 0,
         right: 0,
@@ -558,17 +559,17 @@ class CameraPageState extends State<CameraPage> {
             : null,
         child: Container(
           margin: EdgeInsets.all(16.0),
-          child: TapContainer(
+          child: TapDialog(
             onClose: () {
               log("tap container onClose called");
             },
-            tappedWord: _stripInterpunction(tappedWord),
+            originalText: originalText,
             deckStorage: widget.deckStorage,
             translationEnabled: _translationEnabled,
             userPreferencesStorage: widget.userPreferencesStorage,
             translationLanguages: widget.translationLanguages,
             textToSpeechLanguages: widget.textToSpeechLanguages,
-            userPreferences: widget.userPreferences,
+            userPreferences: widget.userPreferences!,
             googleCloudTranslationClient:
                 GetIt.I<GoogleCloudTranslationClient>(),
             googleCloudTextToSpeechClient:

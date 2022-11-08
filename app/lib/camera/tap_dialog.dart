@@ -21,22 +21,22 @@ import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
-class TapContainer extends StatefulWidget {
+class TapDialog extends StatefulWidget {
   final VoidCallback onClose;
-  final String tappedWord;
+  final String originalText;
   final bool translationEnabled;
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
   final List<GoogleCloudTranslationLanguage> translationLanguages;
   final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
-  final UserPreferences? userPreferences;
+  final UserPreferences userPreferences;
   final GoogleCloudTranslationClient googleCloudTranslationClient;
   final GoogleCloudTextToSpeechClient googleCloudTextToSpeechClient;
 
-  const TapContainer({
+  const TapDialog({
     Key? key,
     required this.onClose,
-    required this.tappedWord,
+    required this.originalText,
     required this.translationEnabled,
     required this.deckStorage,
     required this.userPreferencesStorage,
@@ -48,33 +48,40 @@ class TapContainer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TapContainer> createState() => TapContainerState();
+  State<TapDialog> createState() => TapDialogState();
 }
 
-class TapContainerState extends State<TapContainer> {
+class TapDialogState extends State<TapDialog> {
   GoogleCloudTranslationLanguage? _translationSourceLanguage;
   GoogleCloudTranslationLanguage? _translationTargetLanguage;
 
   GoogleCloudTextToSpeechLanguage? _textToSpeechLanguage;
 
+  String? _originalText;
   String? _translation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    log("setting source and target languages");
+    setState(() {
+      _translationSourceLanguage = getGoogleTranslationLanguageByCode(
+          widget.userPreferences.sourceLanguageCode);
+      _translationTargetLanguage = getGoogleTranslationLanguageByCode(
+          widget.userPreferences.targetLanguageCode);
+    });
+    _setTextToSpeechLanguage();
+
+    _originalText = widget.originalText;
+    _translate();
+  }
 
   @override
   Widget build(BuildContext context) {
     log("@>TapDialogState#build (widget.userPreferences=${widget.userPreferences})");
 
-    if (widget.userPreferences != null &&
-        _translationSourceLanguage == null &&
-        _translationTargetLanguage == null) {
-      log("setting source and target languages");
-      setState(() {
-        _translationSourceLanguage = getGoogleTranslationLanguageByCode(
-            widget.userPreferences!.sourceLanguageCode);
-        _translationTargetLanguage = getGoogleTranslationLanguageByCode(
-            widget.userPreferences!.targetLanguageCode);
-      });
-
-      _setTextToSpeechLanguage();
+    if (_originalText != widget.originalText) {
       _translate();
     }
 
@@ -289,7 +296,7 @@ class TapContainerState extends State<TapContainer> {
                               log("Pressed on speaker icon");
                               widget.googleCloudTextToSpeechClient
                                   .synthesize(
-                                widget.tappedWord,
+                                widget.originalText,
                                 _textToSpeechLanguage!.code,
                               )
                                   .then((base64String) {
@@ -297,7 +304,7 @@ class TapContainerState extends State<TapContainer> {
 
                                 getTemporaryDirectory().then((dir) {
                                   var filePath =
-                                      '${dir.path}/${widget.tappedWord}_${_textToSpeechLanguage!.code}.mp3';
+                                      '${dir.path}/${widget.originalText}_${_textToSpeechLanguage!.code}.mp3';
                                   var file = File(filePath);
 
                                   var decoded = base64.decode(base64String);
@@ -324,7 +331,7 @@ class TapContainerState extends State<TapContainer> {
                 ),
                 Container(
                     child: Text(
-                  widget.tappedWord,
+                  widget.originalText,
                   style: TextStyle(
                     fontSize: 24.0,
                   ),
@@ -367,7 +374,7 @@ class TapContainerState extends State<TapContainer> {
                   Flashcard addedCard = Flashcard(
                     id: const Uuid().v4(),
                     sourceLanguageCode: _translationSourceLanguage!.code,
-                    sourceWord: widget.tappedWord,
+                    sourceWord: widget.originalText,
                     targetLanguageCode: _translationTargetLanguage!.code,
                     targetWord: _translation!,
                   );
@@ -394,26 +401,23 @@ class TapContainerState extends State<TapContainer> {
 
   void _translate() async {
     log("@>translate()");
+
     if (!widget.translationEnabled) {
       setState(() {
         _translation = "<translation disabled>";
       });
       return;
     }
-    if (_translationSourceLanguage == null ||
-        _translationTargetLanguage == null) {
-      return;
-    }
-
     log("Translating...");
 
     String? translation = await widget.googleCloudTranslationClient.translate(
-      widget.tappedWord,
+      widget.originalText,
       _translationSourceLanguage!.code,
       _translationTargetLanguage!.code,
     );
     log("Translation: $translation");
     setState(() {
+      _originalText = widget.originalText;
       _translation = translation;
     });
   }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class TextUnderlinePainter extends CustomPainter {
-  final Rect tappedWordRect;
+  final List<Rect> wordRects;
   final double scaleFactor;
 
-  TextUnderlinePainter(this.tappedWordRect, this.scaleFactor);
+  TextUnderlinePainter(this.wordRects, this.scaleFactor);
 
   @override
   void paint(Canvas canvas, Size canvasSize) {
@@ -15,16 +15,18 @@ class TextUnderlinePainter extends CustomPainter {
       ..strokeWidth = 2.0 * scaleFactor;
 
     // canvas.drawRect(tappedWordRect, yellowPaint);
-    canvas.drawLine(
-      Offset(tappedWordRect.left, tappedWordRect.bottom + 4.0 * scaleFactor),
-      Offset(tappedWordRect.right, tappedWordRect.bottom + 4.0 * scaleFactor),
-      yellowPaint,
-    );
+    for (Rect wordRect in wordRects) {
+      canvas.drawLine(
+        Offset(wordRect.left, wordRect.bottom + 4.0 * scaleFactor),
+        Offset(wordRect.right, wordRect.bottom + 4.0 * scaleFactor),
+        yellowPaint,
+      );
+    }
   }
 
   @override
   bool shouldRepaint(TextUnderlinePainter oldDelegate) {
-    return oldDelegate.tappedWordRect != tappedWordRect ||
+    return oldDelegate.wordRects != wordRects ||
         oldDelegate.scaleFactor != scaleFactor;
   }
 }
