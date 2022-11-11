@@ -14,7 +14,6 @@ class TextUnderlinePainter extends CustomPainter {
       ..color = Color(0xFF00A3FF)
       ..strokeWidth = 2.0 * scaleFactor;
 
-    // canvas.drawRect(tappedWordRect, yellowPaint);
     for (Rect wordRect in wordRects) {
       canvas.drawLine(
         Offset(wordRect.left, wordRect.bottom + 4.0 * scaleFactor),

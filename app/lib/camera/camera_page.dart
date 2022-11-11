@@ -410,18 +410,18 @@ class CameraPageState extends State<CameraPage> {
                 scaleFactor: scaleFactor,
                 callback: _updateSelectedTextElements,
               ),
-              GestureDetector(
-                onTap: () {
-                  // tapped outside tap container
-                  setState(() {
-                    _showTapDialog = false;
-                    _tappedCameraImage = null;
-                    _tapUpDetails = null;
-                    _tappedWord = null;
-                    _selectedTextElements.clear();
-                  });
-                },
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     // tapped outside tap container
+              //     setState(() {
+              //       _showTapDialog = false;
+              //       _tappedCameraImage = null;
+              //       _tapUpDetails = null;
+              //       _tappedWord = null;
+              //       _selectedTextElements.clear();
+              //     });
+              //   },
+              // ),
             ]),
           ),
         ));

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vocab/camera/text_underline_painter.dart';
 import 'package:vocab/deck/deck_storage.dart';
@@ -57,28 +58,33 @@ class TextUnderlineLayerState extends State<TextUnderlineLayer> {
     return Stack(fit: StackFit.expand, children: <Widget>[
       _buildTextUnderlineCustomPaint(),
       GestureDetector(
+        onTapUp: (TapUpDetails details) {
+          log("onTapUp()");
+          var selectedTextElement = _findTextElement(details.localPosition);
+          if (selectedTextElement != null) {
+            if (_selectedTextElements.contains(selectedTextElement)) {
+              setState(() {
+                _selectedTextElements.remove(selectedTextElement);
+              });
+            } else {
+              setState(() {
+                _selectedTextElements.add(selectedTextElement);
+              });
+            }
+            widget.callback(_selectedTextElements);
+          }
+        },
         onPanStart: (DragStartDetails details) {
           log("onPanStart()");
           _selectedTextElements.clear();
         },
         onPanUpdate: (DragUpdateDetails details) {
-          outerLoop:
-          for (TextBlock block in widget.recognizedText!.blocks) {
-            for (TextLine line in block.lines) {
-              for (TextElement element in line.elements) {
-                if (element.boundingBox.contains(details.localPosition)) {
-                  log("Dragged over: ${element.text}");
-
-                  if (!_selectedTextElements.contains(element)) {
-                    setState(() {
-                      _selectedTextElements.add(element);
-                    });
-                  }
-
-                  break outerLoop;
-                }
-              }
-            }
+          var selectedTextElement = _findTextElement(details.localPosition);
+          if (selectedTextElement != null &&
+              !_selectedTextElements.contains(selectedTextElement)) {
+            setState(() {
+              _selectedTextElements.add(selectedTextElement);
+            });
           }
         },
         onPanEnd: (DragEndDetails details) {
@@ -96,6 +102,19 @@ class TextUnderlineLayerState extends State<TextUnderlineLayer> {
         },
       )
     ]);
+  }
+
+  TextElement? _findTextElement(Offset localPosition) {
+    for (TextBlock block in widget.recognizedText!.blocks) {
+      for (TextLine line in block.lines) {
+        for (TextElement element in line.elements) {
+          if (element.boundingBox.contains(localPosition)) {
+            return element;
+          }
+        }
+      }
+    }
+    return null;
   }
 
   Widget _buildTextUnderlineCustomPaint() {
