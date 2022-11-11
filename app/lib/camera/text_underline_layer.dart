@@ -11,6 +11,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vocab/camera/text_element_with_indexes.dart';
 import 'package:vocab/camera/text_underline_painter.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,9 +27,9 @@ import 'package:vocab/user/user_preferences_storage.dart';
 
 class TextUnderlineLayer extends StatefulWidget {
   final RecognizedText recognizedText;
-  final TextElement tappedWord;
+  final TextElementWithIndexes tappedWord;
   final double scaleFactor;
-  final Function callback;
+  final Function(List<TextElement>) callback;
 
   // TODO: use a callback to update dragged text elements there.
 
@@ -45,12 +46,12 @@ class TextUnderlineLayer extends StatefulWidget {
 }
 
 class TextUnderlineLayerState extends State<TextUnderlineLayer> {
-  List<TextElement> _selectedTextElements = [];
+  List<TextElementWithIndexes> _selectedTextElementsWithIndexes = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedTextElements.add(widget.tappedWord);
+    _selectedTextElementsWithIndexes.add(widget.tappedWord);
   }
 
   @override
@@ -60,56 +61,64 @@ class TextUnderlineLayerState extends State<TextUnderlineLayer> {
       GestureDetector(
         onTapUp: (TapUpDetails details) {
           log("onTapUp()");
-          var selectedTextElement = _findTextElement(details.localPosition);
-          if (selectedTextElement != null) {
-            if (_selectedTextElements.contains(selectedTextElement)) {
+          var selectedTextElementWithIndexes =
+              _findTextElementWithIndexes(details.localPosition);
+          if (selectedTextElementWithIndexes != null) {
+            if (_selectedTextElementsWithIndexes
+                .contains(selectedTextElementWithIndexes)) {
               setState(() {
-                _selectedTextElements.remove(selectedTextElement);
+                _selectedTextElementsWithIndexes
+                    .remove(selectedTextElementWithIndexes);
               });
             } else {
               setState(() {
-                _selectedTextElements.add(selectedTextElement);
+                _selectedTextElementsWithIndexes
+                    .add(selectedTextElementWithIndexes);
               });
             }
-            widget.callback(_selectedTextElements);
+            widget.callback(_sort(_selectedTextElementsWithIndexes));
           }
         },
         onPanStart: (DragStartDetails details) {
           log("onPanStart()");
-          _selectedTextElements.clear();
+          _selectedTextElementsWithIndexes.clear();
         },
         onPanUpdate: (DragUpdateDetails details) {
-          var selectedTextElement = _findTextElement(details.localPosition);
+          var selectedTextElement =
+              _findTextElementWithIndexes(details.localPosition);
           if (selectedTextElement != null &&
-              !_selectedTextElements.contains(selectedTextElement)) {
+              !_selectedTextElementsWithIndexes.contains(selectedTextElement)) {
             setState(() {
-              _selectedTextElements.add(selectedTextElement);
+              _selectedTextElementsWithIndexes.add(selectedTextElement);
             });
           }
         },
         onPanEnd: (DragEndDetails details) {
           log("onPanEnd()");
-          log("Dragged word rects: " +
-              _selectedTextElements
-                  // TODO: First sort by text blocks, then by text lines within that block, then by words within that line
-                  .map((x) => x.text)
-                  .toString());
           setState(() {
             // trigger a refresh
-            _selectedTextElements = _selectedTextElements;
+            _selectedTextElementsWithIndexes = _selectedTextElementsWithIndexes;
           });
-          widget.callback(_selectedTextElements);
+          widget.callback(_sort(_selectedTextElementsWithIndexes));
         },
       )
     ]);
   }
 
-  TextElement? _findTextElement(Offset localPosition) {
-    for (TextBlock block in widget.recognizedText!.blocks) {
-      for (TextLine line in block.lines) {
-        for (TextElement element in line.elements) {
+  TextElementWithIndexes? _findTextElementWithIndexes(Offset localPosition) {
+    for (var b = 0; b < widget.recognizedText.blocks.length; b++) {
+      var block = widget.recognizedText.blocks[b];
+      for (var l = 0; l < block.lines.length; l++) {
+        var line = block.lines[l];
+        for (var e = 0; e < line.elements.length; e++) {
+          var element = line.elements[e];
           if (element.boundingBox.contains(localPosition)) {
-            return element;
+            return TextElementWithIndexes(
+              element: element,
+              blockIndex: b,
+              lineIndex: l,
+              elementIndex: e,
+            );
           }
         }
       }
@@ -117,10 +126,33 @@ class TextUnderlineLayerState extends State<TextUnderlineLayer> {
     return null;
   }
 
+  List<TextElement> _sort(List<TextElementWithIndexes> toBeSorted) {
+    toBeSorted.sort((a, b) {
+      var compare = a.blockIndex.compareTo(b.blockIndex);
+      if (compare != 0) {
+        return compare;
+      }
+
+      compare = a.lineIndex.compareTo(b.lineIndex);
+      if (compare != 0) {
+        return compare;
+      }
+
+      compare = a.elementIndex.compareTo(b.elementIndex);
+      if (compare != 0) {
+        return compare;
+      }
+      return 0;
+    });
+    return toBeSorted.map((e) => e.element).toList();
+  }
+
   Widget _buildTextUnderlineCustomPaint() {
     List<Rect> wordRects = [];
-    if (_selectedTextElements.isNotEmpty) {
-      wordRects = _selectedTextElements.map((e) => e.boundingBox).toList();
+    if (_selectedTextElementsWithIndexes.isNotEmpty) {
+      wordRects = _selectedTextElementsWithIndexes
+          .map((e) => e.element.boundingBox)
+          .toList();
     }
 
     final painter = TextUnderlinePainter(wordRects, widget.scaleFactor);

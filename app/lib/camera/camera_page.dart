@@ -15,6 +15,7 @@ import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:vocab/camera/camera_image_converter.dart';
 import 'package:vocab/camera/info_dialog.dart';
+import 'package:vocab/camera/text_element_with_indexes.dart';
 import 'package:vocab/camera/text_underline_layer.dart';
 import 'package:vocab/camera/text_underline_painter.dart';
 import 'package:vocab/deck/deck_storage.dart';
@@ -75,7 +76,7 @@ class CameraPageState extends State<CameraPage> {
 
   RecognizedText? _recognizedText;
   String? _tappedWord;
-  TextElement? _tappedWordTextElement;
+  TextElementWithIndexes? _tappedWordTextElement;
 
   // TODO: move state elsewhere? Because it rerenders the whole page...
   List<TextElement> _selectedTextElements = [];
@@ -185,19 +186,33 @@ class CameraPageState extends State<CameraPage> {
 
   Future<String?> checkTapLocation(TapUpDetails tapUpDetails,
       RecognizedText recognizedText, Size cameraImageSize) async {
-    for (TextBlock block in recognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        for (TextElement element in line.elements) {
-          // final scaledBoundingBox =
-          //     scaleRect(element.boundingBox, scaleX, scaleY);
-
+    for (var b = 0; b < recognizedText.blocks.length; b++) {
+      var block = recognizedText.blocks[b];
+      for (var l = 0; l < block.lines.length; l++) {
+        var line = block.lines[l];
+        for (var e = 0; e < line.elements.length; e++) {
+          var element = line.elements[e];
           if (element.boundingBox.contains(tapUpDetails.localPosition)) {
             log("Tapped on: ${element.text}");
             setState(() {
-              _tappedWordTextElement = element;
+              _tappedWordTextElement = TextElementWithIndexes(
+                element: element,
+                blockIndex: b,
+                lineIndex: l,
+                elementIndex: e,
+              );
+              ;
             });
             return element.text;
           }
+        }
+      }
+    }
+
+    for (TextBlock block in recognizedText.blocks) {
+      for (TextLine line in block.lines) {
+        for (TextElement element in line.elements) {
+          if (element.boundingBox.contains(tapUpDetails.localPosition)) {}
         }
       }
     }
@@ -488,12 +503,15 @@ class CameraPageState extends State<CameraPage> {
     final cameraImageHeightOverflow =
         _getCameraImageHeightOverflow(constraints);
 
-    log("tappedWordTop: " + _tappedWordTextElement!.boundingBox.top.toString());
+    log("tappedWordTop: " +
+        _tappedWordTextElement!.element.boundingBox.top.toString());
 
     final tappedWordTopCorrectedForOverflow =
-        _tappedWordTextElement!.boundingBox.top - cameraImageHeightOverflow;
+        _tappedWordTextElement!.element.boundingBox.top -
+            cameraImageHeightOverflow;
     final tappedWordBottomCorrectedForOverflow =
-        _tappedWordTextElement!.boundingBox.bottom - cameraImageHeightOverflow;
+        _tappedWordTextElement!.element.boundingBox.bottom -
+            cameraImageHeightOverflow;
 
     log("tappedWordTopCorrectForOverflow: " +
         tappedWordTopCorrectedForOverflow.toString());
