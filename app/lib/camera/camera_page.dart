@@ -352,7 +352,7 @@ class CameraPageState extends State<CameraPage> {
           margin: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
           child: const Text(
             "Point the camera at a word and tap it",
@@ -553,10 +553,11 @@ class CameraPageState extends State<CameraPage> {
 
     // This is a workaround because I cannot get the height of the tap container
     // before it's rendered.
-    final tapContainerHeight = 275.0;
+    // TODO: use percentage of scaffold height
+    final tapDialogHeightPlusMargin = 220.0 + 16.0 * 2.0;
 
     final tapContainerFitsAboveTappedWord =
-        (scaledTappedWordTopHeight) >= tapContainerHeight;
+        (scaledTappedWordTopHeight) >= tapDialogHeightPlusMargin;
 
     String originalText;
     if (_selectedTextElements.isNotEmpty) {
@@ -579,7 +580,13 @@ class CameraPageState extends State<CameraPage> {
           margin: EdgeInsets.all(16.0),
           child: TapDialog(
             onClose: () {
-              log("tap container onClose called");
+              setState(() {
+                _showTapDialog = false;
+                _tappedCameraImage = null;
+                _tapUpDetails = null;
+                _tappedWord = null;
+                _selectedTextElements.clear();
+              });
             },
             originalText: originalText,
             deckStorage: widget.deckStorage,
@@ -595,33 +602,6 @@ class CameraPageState extends State<CameraPage> {
           ),
         ));
   }
-
-  // void showTapDialog(String tappedWord) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (ctx) => TapContainer(
-  //             onClose: () {
-  //               log("dialog onClose called");
-  //               Navigator.pop(context);
-  //             },
-  //             tappedWord: _stripInterpunction(tappedWord),
-  //             deckStorage: widget.deckStorage,
-  //             translationEnabled: _translationEnabled,
-  //             userPreferencesStorage: widget.userPreferencesStorage,
-  //             translationLanguages: widget.translationLanguages,
-  //             textToSpeechLanguages: widget.textToSpeechLanguages,
-  //             userPreferences: widget.userPreferences,
-  //             googleCloudTranslationClient:
-  //                 GetIt.I<GoogleCloudTranslationClient>(),
-  //             googleCloudTextToSpeechClient:
-  //                 GetIt.I<GoogleCloudTextToSpeechClient>(),
-  //           )).whenComplete(() {
-  //     setState(() {
-  //       _tappedCameraImage = null;
-  //       _tapUpDetails = null;
-  //     });
-  //   });
-  // }
 
   String _stripInterpunction(String s) {
     return s.replaceAll(RegExp(r'[.,:;\?!]'), '');

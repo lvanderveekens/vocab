@@ -86,7 +86,7 @@ class TapDialogState extends State<TapDialog> {
     }
 
     return Material(
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
         child: Container(
             child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -162,7 +162,7 @@ class TapDialogState extends State<TapDialog> {
       children: [
         Container(
             padding: EdgeInsets.only(
-              top: 16.0,
+              top: 4.0,
               left: 16.0,
               right: 16.0,
             ),
@@ -176,7 +176,6 @@ class TapDialogState extends State<TapDialog> {
                               iconSize: 0.0,
                               isDense: false,
                               isExpanded: true,
-                              style: TextStyle(fontSize: 16.0),
                               value: _translationSourceLanguage,
                               items: widget.translationLanguages
                                   .map((GoogleCloudTranslationLanguage gtl) {
@@ -185,10 +184,10 @@ class TapDialogState extends State<TapDialog> {
                                   child: Text(
                                     gtl.language.name,
                                     style: TextStyle(
-                                        color: gtl == _translationSourceLanguage
-                                            ? Color(0xFF00A3FF)
-                                            : Colors.black,
-                                        fontSize: 16.0 /* no scaling needed */),
+                                      color: gtl == _translationSourceLanguage
+                                          ? Color(0xFF00A3FF)
+                                          : Colors.black,
+                                    ),
                                   ),
                                 );
                               }).toList(),
@@ -207,11 +206,12 @@ class TapDialogState extends State<TapDialog> {
                                     ),
                                   ));
                                 }).toList();
-                              })
+                              },
+                            )
                           : null),
                 ),
                 IconButton(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(left: 4.0, right: 4.0),
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.swap_horiz),
                   iconSize: 24.0,
@@ -235,7 +235,6 @@ class TapDialogState extends State<TapDialog> {
                           ? DropdownButton(
                               underline: Container(),
                               iconSize: 0.0,
-                              style: TextStyle(fontSize: 16.0),
                               isDense: false,
                               isExpanded: true,
                               value: _translationTargetLanguage,
@@ -246,7 +245,6 @@ class TapDialogState extends State<TapDialog> {
                                   child: Text(
                                     gtl.language.name,
                                     style: TextStyle(
-                                        fontSize: 16.0 /* no scaling needed */,
                                         color: gtl == _translationTargetLanguage
                                             ? Color(0xFF00A3FF)
                                             : Colors.black),
@@ -265,7 +263,6 @@ class TapDialogState extends State<TapDialog> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: Color(0xFF00A3FF),
-                                      // fontSize: 16.0 /* no scaling needed */,
                                     ),
                                   ));
                                 }).toList();
@@ -276,7 +273,7 @@ class TapDialogState extends State<TapDialog> {
             )),
         Container(
             padding: EdgeInsets.only(
-              top: 32.0,
+              top: 20.0,
               bottom: 32.0,
             ),
             child: Column(children: [
@@ -339,61 +336,81 @@ class TapDialogState extends State<TapDialog> {
                 Expanded(child: Container())
               ])),
               SizedBox(height: 16.0),
-              Text(
-                _translation ?? '',
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              )
+              Text(_translation ?? '')
             ])),
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.all(16.0),
-            side: BorderSide.none,
-            backgroundColor: const Color(0xFF00A3FF),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
+        Divider(
+          color: Color(0xFFD2D2D2),
+          height: 1,
+          thickness: 1,
+          indent: 16,
+          endIndent: 16,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.all(16.0),
+                side: BorderSide.none,
               ),
+              child: Center(
+                child: Text(
+                  'Close',
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Color(0xFF00A3FF),
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              onPressed: _translation != null
+                  ? () {
+                      widget.onClose();
+                    }
+                  : null,
             ),
-          ),
-          child: Container(
-            width: double.infinity,
-            child: Center(
-                child: Text('Add to deck',
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold))),
-          ),
-          onPressed: _translation != null
-              ? () async {
-                  Deck deck = await widget.deckStorage.get();
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.all(16.0),
+                side: BorderSide.none,
+              ),
+              child: Center(
+                child: Text(
+                  'Add to deck',
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Color(0xFF00A3FF),
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              onPressed: _translation != null
+                  ? () async {
+                      Deck deck = await widget.deckStorage.get();
 
-                  Flashcard addedCard = Flashcard(
-                    id: const Uuid().v4(),
-                    sourceLanguageCode: _translationSourceLanguage!.code,
-                    sourceWord: widget.originalText,
-                    targetLanguageCode: _translationTargetLanguage!.code,
-                    targetWord: _translation!,
-                  );
-                  deck.cards.add(addedCard);
-                  widget.deckStorage.save(deck);
+                      Flashcard addedCard = Flashcard(
+                        id: const Uuid().v4(),
+                        sourceLanguageCode: _translationSourceLanguage!.code,
+                        sourceWord: widget.originalText,
+                        targetLanguageCode: _translationTargetLanguage!.code,
+                        targetWord: _translation!,
+                      );
+                      deck.cards.add(addedCard);
+                      widget.deckStorage.save(deck);
 
-                  widget.onClose();
+                      widget.onClose();
 
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Added to deck'),
-                      action: SnackBarAction(
-                        label: "Undo",
-                        onPressed: () {
-                          deck.cards.remove(addedCard);
-                          widget.deckStorage.save(deck);
-                        },
-                      )));
-                }
-              : null,
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text('Added to deck'),
+                          action: SnackBarAction(
+                            label: "Undo",
+                            onPressed: () {
+                              deck.cards.remove(addedCard);
+                              widget.deckStorage.save(deck);
+                            },
+                          )));
+                    }
+                  : null,
+            )
+          ],
         ),
       ],
     );

@@ -121,7 +121,7 @@ class DeckPageState extends State<DeckPage> {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.circular(10.0)),
+            borderRadius: BorderRadius.circular(5.0)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
               margin: EdgeInsets.only(bottom: 8.0),

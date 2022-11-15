@@ -25,8 +25,7 @@ class InfoDialogState extends State<InfoDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
         child: Container(
             child: Column(
                 mainAxisSize: MainAxisSize.min,
