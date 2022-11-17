@@ -554,6 +554,7 @@ class CameraPageState extends State<CameraPage> {
     // This is a workaround because I cannot get the height of the tap container
     // before it's rendered.
     // TODO: use percentage of scaffold height
+
     final tapDialogHeightPlusMargin = 220.0 + 16.0 * 2.0;
 
     final tapContainerFitsAboveTappedWord =
@@ -577,7 +578,7 @@ class CameraPageState extends State<CameraPage> {
             ? constraints.maxHeight - scaledTappedWordTopHeight
             : null,
         child: Container(
-          margin: EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(16.0),
           child: TapDialog(
             onClose: () {
               setState(() {

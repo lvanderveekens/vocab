@@ -148,11 +148,11 @@ class TapDialogState extends State<TapDialog> {
 
   void _saveLanguagesInUserPreferences() {
     if (widget.userPreferences != null) {
-      widget.userPreferences!.sourceLanguageCode =
+      widget.userPreferences.sourceLanguageCode =
           _translationSourceLanguage!.code;
-      widget.userPreferences!.targetLanguageCode =
+      widget.userPreferences.targetLanguageCode =
           _translationTargetLanguage!.code;
-      widget.userPreferencesStorage.save(widget.userPreferences!);
+      widget.userPreferencesStorage.save(widget.userPreferences);
     }
   }
 
@@ -272,73 +272,93 @@ class TapDialogState extends State<TapDialog> {
               ],
             )),
         Container(
-            padding: EdgeInsets.only(
-              top: 20.0,
-              bottom: 32.0,
-            ),
-            child: Column(children: [
-              Container(
-                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Expanded(
-                  child: _textToSpeechLanguage != null
-                      ? Container(
-                          alignment: Alignment.centerRight,
-                          margin: EdgeInsets.only(right: 4.0),
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            icon: const Icon(Icons.volume_up),
-                            iconSize: 24.0,
-                            onPressed: () async {
-                              log("Pressed on speaker icon");
-                              widget.googleCloudTextToSpeechClient
-                                  .synthesize(
-                                widget.originalText,
-                                _textToSpeechLanguage!.code,
-                              )
-                                  .then((base64String) {
-                                // log("base64 encoded" + base64String);
+            height: 116.0,
+            child: Scrollbar(
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 32.0),
+                    child: Column(children: [
+                      Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _textToSpeechLanguage != null
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    margin:
+                                        EdgeInsets.only(top: 2.5, right: 4.0),
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      icon: const Icon(Icons.volume_up),
+                                      iconSize: 24.0,
+                                      onPressed: () async {
+                                        log("Pressed on speaker icon");
+                                        widget.googleCloudTextToSpeechClient
+                                            .synthesize(
+                                          widget.originalText,
+                                          _textToSpeechLanguage!.code,
+                                        )
+                                            .then((base64String) {
+                                          // log("base64 encoded" + base64String);
 
-                                getTemporaryDirectory().then((dir) {
-                                  var filePath =
-                                      '${dir.path}/${widget.originalText}_${_textToSpeechLanguage!.code}.mp3';
-                                  var file = File(filePath);
+                                          getTemporaryDirectory().then((dir) {
+                                            var filePath =
+                                                '${dir.path}/${widget.originalText}_${_textToSpeechLanguage!.code}.mp3';
+                                            var file = File(filePath);
 
-                                  var decoded = base64.decode(base64String);
-                                  // log("Decoded: " + decoded.toString());
+                                            var decoded =
+                                                base64.decode(base64String);
+                                            // log("Decoded: " + decoded.toString());
 
-                                  file.writeAsBytes(decoded).then((value) {
-                                    log("written to file: $filePath");
-                                    final player = AudioPlayer();
-                                    // player.setAudioContext(audioContext);
+                                            file
+                                                .writeAsBytes(decoded)
+                                                .then((value) {
+                                              log("written to file: $filePath");
+                                              final player = AudioPlayer();
+                                              // player.setAudioContext(audioContext);
 
-                                    // Cannot use BytesSource. It only works on Android...
-                                    player
-                                        .play(DeviceFileSource(filePath))
-                                        .whenComplete(() {
-                                      log("Deleting temp file again");
-                                      file.deleteSync();
-                                    });
-                                  });
-                                });
-                              });
-                            },
-                          ))
-                      : Container(),
-                ),
-                Container(
-                    child: Text(
-                  widget.originalText,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                  ),
-                )),
-                Expanded(child: Container())
-              ])),
-              SizedBox(height: 16.0),
-              Text(_translation ?? '')
-            ])),
-        Divider(
+                                              // Cannot use BytesSource. It only works on Android...
+                                              player
+                                                  .play(DeviceFileSource(
+                                                      filePath))
+                                                  .whenComplete(() {
+                                                log("Deleting temp file again");
+                                                file.deleteSync();
+                                              });
+                                            });
+                                          });
+                                        });
+                                      },
+                                    ))
+                                : Container(),
+                            Flexible(
+                                child: Column(children: [
+                              Text(widget.originalText,
+                                  style: const TextStyle(fontSize: 24.0)),
+                              SizedBox(height: 16.0),
+                              Text(_translation ?? ''),
+                            ])),
+                            SizedBox(
+                              width: 24.0 + 4.0,
+                              child: Container(),
+                            )
+                          ]),
+                      // Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   children: [
+                      //     SizedBox(
+                      //       width: 24.0 + 4.0,
+                      //       child: Container(),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 24.0 + 4.0,
+                      //       child: Container(),
+                      //     )
+                      //   ],
+                      // )
+                    ])))),
+        const Divider(
           color: Color(0xFFD2D2D2),
           height: 1,
           thickness: 1,
