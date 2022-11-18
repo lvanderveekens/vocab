@@ -81,24 +81,24 @@ class TextUnderlineLayerState extends State<TextUnderlineLayer> {
         },
         onPanStart: (DragStartDetails details) {
           log("onPanStart()");
-          _selectedTextElementsWithIndexes.clear();
+          // _selectedTextElementsWithIndexes.clear();
         },
         onPanUpdate: (DragUpdateDetails details) {
-          var selectedTextElement =
+          log("onPanUpdate()");
+          var selectedTextElementWithIndexes =
               _findTextElementWithIndexes(details.localPosition);
-          if (selectedTextElement != null &&
-              !_selectedTextElementsWithIndexes.contains(selectedTextElement)) {
-            setState(() {
-              _selectedTextElementsWithIndexes.add(selectedTextElement);
-            });
+          if (selectedTextElementWithIndexes != null) {
+            if (!_selectedTextElementsWithIndexes
+                .contains(selectedTextElementWithIndexes)) {
+              setState(() {
+                _selectedTextElementsWithIndexes
+                    .add(selectedTextElementWithIndexes);
+              });
+            }
           }
         },
         onPanEnd: (DragEndDetails details) {
           log("onPanEnd()");
-          setState(() {
-            // trigger a refresh
-            _selectedTextElementsWithIndexes = _selectedTextElementsWithIndexes;
-          });
           widget.callback(_sort(_selectedTextElementsWithIndexes));
         },
       )
