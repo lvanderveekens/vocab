@@ -79,7 +79,6 @@ class TextUnderlineLayerState extends State<TextUnderlineLayer> {
         },
         onPanStart: (DragStartDetails details) {
           log("onPanStart()");
-          // _selectedTextElementsWithIndexes.clear();
         },
         onPanUpdate: (DragUpdateDetails details) {
           log("onPanUpdate()");

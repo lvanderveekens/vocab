@@ -353,9 +353,10 @@ class CameraPageState extends State<CameraPage> {
             color: Colors.black.withOpacity(0.5),
             borderRadius: BorderRadius.circular(5.0),
           ),
-          child: const Text(
-            "Point the camera at a word and tap it",
-            // textAlign: TextAlign.center,
+          child: Text(
+            _showTapDialog
+                ? "Tap or drag to select more words"
+                : "Point the camera at a word and tap it",
             style: TextStyle(fontSize: 16.0, color: Colors.white),
           ),
         ));
