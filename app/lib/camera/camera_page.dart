@@ -78,8 +78,7 @@ class CameraPageState extends State<CameraPage> {
   String? _tappedWord;
   TextElementWithIndexes? _tappedWordTextElement;
 
-  // TODO: move state elsewhere? Because it rerenders the whole page...
-  List<TextElement> _selectedTextElements = [];
+  ValueNotifier<List<TextElement>> _selectedTextElements = ValueNotifier([]);
 
   // bool _showTapDialog = false;
   String? _tappedOnWord;
@@ -397,7 +396,14 @@ class CameraPageState extends State<CameraPage> {
               : _buildCameraWidget(),
           _buildUsageTip(),
           _buildInfoIcon(),
-          _showTapDialog ? _buildTapDialog(constraints) : Container(),
+          _showTapDialog
+              ? ValueListenableBuilder(
+                  valueListenable: _selectedTextElements,
+                  builder: (BuildContext context, List<TextElement> val,
+                      Widget? child) {
+                    return _buildTapDialog(constraints, val);
+                  })
+              : Container(),
         ]);
       }),
       // floatingActionButton: kDebugMode ? _buildDebugActions() : null,
@@ -443,9 +449,7 @@ class CameraPageState extends State<CameraPage> {
   }
 
   void _updateSelectedTextElements(List<TextElement> selectedTextElements) {
-    setState(() {
-      _selectedTextElements = selectedTextElements;
-    });
+    _selectedTextElements.value = selectedTextElements;
   }
 
   double _getScaleFactor(BoxConstraints scaffoldConstraints) {
@@ -490,6 +494,7 @@ class CameraPageState extends State<CameraPage> {
 
   Widget _buildTapDialog(
     BoxConstraints constraints,
+    List<TextElement> selectedTextElements,
   ) {
     final parentAspectRatio = constraints.maxWidth / constraints.maxHeight;
 
@@ -561,9 +566,9 @@ class CameraPageState extends State<CameraPage> {
         (scaledTappedWordTopHeight) >= tapDialogHeightPlusMargin;
 
     String originalText;
-    if (_selectedTextElements.isNotEmpty) {
+    if (selectedTextElements.isNotEmpty) {
       originalText = _stripInterpunction(
-          _selectedTextElements.map((e) => e.text).join(" "));
+          selectedTextElements.map((e) => e.text).join(" "));
     } else {
       originalText = _stripInterpunction(_tappedWord!);
     }
@@ -586,7 +591,7 @@ class CameraPageState extends State<CameraPage> {
                 _tappedCameraImage = null;
                 _tapUpDetails = null;
                 _tappedWord = null;
-                _selectedTextElements.clear();
+                _selectedTextElements.value.clear();
               });
             },
             originalText: originalText,

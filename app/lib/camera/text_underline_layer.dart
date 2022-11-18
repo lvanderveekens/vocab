@@ -31,8 +31,6 @@ class TextUnderlineLayer extends StatefulWidget {
   final double scaleFactor;
   final Function(List<TextElement>) callback;
 
-  // TODO: use a callback to update dragged text elements there.
-
   const TextUnderlineLayer({
     Key? key,
     required this.recognizedText,
