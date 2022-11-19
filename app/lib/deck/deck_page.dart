@@ -52,7 +52,7 @@ class DeckPageState extends State<DeckPage> {
   Widget build(BuildContext context) {
     var cards = _deck?.cards ?? [];
     if (cards.isEmpty) {
-      return Center(child: Text("Your deck is empty."));
+      return const Center(child: Text("Your deck is empty."));
     }
 
     cards = cards.reversed.toList();
@@ -61,50 +61,55 @@ class DeckPageState extends State<DeckPage> {
         backgroundColor: Colors.white,
         body: ListView.builder(
           itemCount: cards.length,
-          itemBuilder: (context, index) {
-            var margin = index == cards.length - 1
+          itemBuilder: (context, reversedIndex) {
+            var margin = reversedIndex == cards.length - 1
                 ? const EdgeInsets.all(16.0)
                 : const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0);
 
             return Container(
                 margin: margin,
                 child: Dismissible(
-                  key: Key(cards[index].id),
+                  key: Key(cards[reversedIndex].id),
                   direction: DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    setState(() {
-                      Flashcard deletedCard = cards.removeAt(index);
-                      widget.deckStorage.save(_deck!);
-
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text('Card deleted'),
-                          action: SnackBarAction(
-                            label: "Undo",
-                            onPressed: () {
-                              _setStateIfMounted(() {
-                                cards.insert(index, deletedCard);
-                                widget.deckStorage.save(_deck!);
-                              });
-                            },
-                          )));
-                    });
-                  },
+                  onDismissed: handleDismissedFlashcard(cards, reversedIndex),
                   background: Container(
                     color: Colors.red,
                     child: Container(
-                        margin: EdgeInsets.only(right: 16.0),
-                        child: Text("Delete",
+                        margin: const EdgeInsets.only(right: 16.0),
+                        child: const Text("Delete",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold))),
                     alignment: Alignment.centerRight,
                   ),
-                  child: _buildFlashcard(cards[index]),
+                  child: _buildFlashcard(cards[reversedIndex]),
                 ));
-
-            // return ;
           },
         ));
+  }
+
+  DismissDirectionCallback handleDismissedFlashcard(
+      List<Flashcard> reversedCards, int reversedIndex) {
+    return (direction) {
+      final index = reversedCards.length - reversedIndex - 1;
+
+      setState(() {
+        final deletedCard = _deck!.cards.removeAt(index);
+        widget.deckStorage.save(_deck!);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text('Card deleted'),
+            action: SnackBarAction(
+              label: "Undo",
+              onPressed: () {
+                _setStateIfMounted(() {
+                  _deck!.cards.insert(index, deletedCard);
+                  widget.deckStorage.save(_deck!);
+                });
+              },
+            )));
+      });
+    };
   }
 
   void _setStateIfMounted(VoidCallback fn) {
