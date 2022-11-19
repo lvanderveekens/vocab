@@ -75,7 +75,7 @@ class CameraPageState extends State<CameraPage> {
   bool _showTapDialog = false;
 
   RecognizedText? _recognizedText;
-  String? _tappedWord;
+  // String? _tappedWord;
   TextElementWithIndexes? _tappedWordTextElement;
 
   ValueNotifier<List<TextElement>> _selectedTextElements = ValueNotifier([]);
@@ -171,7 +171,7 @@ class CameraPageState extends State<CameraPage> {
           if (tappedWord != null) {
             setState(() {
               _tappedCameraImage = cameraImage;
-              _tappedWord = tappedWord;
+              _selectedTextElements.value = [tappedWord];
               _showTapDialog = true;
             });
           }
@@ -183,7 +183,7 @@ class CameraPageState extends State<CameraPage> {
     });
   }
 
-  Future<String?> checkTapLocation(TapUpDetails tapUpDetails,
+  Future<TextElement?> checkTapLocation(TapUpDetails tapUpDetails,
       RecognizedText recognizedText, Size cameraImageSize) async {
     for (var b = 0; b < recognizedText.blocks.length; b++) {
       var block = recognizedText.blocks[b];
@@ -202,7 +202,7 @@ class CameraPageState extends State<CameraPage> {
               );
               ;
             });
-            return element.text;
+            return element;
           }
         }
       }
@@ -400,9 +400,12 @@ class CameraPageState extends State<CameraPage> {
           _showTapDialog
               ? ValueListenableBuilder(
                   valueListenable: _selectedTextElements,
-                  builder: (BuildContext context, List<TextElement> val,
-                      Widget? child) {
-                    return _buildTapDialog(constraints, val);
+                  builder: (BuildContext context,
+                      List<TextElement> selectedTextElements, Widget? child) {
+                    if (selectedTextElements.isEmpty) {
+                      return Container();
+                    }
+                    return _buildTapDialog(constraints, selectedTextElements);
                   })
               : Container(),
         ]);
@@ -450,6 +453,9 @@ class CameraPageState extends State<CameraPage> {
   }
 
   void _updateSelectedTextElements(List<TextElement> selectedTextElements) {
+    if (selectedTextElements.isEmpty) {
+      closeTapDialog();
+    }
     _selectedTextElements.value = selectedTextElements;
   }
 
@@ -559,20 +565,13 @@ class CameraPageState extends State<CameraPage> {
 
     // This is a workaround because I cannot get the height of the tap container
     // before it's rendered.
-    // TODO: use percentage of scaffold height
-
-    final tapDialogHeightPlusMargin = 220.0 + 16.0 * 2.0;
+    const tapDialogHeightPlusMargin = 220.0 + 16.0 * 2.0;
 
     final tapContainerFitsAboveTappedWord =
         (scaledTappedWordTopHeight) >= tapDialogHeightPlusMargin;
 
-    String originalText;
-    if (selectedTextElements.isNotEmpty) {
-      originalText = _stripInterpunction(
-          selectedTextElements.map((e) => e.text).join(" "));
-    } else {
-      originalText = _stripInterpunction(_tappedWord!);
-    }
+    final originalText =
+        _stripInterpunction(selectedTextElements.map((e) => e.text).join(" "));
 
     return Positioned(
         left: 0,
@@ -586,15 +585,7 @@ class CameraPageState extends State<CameraPage> {
         child: Container(
           margin: const EdgeInsets.all(16.0),
           child: TapDialog(
-            onClose: () {
-              setState(() {
-                _showTapDialog = false;
-                _tappedCameraImage = null;
-                _tapUpDetails = null;
-                _tappedWord = null;
-                _selectedTextElements.value.clear();
-              });
-            },
+            onClose: closeTapDialog,
             originalText: originalText,
             deckStorage: widget.deckStorage,
             translationEnabled: _translationEnabled,
@@ -608,6 +599,16 @@ class CameraPageState extends State<CameraPage> {
                 GetIt.I<GoogleCloudTextToSpeechClient>(),
           ),
         ));
+  }
+
+  void closeTapDialog() {
+    setState(() {
+      _showTapDialog = false;
+      _tappedCameraImage = null;
+      _tapUpDetails = null;
+      _tappedWordTextElement = null;
+      _selectedTextElements.value.clear();
+    });
   }
 
   String _stripInterpunction(String s) {
