@@ -59,7 +59,8 @@ class DeckPageState extends State<DeckPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: ListView.builder(
+        body: Scrollbar(
+            child: ListView.builder(
           itemCount: cards.length,
           itemBuilder: (context, reversedIndex) {
             var margin = reversedIndex == cards.length - 1
@@ -85,7 +86,7 @@ class DeckPageState extends State<DeckPage> {
                   child: _buildFlashcard(cards[reversedIndex]),
                 ));
           },
-        ));
+        )));
   }
 
   DismissDirectionCallback handleDismissedFlashcard(
