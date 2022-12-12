@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
 import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 
@@ -30,6 +31,11 @@ class GoogleCloudTranslationClient {
         GoogleCloudTranslationTranslateResponse.fromJson(
             jsonDecode(response.body));
 
-    return googleTranslationResponse.data.translations[0].translatedText;
+    String escaped =
+        googleTranslationResponse.data.translations[0].translatedText;
+    var htmlUnescape = HtmlUnescape();
+    var unescaped = htmlUnescape.convert(escaped);
+
+    return unescaped;
   }
 }
