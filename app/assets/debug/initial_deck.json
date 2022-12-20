@@ -1,0 +1,46 @@
+{
+    "cards": [
+        {
+            "id": "1",
+            "sourceLanguageCode": "nl-NL",
+            "sourceWord": "waarom",
+            "targetLanguageCode": "it-IT",
+            "targetWord": "perche"
+        },
+        {
+            "id": "2",
+            "sourceLanguageCode": "nl-NL",
+            "sourceWord": "appel",
+            "targetLanguageCode": "it-IT",
+            "targetWord": "mela"
+        },
+        {
+            "id": "3",
+            "sourceLanguageCode": "nl-NL",
+            "sourceWord": "peer",
+            "targetLanguageCode": "it-IT",
+            "targetWord": "pera"
+        },
+        {
+            "id": "4",
+            "sourceLanguageCode": "nl-NL",
+            "sourceWord": "hallo",
+            "targetLanguageCode": "it-IT",
+            "targetWord": "ciao"
+        },
+        {
+            "id": "5",
+            "sourceLanguageCode": "nl-NL",
+            "sourceWord": "tot ziens",
+            "targetLanguageCode": "it-IT",
+            "targetWord": "arrivederci"
+        },
+        {
+            "id": "6",
+            "sourceLanguageCode": "nl-NL",
+            "sourceWord": "moeilijk",
+            "targetLanguageCode": "it-IT",
+            "targetWord": "difficile"
+        }
+    ]
+}

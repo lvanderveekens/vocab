@@ -92,6 +92,8 @@ class AppState extends State<App> {
         _userPreferences = value;
       });
     });
+
+    deckStorage.migrate();
   }
 
   List<Widget> _getPages() {
