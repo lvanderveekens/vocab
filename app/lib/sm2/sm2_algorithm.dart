@@ -5,12 +5,16 @@ import 'package:vocab/sm2/sm2_result.dart';
 // - https://www.super-memory.com/english/ol/sm2.htm
 
 class SM2Algorithm {
-  SM2Output apply(
+  static SM2Output apply(
     int grade,
-    int repetitionNumber,
-    double easinessFactor, // the initial value is 2.5
-    int intervalDays,
+    int? repetitionNumber,
+    double? easinessFactor,
+    int? intervalDays,
   ) {
+    repetitionNumber ??= 0;
+    easinessFactor ??= 2.5;
+    intervalDays ??= 0;
+
     if (grade >= 3) {
       // correct response
       if (repetitionNumber == 0) {

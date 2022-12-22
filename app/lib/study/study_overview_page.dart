@@ -20,6 +20,7 @@ import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/camera/text_decorator_painter.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:vocab/study/study_service.dart';
 
 class StudyOverviewPage extends StatefulWidget {
   final DeckStorage deckStorage;
@@ -84,9 +85,12 @@ class StudyOverviewPageState extends State<StudyOverviewPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("10", style: TextStyle(fontSize: 24.0)),
-                        Text("0", style: TextStyle(fontSize: 24.0)),
-                        Text("0", style: TextStyle(fontSize: 24.0)),
+                        Text("${_deck?.countNewCards() ?? 0}",
+                            style: TextStyle(fontSize: 24.0)),
+                        Text("${_deck?.countCardsBeingLearned() ?? 0}",
+                            style: TextStyle(fontSize: 24.0)),
+                        Text("${_deck?.countReviewableCards() ?? 0}",
+                            style: TextStyle(fontSize: 24.0)),
                       ],
                     )
                   ],

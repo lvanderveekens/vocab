@@ -5,7 +5,9 @@ class Flashcard {
   final String targetLanguageCode;
   final String targetWord;
 
-  final SM2Metadata? sm2Metadata;
+  DateTime? lastReviewedAt;
+  bool? beingLearned;
+  SM2Metadata? sm2Metadata;
 
   Flashcard({
     required this.id,
@@ -13,6 +15,8 @@ class Flashcard {
     required this.sourceWord,
     required this.targetLanguageCode,
     required this.targetWord,
+    this.lastReviewedAt,
+    this.beingLearned,
     this.sm2Metadata,
   });
 
@@ -23,6 +27,8 @@ class Flashcard {
       sourceWord: json['sourceWord'],
       targetLanguageCode: json['targetLanguageCode'],
       targetWord: json['targetWord'],
+      lastReviewedAt: json['lastReviewedAt'],
+      beingLearned: json['beingLearned'],
       sm2Metadata: json['sm2Metadata'],
     );
   }
@@ -34,6 +40,8 @@ class Flashcard {
       'sourceWord': sourceWord,
       'targetLanguageCode': targetLanguageCode,
       'targetWord': targetWord,
+      'lastReviewedAt': lastReviewedAt,
+      'beingLearned': beingLearned,
       'sm2Metadata': sm2Metadata?.toJson(),
     };
   }
