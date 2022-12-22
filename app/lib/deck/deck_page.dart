@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:vocab/deck/flashcard.dart';
+import 'package:vocab/deck/flashcard/flashcard.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:vocab/language/language.dart';

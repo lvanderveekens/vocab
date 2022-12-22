@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
-import 'package:vocab/deck/flashcard.dart';
+import 'package:vocab/deck/flashcard/flashcard.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vocab/deck/deck.dart';

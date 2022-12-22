@@ -1,30 +1,22 @@
 import 'dart:convert';
 
-import 'package:vocab/deck/flashcard.dart';
+import 'package:vocab/deck/flashcard/flashcard.dart';
 
 class Deck {
   List<Flashcard> cards;
 
   Deck({required this.cards});
 
-  int countNewCards() {
-    return cards.where((c) => c.lastReviewedAt == null).length;
+  List<Flashcard> getNewCards() {
+    return cards.where((c) => c.isNew()).toList();
   }
 
-  int countCardsBeingLearned() {
-    return cards.where((c) => c.beingLearned == true).length;
+  List<Flashcard> getCardsInLearning() {
+    return cards.where((c) => c.isInLearning()).toList();
   }
 
-  int countReviewableCards() {
-    return cards.where((c) {
-      final lastReviewedAt = c.lastReviewedAt;
-      if (lastReviewedAt == null) {
-        return false;
-      }
-      return DateTime.now().isAfter(
-        lastReviewedAt.add(Duration(days: c.sm2Metadata!.intervalDays)),
-      );
-    }).length;
+  List<Flashcard> getCardsToReview() {
+    return cards.where((c) => c.isReviewable()).toList();
   }
 
   factory Deck.fromJsonV1(Map<String, dynamic> json) {

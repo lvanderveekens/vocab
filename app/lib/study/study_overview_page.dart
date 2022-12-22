@@ -85,11 +85,11 @@ class StudyOverviewPageState extends State<StudyOverviewPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("${_deck?.countNewCards() ?? 0}",
+                        Text("${_deck?.getNewCards().length ?? 0}",
                             style: TextStyle(fontSize: 24.0)),
-                        Text("${_deck?.countCardsBeingLearned() ?? 0}",
+                        Text("${_deck?.getCardsInLearning().length ?? 0}",
                             style: TextStyle(fontSize: 24.0)),
-                        Text("${_deck?.countReviewableCards() ?? 0}",
+                        Text("${_deck?.getCardsToReview().length ?? 0}",
                             style: TextStyle(fontSize: 24.0)),
                       ],
                     )
@@ -111,7 +111,41 @@ class StudyOverviewPageState extends State<StudyOverviewPage> {
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              onPressed: () => {},
+              onPressed: () => {
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return Scaffold(
+                      appBar: PreferredSize(
+                          preferredSize: Size.fromHeight(50.0),
+                          child: AppBar(
+                            bottom: PreferredSize(
+                                child: Container(
+                                  color: Colors.black26,
+                                  height: 1.0,
+                                ),
+                                preferredSize: Size.fromHeight(1.0)),
+                            elevation: 0,
+                            title: const Text('Study',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.0,
+                                  color: Color(0xFF00A3FF),
+                                )),
+                            foregroundColor: Colors.black,
+                            backgroundColor: Colors.white,
+                          )),
+                      body: Center(
+                        child: TextButton(
+                          child: const Text('POP'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ))
+              },
             ),
           ),
         ],
