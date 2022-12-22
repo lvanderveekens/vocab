@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
+import 'package:vocab/deck/flashcard.dart';
 import 'package:vocab/deck/deck_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vocab/deck/deck.dart';
@@ -400,7 +401,7 @@ class TapDialogState extends State<TapDialog> {
                   ? () async {
                       Deck deck = await widget.deckStorage.get();
 
-                      Flashcard addedCard = Flashcard(
+                      final addedCard = Flashcard(
                         id: const Uuid().v4(),
                         sourceLanguageCode: _translationSourceLanguage!.code,
                         sourceWord: widget.originalText,

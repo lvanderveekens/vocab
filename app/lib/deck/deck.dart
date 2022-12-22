@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:vocab/deck/flashcard.dart';
+
 class Deck {
   List<Flashcard> cards;
 
@@ -25,44 +27,6 @@ class Deck {
   Map<String, dynamic> toJson() {
     return {
       'cards': cards.map((c) => c.toJson()).toList(),
-    };
-  }
-}
-
-class Flashcard {
-  final String id;
-
-  final String sourceLanguageCode;
-  final String sourceWord;
-
-  final String targetLanguageCode;
-  final String targetWord;
-
-  Flashcard({
-    required this.id,
-    required this.sourceLanguageCode,
-    required this.sourceWord,
-    required this.targetLanguageCode,
-    required this.targetWord,
-  });
-
-  factory Flashcard.fromJson(Map<String, dynamic> json) {
-    return Flashcard(
-      id: json['id'],
-      sourceLanguageCode: json['sourceLanguageCode'],
-      sourceWord: json['sourceWord'],
-      targetLanguageCode: json['targetLanguageCode'],
-      targetWord: json['targetWord'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'sourceLanguageCode': sourceLanguageCode,
-      'sourceWord': sourceWord,
-      'targetLanguageCode': targetLanguageCode,
-      'targetWord': targetWord,
     };
   }
 }

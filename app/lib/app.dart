@@ -10,6 +10,7 @@ import 'package:vocab/language/language.dart';
 import 'package:vocab/camera/camera_page.dart';
 import 'package:vocab/language/languages.dart';
 import 'package:vocab/secret/secrets.dart';
+import 'package:vocab/study/study_overview_page.dart';
 import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
 import 'package:vocab/translation/google_cloud_translation_client.dart';
@@ -111,6 +112,7 @@ class AppState extends State<App> {
         deckStorage: deckStorage,
         languages: _languages,
       ),
+      StudyOverviewPage(deckStorage: deckStorage),
     ];
   }
 
@@ -194,6 +196,11 @@ class AppState extends State<App> {
                     icon: Icon(Icons.style_outlined),
                     activeIcon: Icon(Icons.style),
                     label: 'Deck',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.school_outlined),
+                    activeIcon: Icon(Icons.school),
+                    label: 'Study',
                   ),
                 ],
                 selectedLabelStyle: TextStyle(fontSize: 16.0),
