@@ -51,7 +51,67 @@ class StudyOverviewPageState extends State<StudyOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  "Deck",
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 32.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 32.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("New", style: TextStyle(fontSize: 24.0)),
+                          Text("Learning", style: TextStyle(fontSize: 24.0)),
+                          Text("To review", style: TextStyle(fontSize: 24.0)),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("10", style: TextStyle(fontSize: 24.0)),
+                        Text("0", style: TextStyle(fontSize: 24.0)),
+                        Text("0", style: TextStyle(fontSize: 24.0)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.all(16.0),
+                  backgroundColor: Color(0xFF00A3FF),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0))),
+              child: Text(
+                'Study now',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () => {},
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
