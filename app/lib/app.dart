@@ -5,16 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vocab/language/language.dart';
-
 import 'package:vocab/camera/camera_page.dart';
 import 'package:vocab/language/languages.dart';
-import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/study/study_overview_page.dart';
-import 'package:vocab/text_recognition/ml_kit_text_recognition_languages.dart';
-import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
-import 'package:vocab/translation/google_cloud_translation_client.dart';
-import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -32,11 +25,6 @@ class AppState extends State<App> {
   int _selectedIndex = 0;
   final deckStorage = DeckStorage();
   final userPreferencesStorage = UserPreferencesStorage();
-
-  List<Language> _languages = [];
-  List<GoogleCloudTranslationLanguage> _translationLanguages = [];
-  List<GoogleCloudTextToSpeechLanguage> _textToSpeechLanguages = [];
-  List<MLKitTextRecognitionLanguage> _textRecognitionLanguages = [];
 
   UserPreferences? _userPreferences;
 
@@ -64,29 +52,6 @@ class AppState extends State<App> {
     );
     AudioPlayer.global.setGlobalAudioContext(audioContext);
 
-    log("Loading languages");
-    Languages.getInstance().then((value) {
-      _languages = value.languageList;
-    });
-    log("Loading Google Cloud Translation languages");
-    GoogleCloudTranslationLanguages.load().then((value) {
-      setState(() {
-        _translationLanguages = value;
-      });
-    });
-    log("Loading Google Cloud Text-to-speech languages");
-    GoogleCloudTextToSpeechLanguages.load().then((value) {
-      setState(() {
-        _textToSpeechLanguages = value;
-      });
-    });
-    log("Loading ML Kit Text Recognition languages");
-    MLKitTextRecognitionLanguages.load().then((value) {
-      setState(() {
-        _textRecognitionLanguages = value;
-      });
-    });
-
     log("Loading user preferences...");
     userPreferencesStorage.get().then((value) {
       setState(() {
@@ -103,14 +68,11 @@ class AppState extends State<App> {
       CameraPage(
         deckStorage: deckStorage,
         userPreferencesStorage: userPreferencesStorage,
-        translationLanguages: _translationLanguages,
-        textToSpeechLanguages: _textToSpeechLanguages,
-        textRecognitionLanguages: _textRecognitionLanguages,
         userPreferences: _userPreferences,
       ),
       DeckPage(
         deckStorage: deckStorage,
-        languages: _languages,
+        languages: GetIt.I<Languages>(),
       ),
       StudyOverviewPage(deckStorage: deckStorage),
     ];

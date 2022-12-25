@@ -5,61 +5,35 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:vocab/language/language.dart';
 
 class Languages {
-  static Languages? _instance;
+  final List<Language> list;
 
-  static Future<Languages> getInstance() async {
-    if (_instance == null) {
-      _instance = Languages(
-        languageList: await loadLanguageList(),
-      );
-    }
-    return _instance!;
+  Languages({required this.list});
+
+  Language getByCode(String code) {
+    return list.firstWhere(
+      (language) => language.hasCode(code),
+      orElse: () => throw ArgumentError("Language not found", code),
+    );
   }
+}
 
-  static const String _pathToFile = "assets/languages.json";
+class LanguagesLoader {
+  final String pathToFile = "assets/languages.json";
 
-  static Future<List<Language>> loadLanguageList() {
-    return rootBundle.loadStructuredData<List<Language>>(_pathToFile,
+  LanguagesLoader();
+
+  Future<Languages> load() {
+    log("Loading languages");
+    return rootBundle.loadStructuredData<Languages>(pathToFile,
         (jsonStr) async {
       var languagesJson = json.decode(jsonStr) as List;
-      List<Language> languages = languagesJson
+      List<Language> list = languagesJson
           .map((languageJson) => Language.fromJson(languageJson))
           .toList();
 
-      languages.sort((a, b) => a.name.compareTo(b.name));
+      list.sort((a, b) => a.name.compareTo(b.name));
 
-      return languages;
+      return Languages(list: list);
     });
-  }
-
-  List<Language> languageList;
-
-  Languages({required this.languageList});
-
-  Language findByCode(String code) {
-    return languageList.firstWhere(
-      (l) {
-        // from simple to complex
-        if (l.iso639_1 == code) {
-          return true;
-        }
-        if (l.iso639_2b == code) {
-          return true;
-        }
-        if (l.iso639_2t == code) {
-          return true;
-        }
-        if (l.iso639_3 == code) {
-          return true;
-        }
-        if (l.languageTags != null && l.languageTags!.contains(code)) {
-          return true;
-        }
-        return false;
-      },
-      orElse: () {
-        throw ArgumentError("Language not found", code);
-      },
-    );
   }
 }

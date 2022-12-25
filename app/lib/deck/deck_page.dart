@@ -24,7 +24,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DeckPage extends StatefulWidget {
   final DeckStorage deckStorage;
-  final List<Language> languages;
+  final Languages languages;
 
   const DeckPage({
     Key? key,
@@ -159,6 +159,6 @@ class DeckPageState extends State<DeckPage> {
   }
 
   String _getLanguageName(String code) {
-    return widget.languages.firstWhere((l) => l.hasCode(code)).name;
+    return widget.languages.getByCode(code).name;
   }
 }

@@ -35,18 +35,12 @@ import 'package:vocab/widgets/bullet_text.dart';
 class CameraPage extends StatefulWidget {
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
-  final List<GoogleCloudTranslationLanguage> translationLanguages;
-  final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
-  final List<MLKitTextRecognitionLanguage> textRecognitionLanguages;
   final UserPreferences? userPreferences;
 
   const CameraPage({
     Key? key,
     required this.deckStorage,
     required this.userPreferencesStorage,
-    required this.translationLanguages,
-    required this.textRecognitionLanguages,
-    required this.textToSpeechLanguages,
     required this.userPreferences,
   }) : super(key: key);
 
@@ -380,7 +374,7 @@ class CameraPageState extends State<CameraPage> {
                           Navigator.pop(context);
                         },
                         textRecognitionLanguages:
-                            widget.textRecognitionLanguages,
+                            GetIt.I<MLKitTextRecognitionLanguages>(),
                       ));
             },
           ),
@@ -590,8 +584,8 @@ class CameraPageState extends State<CameraPage> {
             deckStorage: widget.deckStorage,
             translationEnabled: _translationEnabled,
             userPreferencesStorage: widget.userPreferencesStorage,
-            translationLanguages: widget.translationLanguages,
-            textToSpeechLanguages: widget.textToSpeechLanguages,
+            translationLanguages: GetIt.I<GoogleCloudTranslationLanguages>(),
+            textToSpeechLanguages: GetIt.I<GoogleCloudTextToSpeechLanguages>(),
             userPreferences: widget.userPreferences!,
             googleCloudTranslationClient:
                 GetIt.I<GoogleCloudTranslationClient>(),

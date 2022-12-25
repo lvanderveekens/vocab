@@ -4,7 +4,7 @@ import 'package:vocab/widgets/bullet_text.dart';
 
 class InfoDialog extends StatefulWidget {
   final VoidCallback onClose;
-  final List<MLKitTextRecognitionLanguage> textRecognitionLanguages;
+  final MLKitTextRecognitionLanguages textRecognitionLanguages;
 
   const InfoDialog({
     Key? key,
@@ -55,7 +55,7 @@ class InfoDialogState extends State<InfoDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const Text("Supported languages:"),
-        ...widget.textRecognitionLanguages
+        ...widget.textRecognitionLanguages.list
             .map((trl) => BulletText(trl.language.name))
       ],
     ));

@@ -15,8 +15,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/secret/secrets.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_client.dart';
+import 'package:vocab/text_to_speech/google_cloud_text_to_speech_language.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
 import 'package:vocab/translation/google_cloud_translation_client.dart';
+import 'package:vocab/translation/google_cloud_translation_language.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
 import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 import 'package:vocab/user/user_preferences.dart';
@@ -28,8 +30,8 @@ class TapDialog extends StatefulWidget {
   final bool translationEnabled;
   final DeckStorage deckStorage;
   final UserPreferencesStorage userPreferencesStorage;
-  final List<GoogleCloudTranslationLanguage> translationLanguages;
-  final List<GoogleCloudTextToSpeechLanguage> textToSpeechLanguages;
+  final GoogleCloudTranslationLanguages translationLanguages;
+  final GoogleCloudTextToSpeechLanguages textToSpeechLanguages;
   final UserPreferences userPreferences;
   final GoogleCloudTranslationClient googleCloudTranslationClient;
   final GoogleCloudTextToSpeechClient googleCloudTextToSpeechClient;
@@ -117,8 +119,8 @@ class TapDialogState extends State<TapDialog> {
 
   void _setTextToSpeechLanguage() {
     setState(() {
-      _textToSpeechLanguage = widget.textToSpeechLanguages.firstWhereOrNull(
-          (ttsl) =>
+      _textToSpeechLanguage = widget.textToSpeechLanguages.list
+          .firstWhereOrNull((ttsl) =>
               ttsl.language.name == _translationSourceLanguage!.language.name);
     });
   }
@@ -142,7 +144,7 @@ class TapDialogState extends State<TapDialog> {
 
   GoogleCloudTranslationLanguage getGoogleTranslationLanguageByCode(
       String code) {
-    return widget.translationLanguages.firstWhere((gtl) {
+    return widget.translationLanguages.list.firstWhere((gtl) {
       return gtl.language.hasCode(code);
     });
   }
@@ -178,7 +180,7 @@ class TapDialogState extends State<TapDialog> {
                               isDense: false,
                               isExpanded: true,
                               value: _translationSourceLanguage,
-                              items: widget.translationLanguages
+                              items: widget.translationLanguages.list
                                   .map((GoogleCloudTranslationLanguage gtl) {
                                 return DropdownMenuItem(
                                   value: gtl,
@@ -197,7 +199,8 @@ class TapDialogState extends State<TapDialog> {
                                 _setTranslateSourceLanguage(newValue!);
                               },
                               selectedItemBuilder: (con) {
-                                return widget.translationLanguages.map((gtl) {
+                                return widget.translationLanguages.list
+                                    .map((gtl) {
                                   return Center(
                                       child: Text(
                                     gtl.language.name,
@@ -239,7 +242,7 @@ class TapDialogState extends State<TapDialog> {
                               isDense: false,
                               isExpanded: true,
                               value: _translationTargetLanguage,
-                              items: widget.translationLanguages
+                              items: widget.translationLanguages.list
                                   .map((GoogleCloudTranslationLanguage gtl) {
                                 return DropdownMenuItem(
                                   value: gtl,
@@ -257,7 +260,8 @@ class TapDialogState extends State<TapDialog> {
                                 _setTranslateTargetLanguage(newValue!);
                               },
                               selectedItemBuilder: (con) {
-                                return widget.translationLanguages.map((gtl) {
+                                return widget.translationLanguages.list
+                                    .map((gtl) {
                                   return Center(
                                       child: Text(
                                     gtl.language.name,

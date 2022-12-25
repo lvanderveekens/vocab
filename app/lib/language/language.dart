@@ -33,6 +33,7 @@ class Language {
   }
 
   bool hasCode(String code) {
+    // from simple to complex
     if (iso639_1 == code) {
       return true;
     }
