@@ -10,12 +10,14 @@ import 'package:vocab/study/study_service.dart';
 class StudyCardPage extends StatefulWidget {
   final StudyService studyService;
   final Deck deck;
+  final Function(Deck) updateDeck;
   final Languages languages;
 
   const StudyCardPage({
     Key? key,
     required this.studyService,
     required this.deck,
+    required this.updateDeck,
     required this.languages,
   }) : super(key: key);
 
@@ -24,6 +26,8 @@ class StudyCardPage extends StatefulWidget {
 }
 
 class StudyCardPageState extends State<StudyCardPage> {
+  bool showAnswer = false;
+
   @override
   Widget build(BuildContext context) {
     var cards = widget.studyService.findCardsForReviewSession(widget.deck);
@@ -33,9 +37,60 @@ class StudyCardPageState extends State<StudyCardPage> {
       appBar: buildAppBar(),
       body: Column(
         children: [
-          buildCard(card),
-          buildStatusText(card),
-          buildShowAnswerButton(),
+          Flexible(flex: 2, child: buildCard(card)),
+          Flexible(
+              flex: 1,
+              child: Column(
+                children: [
+                  if (showAnswer) ...[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 8.0),
+                      child: Column(
+                        children: [
+                          Text("Grade your response"),
+                          Row(children: [
+                            TextButton(
+                              child:
+                                  Text("😡", style: TextStyle(fontSize: 34.0)),
+                              onPressed: () {
+                                widget.studyService.reviewCard(card, 0);
+                                log("REVIEWED CARD");
+                                log(card.toJson().toString());
+                                // TODO: save card
+                              },
+                            ),
+                            TextButton(
+                                child: Text("😭",
+                                    style: TextStyle(fontSize: 34.0)),
+                                onPressed: () => {}),
+                            TextButton(
+                                child: Text("👎",
+                                    style: TextStyle(fontSize: 34.0)),
+                                onPressed: () => {}),
+                            TextButton(
+                                child: Text(
+                                  "👍",
+                                  style: TextStyle(fontSize: 34.0),
+                                ),
+                                onPressed: () => {}),
+                            TextButton(
+                                child: Text("🙂",
+                                    style: TextStyle(fontSize: 34.0)),
+                                onPressed: () => {}),
+                            TextButton(
+                                child: Text("😁",
+                                    style: TextStyle(fontSize: 34.0)),
+                                onPressed: () => {})
+                          ])
+                        ],
+                      ),
+                    )
+                  ] else ...[
+                    buildStatusText(card),
+                    buildShowAnswerButton()
+                  ]
+                ],
+              ))
         ],
       ),
     );
@@ -54,47 +109,46 @@ class StudyCardPageState extends State<StudyCardPage> {
           'Show answer',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        onPressed: () => {log("PRESSED")},
+        onPressed: () => {
+          setState(() => {showAnswer = true}),
+        },
       ),
     );
   }
 
   Widget buildCard(Flashcard card) {
-    return Expanded(
-      child: Container(
-          margin: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black26),
-              borderRadius: BorderRadius.circular(10.0)),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Expanded(
-                child: Container(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.languages
-                              .getByCode(card.sourceLanguageCode)
-                              .name),
-                          Text(card.sourceWord,
-                              style: TextStyle(fontSize: 34.0)),
-                        ]))),
-            const Divider(color: Colors.black26, height: 1.0, thickness: 1.0),
-            Expanded(
-                child: Container(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.languages
-                              .getByCode(card.targetLanguageCode)
-                              .name),
-                          // Text(card.targetWord,
-                          //     style: TextStyle(fontSize: 24.0)),
-                        ]))),
-          ])),
-    );
+    return Container(
+        margin: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(10.0)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.languages
+                            .getByCode(card.sourceLanguageCode)
+                            .name),
+                        Text(card.sourceWord, style: TextStyle(fontSize: 34.0)),
+                      ]))),
+          const Divider(color: Colors.black26, height: 1.0, thickness: 1.0),
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.languages
+                            .getByCode(card.targetLanguageCode)
+                            .name),
+                        if (showAnswer)
+                          Text(card.targetWord,
+                              style: TextStyle(fontSize: 34.0))
+                      ]))),
+        ]));
   }
 
   Widget buildStatusText(Flashcard card) {
