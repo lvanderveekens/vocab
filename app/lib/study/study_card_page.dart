@@ -27,14 +27,14 @@ class StudyCardPageState extends State<StudyCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    var cards = widget.studyService.findCardsForReviewSession(widget.deck);
+    var cards = widget.deck.getCardsForReviewSession();
     var card = cards[0];
 
     return Scaffold(
       appBar: buildAppBar(),
       body: Column(
         children: [
-          Flexible(flex: 2, child: buildCard(card)),
+          Flexible(flex: 4, child: buildCard(card)),
           Flexible(
               flex: 1,
               child: Column(

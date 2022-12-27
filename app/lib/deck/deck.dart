@@ -23,6 +23,10 @@ class Deck {
     return cardsToReview;
   }
 
+  List<Flashcard> getCardsForReviewSession() {
+    return getNewCards() + getCardsInLearning() + getCardsToReview();
+  }
+
   int _byLastReviewTimestamp(a, b) =>
       a.lastReview!.timestamp.compareTo(b.lastReview!.timestamp);
 

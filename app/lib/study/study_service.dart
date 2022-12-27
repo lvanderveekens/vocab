@@ -5,12 +5,6 @@ import 'package:vocab/deck/flashcard/review.dart';
 import 'package:vocab/sm2/sm2_algorithm.dart';
 
 class StudyService {
-  List<Flashcard> findCardsForReviewSession(Deck deck) {
-    return deck.getNewCards() +
-        deck.getCardsInLearning() +
-        deck.getCardsToReview();
-  }
-
   void reviewCard(Flashcard card, int grade) {
     final result = SM2Algorithm.apply(
       grade,
