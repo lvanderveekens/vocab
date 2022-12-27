@@ -97,9 +97,15 @@ class StudyOverviewPageState extends State<StudyOverviewPage> {
                               builder: (BuildContext context) => StudyCardPage(
                                 studyService: StudyService(),
                                 deck: deck,
+                                saveDeck: (d) {
+                                  widget.deckStorage.save(d);
+                                  setState(() {
+                                    // refreshes future builder
+                                  });
+                                },
                                 languages: GetIt.I<Languages>(),
                               ),
-                            ))
+                            )),
                       },
                     ),
                   ),

@@ -15,7 +15,7 @@ class Review {
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
-      timestamp: json['timestamp'],
+      timestamp: DateTime.parse(json['timestamp']),
       repetitionNumber: json['repetitionNumber'],
       easinessFactor: json['easinessFactor'],
       intervalDays: json['intervalDays'],
@@ -25,7 +25,7 @@ class Review {
 
   Map<String, dynamic> toJson() {
     return {
-      'timestamp': timestamp,
+      'timestamp': timestamp.toIso8601String(),
       'repetitionNumber': repetitionNumber,
       'easinessFactor': easinessFactor,
       'intervalDays': intervalDays,

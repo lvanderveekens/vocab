@@ -12,12 +12,19 @@ class Deck {
   }
 
   List<Flashcard> getCardsInLearning() {
-    return cards.where((c) => c.isInLearning()).toList();
+    var cardsInLearning = cards.where((c) => c.isInLearning()).toList();
+    cardsInLearning.sort(_byLastReviewTimestamp);
+    return cardsInLearning;
   }
 
   List<Flashcard> getCardsToReview() {
-    return cards.where((c) => c.isReviewable()).toList();
+    var cardsToReview = cards.where((c) => c.isReviewable()).toList();
+    cardsToReview.sort(_byLastReviewTimestamp);
+    return cardsToReview;
   }
+
+  int _byLastReviewTimestamp(a, b) =>
+      a.lastReview!.timestamp.compareTo(b.lastReview!.timestamp);
 
   factory Deck.fromJsonV1(Map<String, dynamic> json) {
     var cardsJson = json['cards'] as List;

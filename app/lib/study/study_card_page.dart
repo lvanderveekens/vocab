@@ -1,23 +1,20 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:vocab/deck/deck.dart';
 import 'package:vocab/deck/flashcard/flashcard.dart';
-import 'package:vocab/language/language.dart';
 import 'package:vocab/language/languages.dart';
 import 'package:vocab/study/study_service.dart';
 
 class StudyCardPage extends StatefulWidget {
   final StudyService studyService;
   final Deck deck;
-  final Function(Deck) updateDeck;
+  final Function(Deck) saveDeck;
   final Languages languages;
 
   const StudyCardPage({
     Key? key,
     required this.studyService,
     required this.deck,
-    required this.updateDeck,
+    required this.saveDeck,
     required this.languages,
   }) : super(key: key);
 
@@ -50,37 +47,29 @@ class StudyCardPageState extends State<StudyCardPage> {
                           Text("Grade your response"),
                           Row(children: [
                             TextButton(
-                              child:
-                                  Text("😡", style: TextStyle(fontSize: 34.0)),
-                              onPressed: () {
-                                widget.studyService.reviewCard(card, 0);
-                                log("REVIEWED CARD");
-                                log(card.toJson().toString());
-                                // TODO: save card
-                              },
-                            ),
+                                child: Text("😡",
+                                    style: TextStyle(fontSize: 34.0)),
+                                onPressed: () => reviewCard(card, 0)),
                             TextButton(
                                 child: Text("😭",
                                     style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => {}),
+                                onPressed: () => reviewCard(card, 1)),
                             TextButton(
                                 child: Text("👎",
                                     style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => {}),
+                                onPressed: () => reviewCard(card, 2)),
                             TextButton(
-                                child: Text(
-                                  "👍",
-                                  style: TextStyle(fontSize: 34.0),
-                                ),
-                                onPressed: () => {}),
+                                child: Text("👍",
+                                    style: TextStyle(fontSize: 34.0)),
+                                onPressed: () => reviewCard(card, 3)),
                             TextButton(
                                 child: Text("🙂",
                                     style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => {}),
+                                onPressed: () => reviewCard(card, 4)),
                             TextButton(
                                 child: Text("😁",
                                     style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => {})
+                                onPressed: () => reviewCard(card, 5)),
                           ])
                         ],
                       ),
@@ -94,6 +83,15 @@ class StudyCardPageState extends State<StudyCardPage> {
         ],
       ),
     );
+  }
+
+  void reviewCard(Flashcard card, int grade) {
+    widget.studyService.reviewCard(card, grade);
+    widget.saveDeck(widget.deck);
+    setState(() {
+      // force rerender using updated widget.deck
+      showAnswer = false;
+    });
   }
 
   Widget buildShowAnswerButton() {

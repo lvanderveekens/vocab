@@ -42,7 +42,9 @@ class Flashcard {
       sourceWord: json['sourceWord'],
       targetLanguageCode: json['targetLanguageCode'],
       targetWord: json['targetWord'],
-      lastReview: json['lastReview'],
+      lastReview: json['lastReview'] != null
+          ? Review.fromJson(json['lastReview'])
+          : null,
     );
   }
 
