@@ -1,10 +1,15 @@
 import 'package:vocab/sm2/sm2_result.dart';
 
-// sources:
+// Sources:
 // - https://en.wikipedia.org/wiki/SuperMemo
 // - https://www.super-memory.com/english/ol/sm2.htm
 
-class SM2Algorithm {
+// Modifications:
+// - Grade is not not 0..5 but 0..3
+
+class SM2ModifiedAlgorithm {
+  static const maxGrade = 3;
+
   static SM2Output apply(
     int grade,
     int? repetitionNumber,
@@ -15,7 +20,7 @@ class SM2Algorithm {
     easinessFactor ??= 2.5;
     intervalDays ??= 0;
 
-    if (grade >= 3) {
+    if (grade >= 2) {
       // correct response
       if (repetitionNumber == 0) {
         intervalDays = 1;
@@ -31,8 +36,8 @@ class SM2Algorithm {
       intervalDays = 1;
     }
 
-    easinessFactor =
-        easinessFactor + (0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02));
+    easinessFactor = easinessFactor +
+        (0.1 - (maxGrade - grade) * (0.08 + (maxGrade - grade) * 0.02));
     if (easinessFactor < 1.3) {
       easinessFactor = 1.3;
     }
