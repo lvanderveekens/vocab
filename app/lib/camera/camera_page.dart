@@ -534,29 +534,6 @@ class CameraPageState extends State<CameraPage> {
 
     log("scaledTappedWordTopHeight: " + scaledTappedWordTopHeight.toString());
 
-    // final (_cameraImageSize!.height - renderedCameraImageHeight) / 2;
-
-    // final minCameraImageHeight = cameraImageHeightOverflow;
-    // final maxCameraImageHeight =
-    //     _cameraImageSize!.height - cameraImageHeightOverflow;
-
-    // log("minCameraImageHeight: " + minCameraImageHeight.toString());
-    // log("maxCameraImageHeight: " + maxCameraImageHeight.toString());
-
-    // final availableHeightAboveTappedWord =
-    //     _tappedWordRect!.top - minCameraImageHeight;
-    // final availableHeightBelowTappedWord =
-    //     maxCameraImageHeight - _tappedWordRect!.bottom;
-
-    // log("availableHeightAboveTappedWord: " +
-    //     availableHeightAboveTappedWord.toString());
-    // log("availableHeightBelowTappedWord: " +
-    //     availableHeightBelowTappedWord.toString());
-
-    // TODO: get height of tap dialog
-    // final avaialbleHeightBelowTappedWord =
-    //     maxCameraImageHeight - (_tappedWordRect?.bottom ?? 0);
-
     // This is a workaround because I cannot get the height of the tap container
     // before it's rendered.
     const tapDialogHeightPlusMargin = 220.0 + 16.0 * 2.0;
@@ -564,8 +541,10 @@ class CameraPageState extends State<CameraPage> {
     final tapContainerFitsAboveTappedWord =
         (scaledTappedWordTopHeight) >= tapDialogHeightPlusMargin;
 
-    final originalText =
-        _stripInterpunction(selectedTextElements.map((e) => e.text).join(" "));
+    final originalText = _stripInterpunction(selectedTextElements
+        .map((e) => e.text)
+        .join(" ")
+        .replaceAll(r'- ', '')); // E.g. from 'Mam- ma' to 'Mamma'
 
     return Positioned(
         left: 0,
@@ -606,6 +585,8 @@ class CameraPageState extends State<CameraPage> {
   }
 
   String _stripInterpunction(String s) {
-    return s.replaceAll(RegExp(r'[.,:;\?!]'), '');
+    s = s.replaceFirst(RegExp(r'^[-<«(]+'), '');
+    s = s.replaceFirst(RegExp(r'[.,:;\?!>»)]+$'), '');
+    return s;
   }
 }

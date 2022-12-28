@@ -110,8 +110,16 @@ class DeckPageState extends State<DeckPage> {
     return Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
+            color: Colors.white,
             border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.circular(5.0)),
+            borderRadius: BorderRadius.circular(5.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+              ),
+            ]),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
               margin: EdgeInsets.only(bottom: 8.0),
@@ -119,10 +127,7 @@ class DeckPageState extends State<DeckPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(_getLanguageName(card.sourceLanguageCode),
-                        style: TextStyle(
-                            color: Color(0xFF00A3FF),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.0)),
+                        style: TextStyle(fontSize: 12.0)),
                     Text(card.sourceWord, style: TextStyle(fontSize: 24.0)),
                   ])),
           const Divider(color: Colors.black26, height: 1.0, thickness: 1.0),
@@ -132,10 +137,7 @@ class DeckPageState extends State<DeckPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(_getLanguageName(card.targetLanguageCode),
-                        style: TextStyle(
-                            color: Color(0xFF00A3FF),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.0)),
+                        style: TextStyle(fontSize: 12.0)),
                     Text(card.targetWord, style: TextStyle(fontSize: 24.0)),
                   ])),
         ]));

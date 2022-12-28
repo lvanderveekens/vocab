@@ -30,58 +30,76 @@ class StudyCardPageState extends State<StudyCardPage> {
     var cards = widget.deck.getCardsForReviewSession();
     var card = cards[0];
 
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: Column(
-        children: [
-          Flexible(flex: 4, child: buildCard(card)),
-          Flexible(
-              flex: 1,
-              child: Column(
-                children: [
-                  if (showAnswer) ...[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 8.0),
-                      child: Column(
-                        children: [
-                          Text("Grade your response"),
-                          Row(children: [
-                            TextButton(
-                                child: Text("😡",
-                                    style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => reviewCard(card, 0)),
-                            TextButton(
-                                child: Text("😭",
-                                    style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => reviewCard(card, 1)),
-                            TextButton(
-                                child: Text("👎",
-                                    style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => reviewCard(card, 2)),
-                            TextButton(
-                                child: Text("👍",
-                                    style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => reviewCard(card, 3)),
-                            TextButton(
-                                child: Text("🙂",
-                                    style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => reviewCard(card, 4)),
-                            TextButton(
-                                child: Text("😁",
-                                    style: TextStyle(fontSize: 34.0)),
-                                onPressed: () => reviewCard(card, 5)),
-                          ])
-                        ],
-                      ),
-                    )
-                  ] else ...[
-                    buildStatusText(card),
-                    buildShowAnswerButton()
-                  ]
-                ],
-              ))
-        ],
-      ),
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SafeArea(
+          top: false,
+          bottom: true,
+          child: Scaffold(
+            appBar: buildAppBar(),
+            body: Column(
+              children: [
+                Expanded(child: buildCard(card)),
+                Container(
+                    height: 157.0,
+                    child: Column(
+                      children: [
+                        if (showAnswer) ...[
+                          Container(
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    8.0 /* plus 8px padding from text button */),
+                            child: Column(
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        bottom:
+                                            8.0 /* plus 8px padding from text button */),
+                                    child: Text("Grade your response")),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextButton(
+                                          child: Text("😡",
+                                              style: TextStyle(fontSize: 34.0)),
+                                          onPressed: () => reviewCard(card, 0)),
+                                      TextButton(
+                                          child: Text("😭",
+                                              style: TextStyle(fontSize: 34.0)),
+                                          onPressed: () => reviewCard(card, 1)),
+                                      TextButton(
+                                          child: Text("👎",
+                                              style: TextStyle(fontSize: 34.0)),
+                                          onPressed: () => reviewCard(card, 2)),
+                                    ]),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextButton(
+                                          child: Text("👍",
+                                              style: TextStyle(fontSize: 34.0)),
+                                          onPressed: () => reviewCard(card, 3)),
+                                      TextButton(
+                                          child: Text("😀",
+                                              style: TextStyle(fontSize: 34.0)),
+                                          onPressed: () => reviewCard(card, 4)),
+                                      TextButton(
+                                          child: Text("🥳",
+                                              style: TextStyle(fontSize: 34.0)),
+                                          onPressed: () => reviewCard(card, 5)),
+                                    ])
+                              ],
+                            ),
+                          )
+                        ] else ...[
+                          buildStatusText(card),
+                          buildShowAnswerButton()
+                        ]
+                      ],
+                    ))
+              ],
+            ),
+          )),
     );
   }
 
@@ -116,10 +134,19 @@ class StudyCardPageState extends State<StudyCardPage> {
 
   Widget buildCard(Flashcard card) {
     return Container(
-        margin: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.only(
+            top: 16.0, bottom: 32.0, left: 16.0, right: 16.0),
         decoration: BoxDecoration(
+            color: Colors.white,
             border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.circular(10.0)),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+              ),
+            ]),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
               child: Container(
@@ -132,7 +159,10 @@ class StudyCardPageState extends State<StudyCardPage> {
                             .name),
                         Text(card.sourceWord, style: TextStyle(fontSize: 34.0)),
                       ]))),
-          const Divider(color: Colors.black26, height: 1.0, thickness: 1.0),
+          Container(
+              margin: EdgeInsets.only(left: 32.0, right: 32.0),
+              child:
+                  Divider(color: Colors.black26, height: 1.0, thickness: 1.0)),
           Expanded(
               child: Container(
                   padding: const EdgeInsets.all(32.0),
@@ -151,7 +181,7 @@ class StudyCardPageState extends State<StudyCardPage> {
 
   Widget buildStatusText(Flashcard card) {
     return Container(
-        margin: EdgeInsets.only(bottom: 8.0),
+        margin: EdgeInsets.only(bottom: 16.0),
         child: Text.rich(
           TextSpan(
             children: <TextSpan>[
