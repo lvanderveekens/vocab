@@ -6,11 +6,13 @@ A new Flutter project.
 
 1. Update versions in pubspec.yaml and Xcode.
 
-2. Release build: 
+2. Git release commit.
+
+3. Release build: 
 
     $ flutter build ipa --obfuscate --split-debug-info=build/app/outputs/symbols
 
-3. Use transporter to upload the resulting ipa to App Store Connect.
+4. Use transporter to upload the resulting ipa to App Store Connect.
 
 ## Languages
 
