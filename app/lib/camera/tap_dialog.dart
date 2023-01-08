@@ -1,26 +1,21 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:collection/collection.dart';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
-import 'package:vocab/deck/flashcard/flashcard.dart';
-import 'package:vocab/deck/deck_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vocab/deck/deck.dart';
-import 'package:vocab/secret/secrets.dart';
+import 'package:vocab/deck/deck_storage.dart';
+import 'package:vocab/deck/flashcard/flashcard.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_client.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_language.dart';
 import 'package:vocab/text_to_speech/google_cloud_text_to_speech_languages.dart';
 import 'package:vocab/translation/google_cloud_translation_client.dart';
 import 'package:vocab/translation/google_cloud_translation_language.dart';
 import 'package:vocab/translation/google_cloud_translation_languages.dart';
-import 'package:vocab/translation/google_cloud_translation_dtos.dart';
 import 'package:vocab/user/user_preferences.dart';
 import 'package:vocab/user/user_preferences_storage.dart';
 
@@ -278,85 +273,87 @@ class TapDialogState extends State<TapDialog> {
             )),
         Container(
             height: 116.0,
+            padding: const EdgeInsets.only(
+                top: 20.0, bottom: 32.0, left: 16.0, right: 16.0),
             child: Scrollbar(
+                thumbVisibility: true,
                 child: SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                  top: 20.0, bottom: 32.0, left: 16.0, right: 16.0),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _textToSpeechLanguage != null
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.only(top: 2.5, right: 4.0),
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    icon: const Icon(Icons.volume_up),
-                                    iconSize: 24.0,
-                                    onPressed: () async {
-                                      log("Pressed on speaker icon");
-                                      widget.googleCloudTextToSpeechClient
-                                          .synthesize(
-                                        widget.originalText,
-                                        _textToSpeechLanguage!.code,
-                                      )
-                                          .then((base64String) {
-                                        // log("base64 encoded" + base64String);
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _textToSpeechLanguage != null
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      margin:
+                                          EdgeInsets.only(top: 2.5, right: 4.0),
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        icon: const Icon(Icons.volume_up),
+                                        iconSize: 24.0,
+                                        onPressed: () async {
+                                          log("Pressed on speaker icon");
+                                          widget.googleCloudTextToSpeechClient
+                                              .synthesize(
+                                            widget.originalText,
+                                            _textToSpeechLanguage!.code,
+                                          )
+                                              .then((base64String) {
+                                            // log("base64 encoded" + base64String);
 
-                                        getTemporaryDirectory().then((dir) {
-                                          var filePath =
-                                              '${dir.path}/${widget.originalText}_${_textToSpeechLanguage!.code}.mp3';
-                                          var file = File(filePath);
+                                            getTemporaryDirectory().then((dir) {
+                                              var filePath =
+                                                  '${dir.path}/${widget.originalText}_${_textToSpeechLanguage!.code}.mp3';
+                                              var file = File(filePath);
 
-                                          var decoded =
-                                              base64.decode(base64String);
-                                          // log("Decoded: " + decoded.toString());
+                                              var decoded =
+                                                  base64.decode(base64String);
+                                              // log("Decoded: " + decoded.toString());
 
-                                          file
-                                              .writeAsBytes(decoded)
-                                              .then((value) {
-                                            log("written to file: $filePath");
-                                            final player = AudioPlayer();
-                                            // player.setAudioContext(audioContext);
+                                              file
+                                                  .writeAsBytes(decoded)
+                                                  .then((value) {
+                                                log("written to file: $filePath");
+                                                final player = AudioPlayer();
+                                                // player.setAudioContext(audioContext);
 
-                                            // Cannot use BytesSource. It only works on Android...
-                                            player
-                                                .play(
-                                                    DeviceFileSource(filePath))
-                                                .whenComplete(() {
-                                              log("Deleting temp file again");
-                                              file.deleteSync();
+                                                // Cannot use BytesSource. It only works on Android...
+                                                player
+                                                    .play(DeviceFileSource(
+                                                        filePath))
+                                                    .whenComplete(() {
+                                                  log("Deleting temp file again");
+                                                  file.deleteSync();
+                                                });
+                                              });
                                             });
                                           });
-                                        });
-                                      });
-                                    },
-                                  ))
-                              : Container(),
-                          Flexible(
-                            child: Text(
-                              widget.originalText,
-                              style: const TextStyle(fontSize: 24.0),
-                            ),
+                                        },
+                                      ))
+                                  : Container(),
+                              Flexible(
+                                child: Text(
+                                  widget.originalText,
+                                  style: const TextStyle(fontSize: 24.0),
+                                ),
+                              ),
+                              SizedBox(width: 24.0 + 4.0)
+                            ]),
+                        SizedBox(height: 16.0),
+                        Flexible(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: 24.0 + 4.0, right: 24.0 + 4.0),
+                            child: Text(_translation ?? ''),
                           ),
-                          SizedBox(width: 24.0 + 4.0)
-                        ]),
-                    SizedBox(height: 16.0),
-                    Flexible(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: 24.0 + 4.0, right: 24.0 + 4.0),
-                        child: Text(_translation ?? ''),
-                      ),
-                    ),
-                  ]),
-            ))),
+                        ),
+                      ]),
+                ))),
         const Divider(
           color: Color(0xFFD2D2D2),
           height: 1,

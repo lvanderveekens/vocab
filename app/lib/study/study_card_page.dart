@@ -154,16 +154,28 @@ class StudyCardPageState extends State<StudyCardPage> {
             ]),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
-              child: Container(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.languages
-                            .getByCode(card.sourceLanguageCode)
-                            .name),
-                        Text(card.sourceWord, style: TextStyle(fontSize: 34.0)),
-                      ]))),
+            child: Container(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      widget.languages.getByCode(card.sourceLanguageCode).name),
+                  Expanded(
+                      child: Scrollbar(
+                    thumbVisibility: true,
+                    child: SingleChildScrollView(
+                      primary: true,
+                      child: Text(
+                        card.sourceWord,
+                        style: TextStyle(fontSize: 34.0),
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
+          ),
           Container(
               margin: EdgeInsets.only(left: 32.0, right: 32.0),
               child:
@@ -178,8 +190,18 @@ class StudyCardPageState extends State<StudyCardPage> {
                             .getByCode(card.targetLanguageCode)
                             .name),
                         if (showAnswer)
-                          Text(card.targetWord,
-                              style: TextStyle(fontSize: 34.0))
+                          Expanded(
+                            child: Scrollbar(
+                              thumbVisibility: true,
+                              child: SingleChildScrollView(
+                                primary: false,
+                                child: Text(
+                                  card.targetWord,
+                                  style: TextStyle(fontSize: 34.0),
+                                ),
+                              ),
+                            ),
+                          )
                       ]))),
         ]));
   }
