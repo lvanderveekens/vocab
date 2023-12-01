@@ -1,3 +1,3 @@
-# vocab
+# Vocab
 
-TODO
+A language learning app to improve your vocabulary.
